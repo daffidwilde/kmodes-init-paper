@@ -1,0 +1,143 @@
+The primary motivation for this work is to move away from the greedy approaches
+defined above by incorporating some techniques from game theory, namely:
+matching games. The purpose of solving a matching game is to link the elements
+of two sets in a `fair' way. By considering the initial modes found by Huang's 
+method with some suitable subset of our dataset as a matching game to be solved, 
+we can hope to find a closer-to-optimal set of initial modes for the \(k\)-modes 
+algorithm.
+
+
+\begin{definition}\label{def:matching-game}
+    Consider two sets \(S, R\) each of size \(N\), and let us call them 
+    `suitors' and `reviewers'. Each element of \(S\) and \(R\) has associated 
+    with it a preference list of the other set's elements. These preference 
+    lists are ranked in descending order. We consider the preference lists as 
+    functions which produce tuples, \(f\) and \(g\), respectively:
+	\[
+	    f : S \to R^n, g : R \to S^n
+	\]\\
+
+	This construction of sets and preference lists is called a 
+    \emph{matching game} of size \(N\) and we denote the game itself by 
+    \((S,R)\).\\
+	
+    A matching, \(M\), is defined to be any bijection between \(S\) and \(R\). 
+    If \(s \in S\) and \(r \in R\) are matched by \(M\), then we write \(M(s) = 
+    r\). A matching \(M\) is considered to be either stable or unstable based on
+    the preference lists of its suitors and reviewers, and the presence of 
+    blocking pairs.
+\end{definition}
+
+\begin{definition}\label{def:blocking-pair}
+    Let \((S, R)\) be a matching game of size \(N\) with some matching \(M\). A 
+    pair \((s, r) \in S \times R\) is said to \emph{block} \(M\) if \(M(s) \ne
+    r\) but \(s\) prefers \(r\) to \(M(s) = r'\) and \(r\) prefers \(s\) to
+    \(M^{-1}(r) = s'\). That is, \(r\) appears before \(r'\) in \(f(s)\) and
+    \(s\) appears before \(s'\) in \(g(r)\).
+\end{definition}
+
+\begin{definition}\label{def:stable-matching}
+    Let \((S, R)\) be a matching game of size \(N\) with some matching \(M\). 
+    Then we say \(M\) is a \emph{stable matching} if there are no blocking 
+    pairs, and \emph{unstable} otherwise.
+\end{definition}
+
+\begin{example}\label{example:matching}
+    Nice little example (see \url{vknight.org})
+\end{example}
+
+\subsection{The Gale-Shapley algorithm}\label{subsection:galeshapley}
+
+The Gale-Shapley algorithm is known to find a unique stable matching for any 
+matching game of size \(N\). This matching is also considered to be 
+suitor-optimal. That is, each suitor is matched with the best possible reviewer
+that ensures a stable matching, but is in fact the worst possible matching for 
+the reviewers [!!! cite or maybe have these theorems stated/proven !!!]. 
+
+As was discussed at the start of Section~\ref{section:matching}, the outline of
+the method proposed in this paper is to extend Huang's method by considering our
+virtual modes with some subset of the data as a matching game and then solve it.
+It should be noted, however, that in this method we may not have equally sized 
+sets of suitors and reviewers. As a result of this, the Gale-Shapley algorithm 
+becomes inapplicable as the matching produced \(M\) would not be a bijection of 
+our suitors and reviewers.
+
+\subsection{The capacitated Gale-Shapley algorithm for the hospital-resident 
+		problem}\label{subsection:capacitated-galeshapley}
+
+The situation where a large set of suitors are to be matched with a number
+reviewers is not limited to abstraction. A practical example of this problem is
+how to best assign a cohort of medical students to a group of hospitals. Here, 
+we have all of the requisite components of a matching game:
+
+\begin{itemize}
+	\item A set of reviewers (the hospitals) and a set of suitors (the potential
+        residents) 
+	\item A ranking of the students/residents by the hospitals, and vice versa
+\end{itemize}
+
+The only obstacle which stops us from using the Gale-Shapley algorithm is the 
+disparity in the sizes of our sets. In reality, hospitals need not always take 
+at most one resident on from a cohort of medical students. So each hospital has
+a capacity associated with it and we can consider our matching game to be
+`capacitated'. By this we mean that each reviewer may be matched with any number
+of suitors up to the capacity associated with them, making our matching \(M: S 
+\to R\) surjective. \\
+
+Research surrounding the hospital-resident assignment problem is well-documented 
+[cite] and an extension of the Gale-Shapley algorithm was developed to solve it,
+awarding the authors the 2012 Nobel Prize in Economic Sciences. This algorithm
+is currently used by the National Resident Matching Program 
+(\url{http://www.nrmp.org}). \\
+
+As before, we consider a set of suitors and reviewers denoted by \(S\) and 
+\(R\). These sets are no longer (necessarily) the same size. We also have our 
+preference lists \(f, g\), and a set \(C = \{c_1, \ldots, c_{|R|}\}\) of 
+reviewer capacities. Finally, let \(S_u \subset S\) denote the set of suitors 
+that are currently unmatched. The capacitated Gale-Shapley algorithm is given 
+below.
+
+\begin{algorithm}[H]
+\caption{Capacitated Gale-Shapley}\label{alg:cap-galeshapley}
+    \begin{algorithmic}[0]
+        \For {\(s \in S\)}
+            \State \(M(s) \gets \emptyset\)
+	    \EndFor
+        \For {\(r \in R\)}
+            \State \(M^{-1}(r) \gets \emptyset\)
+	    \EndFor
+        \State \(S_u \gets S\)
+        \While {\(|S_u| > 0\)}
+            \State Select any \(s \in S_u\)
+            \If {\(|f(s)| = 0\)}
+                \State \(S_u \gets S_u \setminus \{s\}\)
+		    \Else
+                \State Select \(s\)'s most preferred reviewer \(r \in R\)
+                \If {\(|M(r)| < c_r\)}
+                    \State \(M(r) \gets M(r) \cup \{s\}\)
+                    \State \(S_u \gets S_u \setminus \{s\}\)
+		        \Else
+                    \For {\(s' \in M(r)\)}
+                        \If {\(s \notin M(r)\)}
+                            \If {\(r\) prefers \(s\) to \(s'\)}
+                                \State \(M(r) \gets M(r) \cup \{s\}\)
+                                \State \(S_u \gets S_u \cup \{s\}\)
+                                \State \(M(r) \gets M(r) \setminus \{s'\}\)
+                                \State \(S_u \gets S_u \cup \{s'\}\)
+				            \Else
+                                \State \(f(s) \gets f(s) \setminus \{r\}\)
+				            \EndIf
+			            \EndIf
+			        \EndFor
+		        \EndIf
+		    \EndIf
+	    \EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{remark}
+	This implementation requires all residents to be ranked by all hospitals, 
+    and will produce a matching such that no hospital is left without at least 
+    one resident.
+\end{remark}
+
