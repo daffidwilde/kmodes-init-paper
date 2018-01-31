@@ -1,0 +1,44 @@
+Now that we have defined what we mean by a matching game, with the algorithm 
+described above, we can construct an alternative initialisation process for the 
+$k$-modes algorithm. \\
+
+Let \textbf{X} be a dataset with attribute set \textbf{A}, and let \(\bar{\mu}\) 
+be the set of virtual modes found by the Huang method (i.e.\ the set found 
+before the selection of points in \textbf{X}). We then take this set of virtual 
+modes \(\bar{\mu}\) and construct a capacitated matching game to be solved by 
+the capacitated Gale-Shapley algorithm in the following way.
+
+\begin{algorithm}[H]
+\caption{The proposed initialisation method}
+    \begin{algorithmic}[0]
+        \For{Condition}
+            \State Something
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+\begin{itemize}
+    \item The set of hospitals \(H\) is \(\bar{\mu}\), and each hospital has 
+        capacity \(1\).
+
+    \item The set of residents, \(R\), is made up of the \(k\) least dissimilar 
+        points \(X_{l,1}, \ldots, X_{l,k} \in \textbf{X}\) to each \(\mu^{(l)} 
+        \in \bar{\mu}\).
+
+	\item Each hospital's preference list is simply their addition to the set of
+        residents in descending order of similarity.
+	
+	\item The preference lists of the residents is more complicated. In this 
+        initial implementation, we take their preference list to be the set of 
+        hospitals in ascending order of dissimilarity. Though, as will be seen 
+        in Section~\ref{section:results}, other ways of generating these lists 
+        (such as randomly) can provide different results.
+\end{itemize}
+
+Now, by applying the capacitated Gale-Shapley algorithm to this game, we find a 
+resident-optimal matching \(M\). Let our set of modes \(\bar{\mu} := 
+M^{-1}(H)\). That is, the \(l^{th}\) mode is the resident matched with
+\(\mu^{(l)}\) when the algorithm concludes.
+

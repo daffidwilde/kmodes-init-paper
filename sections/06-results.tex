@@ -1,0 +1,32 @@
+To give comparative results on the quality of the initialisation processes defined in Sections \ref{section:init} \& \ref{section:new-method}, four well-known, categorical, labelled datasets - soybean, mushroom, breast cancer, and zoo - will be clustered with the $k$-modes algorithm. Then the typical performance measures of accuracy, precision, and recall will be calculated and summarised below. As a general rule, each algorithm will be trained on approximately two thirds of the respective dataset and tested against the final third.
+
+\begin{definition}
+	Let a dataset \textbf{X} have $k$ classes $C_1, \ldots, C_k$, let the number of objects correctly assigned to $C_i$ be denoted $tp_i$, let $fp_i$ denote the number of objects incorrectly assigned to $C_i$, and let $fn_i$ denote the number of objects incorrectly not assigned to $C_i$. Then our performance measures are defined as follows: \\
+		
+		\centering
+		\begin{tabular}{ccc}
+			$\emph{Accuracy}: \ \ \frac{\sum_{i=1}^{k}{tp_i}}{|\textbf{X}|}$, &
+			
+			$\emph{Precision}: \ \ \frac{\sum_{i=1}^{k} \frac{tp_i}{tp_i + fp_i}}{k}$, &
+			
+			$\emph{Recall}: \ \ \frac{\sum_{i=1}^{k} \frac{tp_i}{tp_i + fn_i}}{k}$ \\
+		\end{tabular}
+\end{definition}
+
+
+\subsection{The datasets}\label{subsection:datasets}
+
+A bit on the structure of each dataset and links to access them.
+
+
+\subsection{Results}\label{subsection:results}
+
+Tables of results for each dataset and each initialisation process. Credit to \url{https://github.com/nicodv/kmodes} for the Python implementation of both the Huang and Cao processes, as well as the $k$-modes algorithm itself.
+
+\begin{example}
+\begin{figure}
+    \centering
+    \input{tex/zoo-results.tex}
+\end{figure}
+\end{example}
+
