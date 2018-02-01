@@ -20,8 +20,8 @@ set, points, clusters and representative points:
         \mathbb{Z}_+\) is sometimes used as shorthand.
     \item We write each data point \(X^{(i)}\) as an \(m\)-dimensional vector:
 	\[
-		X^{(i)} = [A_1 = x_1^{(i)}, A_2 = x_2^{(i)}, \ldots, A_m = 
-				x_m^{(i)}], \ \ i=1, \ldots, N
+		X^{(i)} = \left[A_1 = x_1^{(i)}, A_2 = x_2^{(i)}, \ldots, A_m = 
+        x_m^{(i)}\right], \ \ i=1, \ldots, N
 	\]
         where \(x_j^{(i)}\) is the value of the \(j^{th}\) attribute of the
         \(i^{th}\) data point, \(X^{(i)}\).
@@ -36,7 +36,7 @@ set, points, clusters and representative points:
 	\]
     \item Each cluster \(C_l\) has associated with it a representative point 
 		(see: Section~\ref{subsection:rep-points}) which we denote by 
-        \(\mu^{(l)}~=~[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}]\).
+        \(\mu^{(l)}~=~\left[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}\right]\).
 \end{itemize}
 
 
@@ -62,8 +62,9 @@ metric. It can be easily checked that this is indeed a distance measure.\\
 					                  \end{cases}
 	\]
 
-    In other words, the dissimilarity between two points is the number of
-    attributes where they are not the same.
+    In other words, the dissimilarity between two points is simply the number of
+    attributes where their values are not the same. It should also be clear that
+    the dissimilarity between a point and itself is always zero.
 \end{definition}
 
 
@@ -73,18 +74,56 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     at~\url{https://www.kaggle.com/uciml/zoo-animal-classification/data}.\\
 
     This dataset is built for the classification of zoo animals. There are 101
-    instances, described by 16 (mostly binary) attributes, their name and a 
+    instances, described by 16 (mostly binary) attributes, their name, and a 
     class label indicating the type of animal they are. The first five rows of 
-    the dataset are given in Table~\ref{tab:zoo-head}.\\
+    the dataset are given in Table~\ref{tab:zoo-head}. Please note that the
+    first column is the index starting at \(0\).\\
     
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
         \centering
         \input{tex/zoo-head.tex}
     }
-    \caption{The head of the zoo animal dataset}
-    \label{tab:zoo-head}
+    \caption{The head of the zoo animal dataset}\label{tab:zoo-head}
     \end{table}
+
+    Let us consider three of our points: aardvark, antelope and bass. With our 
+    notation, these points can be expressed as the following vectors:
+
+    \begin{equation}
+    \nonumber
+    \begin{aligned}
+        \textbf{Aardvark:} \quad & X^{(0)} = \left[x_1^{(0)} = \true, \ 
+            x_2^{(2)} = \false, \ldots, \ x_{15}^{(0)} = \false, \ x_{16}^{(0)} 
+            = \true\right]
+        \\
+        \textbf{Antelope:} \quad & X^{(1)} = \left[x_1^{(1)} = \true, \
+            x_2^{(1)} = \false, \ldots, \ x_{15}^{(1)} = \false, \ x_{16}^{(1)} 
+            = \true\right]
+        \\
+        \textbf{Bass:} \quad & X^{(2)} = \left[x_1^{(2)} = \false, \ x_2^{(2)} = 
+            \false, \ \ldots, \ x_{15}^{(2)} = \false, \ x_{16}^{(2)} = 
+            \false\right]
+        \\
+    \end{aligned}
+    \end{equation}
+
+    And their pairwise dissimilarities are:
+    \begin{equation}
+    \nonumber
+    \begin{aligned}
+        d(X^{(0)}, X^{(1)}) & = & 0 + 0 + 0 + 0 + 0 + 0 + 1 + 0 + 0 + 0 + 0 + 0 
+        + 0 + 1 + 0 + 0 & = 2
+        \\
+        d(X^{(0)}, X^{(2)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 0 + 0 + 0 + 1 + 0 + 1 
+        + 1 + 1 + 0 + 1 & = 9
+        \\
+        d(X^{(1)}, X^{(2)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 1 + 0 + 0 + 1 + 0 + 1
+        + 1 + 0 + 0 + 1 & = 9
+        \\
+    \end{aligned}
+    \end{equation}
+    \\
 \end{example}
 
 \subsection{Representative points}\label{subsection:rep-points}
@@ -104,8 +143,8 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 		D(\textbf{X}, \mu) = \sum_{i=1}^{n} d(X_i, \mu)
 	\end{equation}
 	
-    Note that \(\mu\) is not necessarily in \textbf{X}. We call such a mode a 
-    \emph{virtual mode}.
+    Note that \(\mu\) is not necessarily in \textbf{X}. We call such a vector
+    \(\mu\) a \emph{virtual mode} of \textbf{X}.
 \end{definition}
 
 \begin{definition}\label{def:rel-freq}
