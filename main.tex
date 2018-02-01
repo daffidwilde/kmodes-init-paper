@@ -23,11 +23,21 @@
 
 % For indexing sections, etc.
 \usepackage{amsthm}
-\theoremstyle{definition}
-\newtheorem{definition}{Definition}[section]
-\newtheorem{theorem}{Theorem}
-\newtheorem{example}{Example}
+\theoremstyle{definition} \newtheorem{definition}{Definition}[section]
 \newtheorem*{remark}{Remark}
+\newtheorem{theorem}{Theorem}
+
+\newtheoremstyle{example}
+{\topsep} % Space above
+{\topsep} % Space below
+{} % Body font (normal)
+{} % Indent
+{\bfseries} % Head font
+{.} % Punctuation after head
+{.5em} % Space after head
+{} % Head spec (normal)
+
+\theoremstyle{example} \newtheorem{example}{Example}
 
 % Bibliography
 \usepackage[backend=bibtex]{biblatex}
