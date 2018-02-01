@@ -68,7 +68,7 @@ metric. It can be easily checked that this is indeed a distance measure.\\
 \end{definition}
 
 
-\begin{example}
+\begin{example}\label{ex:dissim}
     Throughout this paper, we will make use of a small numerical example to aid 
     our understanding of concepts. The dataset we will use is available online 
     at~\url{https://www.kaggle.com/uciml/zoo-animal-classification/data}.\\
@@ -87,8 +87,9 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     \caption{The head of the zoo animal dataset}\label{tab:zoo-head}
     \end{table}
 
-    Let us consider three of our points: aardvark, antelope and bass. With our 
-    notation, these points can be expressed as the following vectors:
+    Let us consider three of our points: aardvark, antelope and bass. Then our
+    attributes are the central 16 columns (from `hair' to `catsize'), and with 
+    our notation, these points can be expressed as the following vectors:
 
     \begin{equation}
     \nonumber
@@ -108,7 +109,7 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     \end{aligned}
     \end{equation}
 
-    And their pairwise dissimilarities are:
+    And using Definition~\ref{def:dissim}, their pairwise dissimilarities are:
     \begin{equation}
     \nonumber
     \begin{aligned}
@@ -199,6 +200,9 @@ dissimilarity:
                                 \delta(x_{i,j}, \mu_{l,j})
 \end{equation}
 
+\begin{example}\label{ex:cost}
+    Let us return to our zoo animal dataset. 
+\end{example}
 
 \subsection{The \(k\)-modes algorithm}\label{subsection:kmodes}
 
