@@ -6,7 +6,7 @@ examine how the initial cluster selection process has an impact on the
 efficiency and quality of the \(k\)-modes algorithm.\\
 
 
-\subsection{Notation}\label{subsection:notation}
+\subsection{Notation}\label{subsec:notation}
 
 We will use the following notation throughout this work to describe our data 
 set, points, clusters and representative points:
@@ -35,12 +35,12 @@ set, points, clusters and representative points:
 		\text{ for all } l \ne t
 	\]
     \item Each cluster \(C_l\) has associated with it a representative point 
-		(see: Section~\ref{subsection:rep-points}) which we denote by 
+		(see: Section~\ref{subsec:rep-points}) which we denote by 
         \(\mu^{(l)}~=~\left[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}\right]\).
 \end{itemize}
 
 
-\subsection{Dissimilarity measure}\label{subsection:dissim}
+\subsection{Dissimilarity measure}\label{subsec:dissim}
 
 An immediate difference between the \(k\)-means and \(k\)-modes algorithms is 
 that they deal with different types of data, and so the metric used to define 
@@ -127,7 +127,7 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     \\
 \end{example}
 
-\subsection{Representative points}\label{subsection:rep-points}
+\subsection{Representative points}\label{subsec:rep-points}
 
 Now that we have defined a metric on our space, we can turn our attention to 
 what we mean by the representative point \(\mu^{(l)}\) of a cluster \(C_l\). In 
@@ -166,7 +166,7 @@ a representative point. We call such a point a mode of \textbf{X}.\\
     \ldots, m\).\\
 \end{remark}
 
-\begin{theorem}\label{theorem:1}
+\begin{theorem}\label{thm:1}
     Consider a dataset \textbf{X} and some \(X^{(i)} \in \textbf{X}\). Then:
 	
     \[
@@ -177,7 +177,7 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 A proof of this theorem can be found in the Appendix of~\cite{Huang98}.\\
 
 
-\subsection{The cost function}\label{subsection:cost}
+\subsection{The cost function}\label{subsec:cost}
 
 We can use Definitions~\ref{def:dissim}~\&~\ref{def:mode} to determine a cost 
 function for our algorithm. Let \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\) 
@@ -201,10 +201,21 @@ dissimilarity:
 \end{equation}
 
 \begin{example}\label{ex:cost}
-    Let us return to our zoo animal dataset. 
+    Let us return to our zoo animal dataset. Using Theorem~\ref{thm:1}, we can
+    identify a mode of our set by taking the most commonly occurring value for 
+    each attribute. This gives us the following vector:
+    \[
+        \mu = \left[\false, \ \false, \ \true, \ \false, \ \false, \ \false, \
+        \true, \ \true, \ \true, \ \true, \ \false, \false, \ \text{Four}, \ 
+        \true, \ \false, \ \false\right]
+    \]\\
+
+    In fact, this vector appears in our dataset, and corresponds to the entry 
+    for the tuatara.
+
 \end{example}
 
-\subsection{The \(k\)-modes algorithm}\label{subsection:kmodes}
+\subsection{The \(k\)-modes algorithm}\label{subsec:kmodes}
 
 Below is a practical implementation of the \(k\)-modes algorithm \cite{Huang98}:
 
@@ -241,6 +252,6 @@ Below is a practical implementation of the \(k\)-modes algorithm \cite{Huang98}:
 
 \begin{remark}
     The processes by which the \(k\) initial modes are selected are detailed in 
-    Sections~\ref{section:init}~\&~\ref{section:new-method}.
+    Sections~\ref{sec:init}~\&~\ref{sec:proposed-method}.
 \end{remark}
 
