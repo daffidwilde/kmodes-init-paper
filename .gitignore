@@ -5,5 +5,7 @@ main.bcf
 main.run.xml
 main-blx.bib
 
+*.swp
+
 data/
 nbs/
