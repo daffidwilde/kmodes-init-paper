@@ -32,7 +32,7 @@ its points, our clusters and their representative points:
 	\[
 		C_1, \ldots, C_k \text{ are such that } \bigcup_{l=1}^k C_l = 
 		\textbf{X} \quad \text{and} \quad C_l \cap C_t = \emptyset 
-		\text{ for all } l \ne t
+		\text{ for all } l \neq t
 	\]
     \item Each cluster \(C_l\) has associated with it a representative point 
 		(see: Section~\ref{subsec:rep-points}) which we denote by 
@@ -235,31 +235,33 @@ Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
 \begin{algorithm}[H]
     \caption{\(k\)-modes}\label{alg:kmodes}
 	\begin{algorithmic}[0] 
-        \State \(\bar{\mu} \gets \emptyset\)
-        \For {\(l \in \{1, \ldots, k\}\)}
-            \State \(C_l \gets \emptyset\)
+        \State{\(\bar{\mu} \gets \emptyset\)}
+        \For{\(l \in \{1, \ldots, k\}\)}
+            \State{\(C_l \gets \emptyset\)}
 		\EndFor
-        \State Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)}\).
-        \State \(\bar{\mu} \gets \{\mu^{(1)}, \ldots, \mu^{(k)}\}\)
-        \For {\(X_i \in \textbf{X}\)}
-            \State Select \(l^* \text{ that satisfies } \displaystyle{d(X^{(i)}, 
-                \mu^{(l^*)}) = \min_{1 \le l \le m} \{d(X^{(i)}, \mu^{(l)})\}}\)
-            \State \(C_{j^*} \gets C_{j^*} \cup \{X^{(i)}\}\)
-            \State Update \(\mu^{(l^*)}\)
+        \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)}\).}
+        \State{\(\bar{\mu} \gets \{\mu^{(1)}, \ldots, \mu^{(k)}\}\)}
+        \For{\(X_i \in \textbf{X}\)}
+            \State{Select \(l^* \text{ that satisfies } \displaystyle{d(X^{(i)}, 
+                \mu^{(l^*)}) = \min_{1 \le l \le m} \{d(X^{(i)},
+                \mu^{(l)})\}}\).}
+            \State{\(C_{j^*} \gets C_{j^*} \cup \{X^{(i)}\}\)}
+            \State{Update \(\mu^{(l^*)}\).}
 		\EndFor
-		\Repeat
-            \For {\(X^{(i)} \in \textbf{X}\)}
-                \For {\(\mu^{(l)} \in \bar{\mu}\)}
-                    \State Calculate \(d(X^{(i)}, \mu^{(l)})\)
+        \Repeat{%
+            \For{\(X^{(i)} \in \textbf{X}\)}
+                \For{\(\mu^{(l)} \in \bar{\mu}\)}
+                    \State{Calculate \(d(X^{(i)}, \mu^{(l)})\)}
 				\EndFor
-                \If {\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \text{ 
-                    for some } l' \ne l^*\)}
-                    \State \(C_{l^*} \gets C_{l^*} \setminus \{X^{(i)}\}\)
-                    \State \(C_{l'} \gets C_{l'} \cup \{X^{(i)}\}\)
-                    \State Update both \(\mu^{(l^*)} \text{ and } \mu^{(j')}\)
+                \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \text{ 
+                for some } l' \neq l^*\)}
+                    \State{\(C_{l^*} \gets C_{l^*} \setminus \{X^{(i)}\}\)}
+                    \State{\(C_{l'} \gets C_{l'} \cup \{X^{(i)}\}\)}
+                    \State{Update both \(\mu^{(l^*)} \text{ and } \mu^{(j')}\).}
 				\EndIf
 			\EndFor
-		\Until {No point changes cluster after a full cycle through \textbf{X}}
+        }
+		\Until{No point changes cluster after a full cycle through \textbf{X}.}
 	\end{algorithmic}
 \end{algorithm}
 
