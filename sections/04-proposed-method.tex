@@ -16,8 +16,9 @@ following way.
         final `for' loop.}
         \State{\(R \gets \bar{\mu}\)}
         \State{\(S \gets \emptyset\)}
-        \State{\(C \gets \left{1, \ldots, 1\right}\)}
+        \State{\(C \gets \{c_1, \ldots, c_k\}\)}
         \For{\(r \in R\)}
+            \State{\(c_r \gets 1\)}
             \State{Find the set of \(k\) vectors, \(S_r\), in \textbf{X} that 
             are the least dissimilar to \(r\).}
             \State{\(S \gets S \cup S_r\)}
@@ -31,7 +32,7 @@ following way.
         \in S\).}
         \State{Solve the capacitated matching game defined by \((S, R, C)\) to
         obtain a matching \(M: R \to S\)}.
-        \For{\(r in R\)}
+        \For{\(r \in R\)}
             \State{\(\mu^{(l)} \gets M(r)\)}.
         \EndFor
     \end{algorithmic}
