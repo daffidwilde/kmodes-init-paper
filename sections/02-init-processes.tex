@@ -18,40 +18,41 @@ these modes that forces some diversity between them, as described in
 \begin{algorithm}[H]
 \caption{Huang's method}\label{alg:huang}
     \begin{algorithmic}[0]
-        \State \(\bar{\mu} \gets \emptyset\)
-        \State Let \(P = (p_{s,j})\) be an empty \(N \times m\) matrix.
-        \For {\(j = 1, \ldots, m\)}
-            \State \(d \gets |dom(A_j)|\)
-            \For {\(s = 1, \ldots, d\)}
-                \State Calculate \(n(a_s^{(j)})\)
+        \State{\(\bar{\mu} \gets \emptyset\)}
+        \State{Let \(P = (p_{s,j})\) be an empty \(N \times m\) matrix.}
+        \For{\(j = 1, \ldots, m\)}
+            \State{\(d \gets |dom(A_j)|\)}
+            \For{\(s = 1, \ldots, d\)}
+                \State{Calculate \(n(a_s^{(j)})\).}
 	        \EndFor
-            \State Sort \(dom(A_j) = \{a_1^{(j)}, \ldots, a_d^{(j)}\}\) into 
-                descending order by frequency, breaking ties arbitrarily.
-            \State Call this arrangement \(dom^*(A_j)\).
-            \For {\(a_s^{(j)} \in dom^*{A_j}\)}
-                \State \(p_{s,j} \gets \frac{n(a_s^{(j)})}{N}\)
+            \State{Sort \(dom(A_j) = \{a_1^{(j)}, \ldots, a_d^{(j)}\}\) into 
+            descending order by frequency, breaking ties arbitrarily.}
+            \State{Call this arrangement \(dom^*(A_j)\).}
+            \For{\(a_s^{(j)} \in dom^*{A_j}\)}
+                \State{\(p_{s,j} \gets \frac{n(a_s^{(j)})}{N}\)}
 	        \EndFor
-            \State \(p_{s,j}\) is left empty for all \(s > d\)
+            \State{\(p_{s,j}\) is left empty for all \(s > d\).}
 	    \EndFor
-        \For {\(l = 1, \ldots, k\)}
-            \For {\(j = 1, \ldots, m\)}
-                \State Take the nonempty entries of \(p_{*,j}\) as a vector and 
-                    consider it as a probability distribution.
-            \State Sample \(a_{s^*}^{(j)}\) from \(dom^*(A_j)\) according to 
-                this probability distribution.
-            \State \(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)
+        \For{\(l = 1, \ldots, k\)}
+            \For{\(j = 1, \ldots, m\)}
+                \State{Take the nonempty entries of \(p_{*,j}\) as a vector and 
+                consider it as a probability distribution.}
+            \State{Sample \(a_{s^*}^{(j)}\) from \(dom^*(A_j)\) according to 
+            this probability distribution.}
+            \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
 	        \EndFor
-            \State \(\bar{\mu} \gets \bar{\mu} \cup \mu^{(l)}\)
+            \State{\(\bar{\mu} \gets \bar{\mu} \cup \mu^{(l)}\)}
 	    \EndFor
-        \For {\(l = 1, \ldots, k\)}
-            \State Select \(X^{(i^*)} \in \textbf{X}\) such that: 
+        \For{\(l = 1, \ldots, k\)}
+            \State{Select \(X^{(i^*)} \in \textbf{X}\) such that: 
             \[
                 d(X^{(i^*)}, \mu^{(l)}) = \min_{1 \le i \le  N} 
                 \{d(X^{(i)}, \mu^{(l)})\} \text{ and } X^{(i^*)} \ne \mu^{(l')}
                 \text{ for all } \mu^{(l')} \in \bar{\mu}
             \]
-            \State \(\mu^{(l)} \gets X^{(i^*)}\)
-            \State \(\bar{\mu} \gets \mu^{(l)}\)
+            }
+            \State{\(\mu^{(l)} \gets X^{(i^*)}\)}
+            \State{\(\bar{\mu} \gets \mu^{(l)}\)}
 	    \EndFor
     \end{algorithmic}
 \end{algorithm} 
