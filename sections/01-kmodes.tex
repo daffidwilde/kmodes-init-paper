@@ -8,8 +8,8 @@ efficiency and quality of the \(k\)-modes algorithm.\\
 
 \subsection{Notation}\label{subsec:notation}
 
-We will use the following notation throughout this work to describe our data 
-set, points, clusters and representative points:
+We will use the following notation throughout this work to describe our dataset,
+its points, our clusters and their representative points:
 
 \begin{itemize}
     \item Our dataset has \(N\) elements and is denoted by \textbf{X}.
@@ -77,7 +77,7 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     instances, described by 16 (mostly binary) attributes, their name, and a 
     class label indicating the type of animal they are. The first five rows of 
     the dataset are given in Table~\ref{tab:zoo-head}. Please note that the
-    first column is the index starting at \(0\).\\
+    first column is the index starting at \(1\).\\
     
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
@@ -138,10 +138,10 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 
 \begin{definition}\label{def:mode}
     We define a \emph{mode} of our set \textbf{X} to be any vector \(\mu = 
-    [\mu_1, \ldots, \mu_m]\) that minimises:
+    [\mu_1, \ldots, \mu_m]\) that minimises the \emph{summed dissimilarity}:
 	
     \begin{equation}
-		D(\textbf{X}, \mu) = \sum_{i=1}^{n} d(X_i, \mu)
+        D(\textbf{X}, \mu) = \sum_{i=1}^{N} d(X^{(i)}, \mu)
 	\end{equation}
 	
     Note that \(\mu\) is not necessarily in \textbf{X}. We call such a vector
@@ -176,12 +176,39 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 \end{theorem}
 A proof of this theorem can be found in the Appendix of~\cite{Huang98}.\\
 
+\begin{example}\label{ex:mode}
+    Let us return to our zoo animal dataset from Example~\ref{ex:dissim}. Using 
+    Theorem~\ref{thm:1}, we can identify a mode of our set by taking the most 
+    commonly occurring value for each attribute. This gives us the following 
+    vector:
+    \[
+        \mu = \left[\false, \ \false, \ \true, \ \false, \ \false, \ \false, \
+        \true, \ \true, \ \true, \ \true, \ \false, \false, \ \text{Four}, \ 
+        \true, \ \false, \ \false\right]
+    \]
+
+    In fact, this vector appears in our dataset, and corresponds to the entry 
+    for the tuatara:
+    
+    \begin{table}[h]
+        \resizebox{\textwidth}{!}{%
+        \centering
+        \input{tex/tuatara.tex}\label{tab:tuatara}
+    }
+    \end{table}
+
+    To be consistent with our definition for a mode, we should also calculate 
+    our summed dissimilarity:
+    \[
+        D(\textbf{X}, \mu) = 5 + 5 + 4 + 5 + \cdots + 6 + 8 + 4 + 5 + 5 = 501
+    \]
+\end{example}
 
 \subsection{The cost function}\label{subsec:cost}
 
 We can use Definitions~\ref{def:dissim}~\&~\ref{def:mode} to determine a cost 
 function for our algorithm. Let \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\) 
-be a set of \(k\) modes of \textbf{X}, and let \(W = (w_{i,l})\) be an \(n 
+be a set of \(k\) modes of \textbf{X}, and let \(W = (w_{i,l})\) be an \(N 
 \times k\) matrix such that:
 
 \[ 
@@ -195,29 +222,15 @@ Then we define our \emph{cost function} to be the summed within-cluster
 dissimilarity:
 
 \begin{equation}
-    \text{Cost}(W, \bar{\mu}) = \sum_{l=1}^{k} \sum_{i=1}^{n} 
+    \text{Cost}(W, \bar{\mu}) = \sum_{l=1}^{k} \sum_{i=1}^{N} 
                                 \sum_{j=1}^{m} w_{i,l} 
                                 \delta(x_{i,j}, \mu_{l,j})
 \end{equation}
 
-\begin{example}\label{ex:cost}
-    Let us return to our zoo animal dataset. Using Theorem~\ref{thm:1}, we can
-    identify a mode of our set by taking the most commonly occurring value for 
-    each attribute. This gives us the following vector:
-    \[
-        \mu = \left[\false, \ \false, \ \true, \ \false, \ \false, \ \false, \
-        \true, \ \true, \ \true, \ \true, \ \false, \false, \ \text{Four}, \ 
-        \true, \ \false, \ \false\right]
-    \]\\
-
-    In fact, this vector appears in our dataset, and corresponds to the entry 
-    for the tuatara.
-
-\end{example}
 
 \subsection{The \(k\)-modes algorithm}\label{subsec:kmodes}
 
-Below is a practical implementation of the \(k\)-modes algorithm \cite{Huang98}:
+Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
 
 \begin{algorithm}[H]
     \caption{\(k\)-modes}\label{alg:kmodes}
