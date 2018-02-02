@@ -94,16 +94,16 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     \begin{equation}
     \nonumber
     \begin{aligned}
-        \textbf{Aardvark:} \quad & X^{(0)} = \left[x_1^{(0)} = \true, \ 
-            x_2^{(2)} = \false, \ldots, \ x_{15}^{(0)} = \false, \ x_{16}^{(0)} 
-            = \true\right]
-        \\
-        \textbf{Antelope:} \quad & X^{(1)} = \left[x_1^{(1)} = \true, \
+        \textbf{Aardvark:} \quad & X^{(1)} = \left[x_1^{(1)} = \true, \ 
             x_2^{(1)} = \false, \ldots, \ x_{15}^{(1)} = \false, \ x_{16}^{(1)} 
             = \true\right]
         \\
-        \textbf{Bass:} \quad & X^{(2)} = \left[x_1^{(2)} = \false, \ x_2^{(2)} = 
-            \false, \ \ldots, \ x_{15}^{(2)} = \false, \ x_{16}^{(2)} = 
+        \textbf{Antelope:} \quad & X^{(2)} = \left[x_1^{(2)} = \true, \
+            x_2^{(2)} = \false, \ldots, \ x_{15}^{(2)} = \false, \ x_{16}^{(2)} 
+            = \true\right]
+        \\
+        \textbf{Bass:} \quad & X^{(3)} = \left[x_1^{(3)} = \false, \ x_2^{(3)} = 
+            \false, \ \ldots, \ x_{15}^{(3)} = \false, \ x_{16}^{(3)} = 
             \false\right]
         \\
     \end{aligned}
@@ -113,13 +113,13 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     \begin{equation}
     \nonumber
     \begin{aligned}
-        d(X^{(0)}, X^{(1)}) & = & 0 + 0 + 0 + 0 + 0 + 0 + 1 + 0 + 0 + 0 + 0 + 0 
+        d(X^{(1)}, X^{(2)}) & = & 0 + 0 + 0 + 0 + 0 + 0 + 1 + 0 + 0 + 0 + 0 + 0 
         + 0 + 1 + 0 + 0 & = 2
         \\
-        d(X^{(0)}, X^{(2)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 0 + 0 + 0 + 1 + 0 + 1 
+        d(X^{(1)}, X^{(3)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 0 + 0 + 0 + 1 + 0 + 1 
         + 1 + 1 + 0 + 1 & = 9
         \\
-        d(X^{(1)}, X^{(2)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 1 + 0 + 0 + 1 + 0 + 1
+        d(X^{(2)}, X^{(3)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 1 + 0 + 0 + 1 + 0 + 1
         + 1 + 0 + 0 + 1 & = 9
         \\
     \end{aligned}
