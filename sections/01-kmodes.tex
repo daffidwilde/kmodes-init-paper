@@ -69,15 +69,18 @@ metric. It can be easily checked that this is indeed a distance measure.\\
 
 
 \begin{example}\label{ex:dissim}
-    Throughout this paper, we will make use of a small numerical example to aid 
-    our understanding of concepts. The dataset we will use is available online 
-    at~\url{https://www.kaggle.com/uciml/zoo-animal-classification/data}.\\
+    Throughout this work, we will make use of a number of small examples to aid 
+    our understanding of various concepts. These examples will utilise a small 
+    categorical dataset built for the classification of zoo animals (available
+    at~\url{https://www.kaggle.com/uciml/zoo-animal-classification/data}).\\
 
-    This dataset is built for the classification of zoo animals. There are 101
-    instances, described by 16 (mostly binary) attributes, their name, and a 
-    class label indicating the type of animal they are. The first five rows of 
-    the dataset are given in Table~\ref{tab:zoo-head}. Please note that the
-    first column is the index starting at \(1\).\\
+    Each instance in the set corresponds to a zoo animal, of which there are
+    101. These instances are described by 16 (mostly binary) attributes, as well
+    as the animal name, and a class label which indicates the type of animal 
+    they are. The first five rows of the dataset are given in 
+    Table~\ref{tab:zoo-head}. Please note that there is an additional, unheaded
+    column on the left hand side showing the index starting at \(1\) and going 
+    up to \(101\).\\
     
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
@@ -87,9 +90,10 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     \caption{The head of the zoo animal dataset}\label{tab:zoo-head}
     \end{table}
 
-    Let us consider three of our points: aardvark, antelope and bass. Then our
-    attributes are the central 16 columns (from `hair' to `catsize'), and with 
-    our notation, these points can be expressed as the following vectors:
+    Let us consider our first three data points: aardvark, antelope and bass. 
+    Our attributes are given in the central 16 columns (`hair' to `catsize'), 
+    and with the notation we laid out in Section~\ref{subsec:notation}, we can 
+    express these points as vectors in the following way:
 
     \begin{equation}
     \nonumber
