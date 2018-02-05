@@ -5,15 +5,15 @@ quality of \(k\)-modes and similar algorithms by considering an alternative
 dissimilarity measure~\cite{Ng07}, this work will examine the way in which these
 \(k\) initial representative points are chosen. Two established methods of 
 selecting these initial points are described in
-Sections~\ref{subsection:huang}~\&~\ref{subsection:cao}.
+Sections~\ref{subsec:huang}~\&~\ref{subsec:cao}.\\
 
 
-\subsection{Huang's method}\label{subsection:huang}
+\subsection{Huang's method}\label{subsec:huang}
 
 In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
 chosen at random from \textbf{X}. Below is an alternative method of selecting
-these modes that forces some diversity between them, as described in 
-\cite{Huang98}:
+these modes that forces some diversity between them, as described 
+in~\cite{Huang98}:\\
 
 \begin{algorithm}[H]
 \caption{Huang's method}\label{alg:huang}
@@ -58,49 +58,135 @@ these modes that forces some diversity between them, as described in
 \end{algorithm} 
 
 In the original statement of Huang's method~\cite{Huang98}, the algorithm states
-that the most frequent categories should be assigned `equally' to the $k$ 
+that the most frequent categories should be assigned `equally' to the \(k\) 
 initial modes. How the categories should be distributed `equally' is not 
-well-defined or easily seen from the example given. In 
-Section~\ref{section:results}, an implementation of the $k$-modes algorithm 
+well-defined or easily seen from the example given. This ambiguity in the 
+definition of Huang's method means that a probabilistic element must be 
+introduced, and unless seeded pseudo-random numbers are used, computer-generated results are not necessarily reproducible.\\
+
+In Section~\ref{sec:results}, an implementation of the \(k\)-modes algorithm 
 (written in Python) is used to compare the quality of the initialisation 
 processes discussed throughout this piece of work when applied to a collection 
-of datasets. That 
-implementation distributes the attribute values in a random way (with replacement) according to the probability distribution formed by the relative frequencies of each category for each attribute. \\ In our examples, we will assign the categories to our initial modes in the same way, as it is described in Algorithm \ref{alg:huang}. This ambiguity in the definition of Huang's method means that a probabilistic element must be introduced, and unless seeded pseudo-random numbers are used, results are not necessarily reproducible. \\ A small example of this method is given below. \\ {\textbf{\large{Skip this example and replace with the toy example}}} \begin{example}	Below are the first five rows of a random sample of 250 records from a data set used to determine the acceptability of a car. This dataset was chosen primarily for its number of attributes. However, it should be noted that one downfall of this particular data set is that some of the attributes could be considered as ordinal rather than purely categorical since there are clearly established and easily understandable differences between "high" and "low" prices, for instance. \\ \begin{table}[H] \centering \begin{tabular}{c|c|c|c|c|c}\label{table:1} Price & Maintenance & Doors & Passengers & Luggage & Safety \\ \hline low &               vhigh &            2 &                  5+ &              med &          med \\ vhigh &             high &            2 &                  4 &              big &          med \\ high &             med &            2 &                  2 &              small &          low \\          vhigh &              med &            3 &                  2 &            big &          low \\         low &             med &            5+ &                  2 &              big &           low \\ \end{tabular} \end{table} The frequencies of our attributes' categories are given below: \\ \begin{table}[H] \centering \begin{tabular}{c|c|c|c|c|c}\label{table:2} Price	&	Maintenance	&	Doors	&	Passenger	&	Luggage &	Safety	\\ \hline $ f(c_{\text{low}}) = 61 $		&	$ f(c_{\text{low}}) = 53 $		&	$ f(c_{2}) = 71 $	   	&	$ f(c_{2}) = 81 $		&	$ f(c_{\text{small}}) = 88 $		&	$ f(c_{\text{low}}) = 76 $	\\ $ f(c_{\text{med}}) = 63 $		&	$ f(c_{\text{med}}) = 66 $		&	$ f(c_{3}) = 71 $		& 	$ f(c_{4}) = 85 $		&	$ f(c_{\text{med}}) = 78 $	&	$ f(c_{\text{med}}) = 91 $	\\ $ f(c_{\text{high}}) = 63 $		 &	 $ f(c_{\text{high}}) = 50 $		  &	  $ f(c_{4}) = 53 $	   &	$ f(c_{5+}) = 84 $	&	$ f(c_{\text{big}}) = 84 $	  &		$ f(c_{\text{high}}) = 83 $	\\ $ f(c_{\text{vhigh}}) = 63 $	&	$ f(c_{\text{vhigh}}) = 81 $	&	$ f(c_{5+}) = 55 $		&				{}					&					{}						&						{}					\\ \end{tabular} \caption{Frequencies of all attribute categories, $f(c_{s,j})$} \end{table}
+of datasets. That implementation distributes the attribute values by taking a
+sample from each attribute domain (with replacement) according to the 
+probability distribution formed by the relative frequencies of the attribute
+values, as is described in Algorithm~\ref{alg:huang}. In our examples, we will
+assign the categories to our initial modes in the same way.\\
 
-	Thus, from Table \ref{table:2} we see that our category matrix is:
-	
-	\[
-	\begin{pmatrix}		
-		\text{vhigh}	&	\text{vhigh}	&	3	&	4	&	\text{small}	&	\text{med}	\\
-		\text{high}		&	\text{med}		&	2	&	5+	&	\text{big}	&	\text{high}		\\
-		\text{med}		&	\text{low}		&	5+	&	2	&	\text{med}	&	\text{low}		\\
-		\text{low}		&	\text{high}		&	4	&	{}	&			{}			&			{}			\\
-	\end{pmatrix}
-	\] \\
-	
-	
-	Acceptability is an attribute of this data which has been removed but indicates whether a car is one of `very good', `good', `acceptable' or `unacceptable'. From this we can suppose that we are looking for $k = 4$ clusters, and so, by distributing the most frequent categories `equally' our initial set of modes is:
-	
-	\begin{equation}
-	\begin{aligned}
-	\bar{\mu} = & \{\mu^{(1)} = [\text{vhigh}, \text{med}, 5+, 4, \text{big}, \text{low}], \ \ \mu^{(2)} = [\text{high}, \text{low}, 4, 5+, \text{med}, \text{med}], \\
-						  & \ \ \mu^{(3)} = [\text{med}, \text{high}, 3, 2, \text{small}, \text{high}], \ \ \mu^{(4)} = [\text{low}, \text{vhigh}, 2, 4, \text{big}, \text{med}] \} \\
-	\end{aligned}
-	\end{equation} \\
-	
-	Now we would select the least dissimilar point in our data set to replace each $\mu^{(l)} \in \bar{\mu}$ in numerical order according to Definition \ref{def:dissim} and continue with the rest of the algorithm. \\
+\begin{example}\label{ex:huang}
+    Consider the zoo animal dataset. We will now find a set of initial modes for
+    the \(k\)-modes algorithm using Huang's method. For the sake of this
+    example, we will let \(k = 7\) as there are \(7\) classes. Please be advised
+    that this may not be the optimal value for \(k\).\\
+    
+    We begin by calculating the frequencies and relative frequencies of our 
+    attributes' values, which are stored in 
+    Tables~\ref{tab:freq}~\&~\ref{tab:rel-freq}, respectively.
+
+    \begin{table}[h]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/frequency-table.tex}
+    }
+    \caption{Frequency table for attribute values.}\label{tab:freq}
+    \end{table}
+
+    Now that we have the frequency distributions for our attributes, we can
+    arrange our attribute domains into descending order of frequency:
+    
+    \begin{equation}
+    \begin{aligned}
+    \nonumber
+    \centering
+        dom^*(\text{hair}) = \left[\false, \true\right], \
+        dom^*(\text{feathers}) = \left[\false, \true \right], & \ &
+        dom^*(\text{eggs}) = \left[\true, \false\right], \
+        dom^*(\text{milk}) = \left[\false, \true\right],
+        \\
+        {} & \vdots & {}
+        \\
+        dom^*(\text{legs}) = \left[\text{Four, Two, None, Six, Eight, 
+        Five}\right], \
+        dom^*(\text{tail}) = \left[\true, \false\right], & \ &
+        dom^*(\text{domestic}) = \left[\false, \true\right], \
+        dom^*(\text{catsize}) = \left[\false, \true\right]
+        \\
+    \end{aligned}
+    \end{equation}
+
+    \begin{table}[h]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/rel-freq-frac-table.tex}
+    }
+    \caption{Relative frequency table for attribute values.}\label{tab:rel-freq}
+    \end{table}
+
+    Now to find our set of (potentially) virtual modes, \(\bar{\mu}\). For each
+    attribute, we will take a sample of size one from the attribute domain
+    according to the probability distribution represented in the corresponding
+    column of Table~\ref{tab:rel-freq}. The following set of initial modes was 
+    obtained by using a short Python script (put in Appendix). It can be easily
+    checked that these vectors minimise our summed dissimilarity function
+    \(D(\textbf{X}, \mu)\) with value \(101\), thus satisfying 
+    Theorem~\ref{thm:1}.
+
+    \begin{equation}
+    \nonumber
+    \begin{aligned}
+        \bar{\mu} = \ \{ & \mu^{(1)} = \left[\false, \ \false, \ \true, \ 
+        \false, \ \false, \ \true, \ \false, \ \true, \ \true, \ \true, \ 
+        \false, \ \false, \ \text{Two}, \ \true, \ \false, \ \false\right],
+        \\
+        {} & \mu^{(2)} = \left[\false, \ \true, \ \true, \ \true, \ \true, \
+        \true, \ \true, \ \true, \ \false, \ \true, \ \false, \ \true, \
+        \text{Two}, \ \true, \ \false, \ \true\right],
+        \\
+        {} & \mu^{(3)} = \left[\false, \ \false, \ \false, \ \true, \ \false, \
+        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \false, 
+        \text{None}, \ \true, \ \false, \ \false\right],
+        \\
+        {} & \mu^{(4)} = \left[\false, \ \false, \ \true, \ \false, \ \true, \
+        \false, \ \false, \ \false, \ \true, \ \true, \ \false, \false, \
+        \text{Four}, \ \false, \ \false, \false\right],
+        \\
+        {} & \mu^{(5)} = \left[\false, \ \false, \ \true, \ \false, \ \true, \
+        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \
+        \text{Four}, \ \false, \false, \false\right],
+        \\
+        {} & \mu^{(6)} = \left[\false, \ \false, \ \false, \ \true, \ \false, \
+        \false, \ \true, \ \false, \ \true, \ \true, \ \false, \ \false, \
+        \text{Four}, \ \true, \ \false, \ \false\right],
+        \\
+        {} & \mu^{(7)} = \left[\true, \ \false, \ \true, \ \false, \ \false, \
+        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \ 
+        \text{Four}, \ \true, \ \false, \ \true\right]\}\\
+    \end{aligned}
+    \end{equation}
+
+    Finally, we take each element of \(\bar{\mu}\) in turn and replace it with
+    the most similar point in our dataset such that no point is used twice.
+    These \(k\) modes are given in Table~\ref{tab:huang-modes}.
+    We also stipulate that if there is more than one entry in the set with the 
+    same attributes as another (for instance, aardvark and bear are identical in
+    this setting) that only one of these entries may be used as a replacement 
+    for one of our virtual modes.\\
+
+    \begin{table}[h]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/huang-modes.tex}
+    }
+    \caption{The \(7\) initial modes found by Huang's
+    method.}\label{tab:huang-modes}
+    \end{table}
 \end{example}
 
-
-\subsection{Cao's method}\label{subsection:cao}
+\subsection{Cao's method}\label{subsec:cao}
 
 Cao's method selects representative points by the average density of a point in
 the dataset. As will be seen in the following definition, this average density 
 is in fact the average relative frequency of all the attribute values of that 
 point. This method is considered deterministic as there is no probabilistic 
 element - unlike the standard or Huang's method - and so results are completely
-reproducible.
-
+reproducible.\\
 
 \begin{definition}\label{def:density}	
     Consider a data set \(\textbf{X}\) with attribute set \(\textbf{A} = 
@@ -109,9 +195,9 @@ reproducible.
     defined~\cite{Cao09} as:
 	\[
 	    \text{Dens}(X^{(i)}) = \frac{\sum_{j=1}^m \text{Dens}_{j}(X^{(i)})}{m}, 
-        \text{where} \quad \text{Dens}_{j}(X^{(i)}) = \frac{|\{X^{(t)} \in 
+        \quad \text{where} \quad \text{Dens}_{j}(X^{(i)}) = \frac{|\{X^{(t)} \in 
         \textbf{X} : x_j^{(i)} = x_j^{(t)}\}|}{N} = \frac{n(x_j^{(i)})}{N}
-	\]
+	\]\\
 \end{definition}
 
 \begin{remark}
@@ -120,18 +206,18 @@ reproducible.
 	\begin{itemize}	
         \item If \(n(x_j^{(i)}) = 1\), then \(\text{Dens}(X^{(i)}) = 
 			\frac{\sum_{j=1}^m \frac{1}{N}}{m} = \frac{m}{mN} = \frac{1}{N}\)
-        \item If \(n(x_j^{(i)}) = N$, then $\text{Dens}(X^{(i)}) = 
-            \frac{\sum_{j=1}^m 1}{m} = \frac{m}{m} = 1\)
+        \item If \(n(x_j^{(i)}) = N\), then \(\text{Dens}(X^{(i)}) = 
+            \frac{\sum_{j=1}^m 1}{m} = \frac{m}{m} = 1\)\\
 	\end{itemize}
 \end{remark}
-    
-Observe that:
+
+\noindent Observe that:
 \[
 	|\{X^{(t)} \in \textbf{X} : x_j^{(i)} = x_j^{(t)}\}| = n(x_j^{(i)}) = 
 	\sum_{t=1}^N (1 - \delta(x_j^{(i)}, x_j^{(t)}))
 \]\\
 
-and so, we can find an alternative definition for $\text{Dens}(X^{(i)})$:
+and so, we can find an alternative definition for \(\text{Dens}(X^{(i)})\):
 \begin{equation}
 \begin{aligned}
     \text{Dens}(X^{(i)}) = {} & {} \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N 
@@ -150,7 +236,7 @@ and so, we can find an alternative definition for $\text{Dens}(X^{(i)})$:
 
 With this alternative definition, we see - since \(m\) and \(N\) are fixed 
 positive integers - that \(\text{Dens}(X^{(i)})\) is maximised when 
-\(D(\textbf{X}, X^{(i)})\) is minimised. Then by Theorem \ref{theorem:1} we have
+\(D(\textbf{X}, X^{(i)})\) is minimised. Then by Theorem \ref{thm:1} we have
 that such an \(X^{(i)}\) with maximal average density in \textbf{X} with respect
 to \textbf{A} is, in fact, a mode of \textbf{X}. This notion helps justify the 
 method proposed by Cao et al. as discussed below.\\
@@ -189,4 +275,8 @@ method proposed by Cao et al. as discussed below.\\
 		\EndWhile
 	\end{algorithmic}
 \end{algorithm}
+
+\begin{example}\label{ex:cao}
+    Cao's method with zoo animal dataset
+\end{example}
 
