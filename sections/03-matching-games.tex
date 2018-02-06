@@ -14,7 +14,7 @@ algorithm.
     lists are ranked in descending order. We consider the preference lists as 
     functions which produce tuples, \(f\) and \(g\), respectively:
 	\[
-	    f : S \to R^n, g : R \to S^n
+	    f : S \to R^n, \ g : R \to S^n
 	\]\\
 
 	This construction of sets and preference lists is called a 
@@ -43,7 +43,47 @@ algorithm.
 \end{definition}
 
 \begin{example}\label{example:matching}
-    Nice little example (see \url{vknight.org})
+    Consider the following example with \(S = \{A, B, C\}\) and \(R = \{D, E,
+    F\}\). We can visualise this matching game as a bipartite graph as in
+    Figure~\ref{fig:matching}. In this representation, an edge between two
+    vertices indicates that they are matched by \(M\). Beside each node is the
+    name of the node and a complete ranking of its complementary set's elements.
+    We interpret these rankings the values of our preference list functions. 
+    Here, for instance, \(A\) would most prefer to be matched to \(D\), then 
+    \(E\), and finally \(F\).
+    
+    \begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=0.5]
+
+        % Suitors
+        \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+        label=left: {\(A: (D, E, F)\)}] (A) at (0, 0) {};
+        \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+        label=left: {\(B: (D, F, E)\)}] (B) at (0, -3) {}; 
+        \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+        label=left: {\(C: (E, D, F)\)}] (C) at (0, -6) {};
+
+        % Reviewers
+        \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+        label=right: {\(D: (B, C, A)\)}] (D) at (6, 0) {};
+        \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+        label=right: {\(E: (A, C, B)\)}] (E) at (6, -3)
+        {};
+        \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm,
+        label=right: {\(F: (A, B, C)\)}] (F) at (6, -6)
+        {};
+
+        % Question mark node
+        \node[draw, shape=circle] (q) at (3, -3) {?};
+        
+        % Lines into (?)
+        \foreach \x in {A, B, C, D, E, F}
+            \draw (\x) -- (q);
+    \end{tikzpicture}
+    \caption{A simple matching game represented on a bipartite 
+    graph.}\label{fig:matching}
+    \end{figure}
 \end{example}
 
 \subsection{The Gale-Shapley algorithm}\label{subsection:galeshapley}
