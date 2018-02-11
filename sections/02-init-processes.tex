@@ -232,7 +232,7 @@ method proposed by Cao et al. as discussed below.\\
         \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_1)}\)}
         \State{Select \(X^{(i_2)} \in \textbf{X}\) such that: 
 		\[
-			\text{Dens}(X^{(i_2)}) \times d(X^{(i_1)}, X^{(i_2)}) =
+            \text{Dens}(X^{(i_2)}) \times d(X^{(i_1)}, X^{(i_2)}) =
 			\max_{X^{(i)} \in \textbf{X}} \{d(X^{(i)}, X^{(i_1)})\}
 		\]
         }
@@ -252,6 +252,20 @@ method proposed by Cao et al. as discussed below.\\
 \end{algorithm}
 
 \begin{example}\label{ex:cao}
-    Cao's method with zoo animal dataset
+    We will now find our \(k\) initial modes using Cao's method, as we did in
+    Example~\ref{ex:huang}. We begin by calculating the average density of each
+    of our points \(X^{(i)} \in \textbf{X}, \ \text{Dens}(X^{(i)})\). These are
+    given in Table~\ref{tab:density}.
+
+    \begin{table}[h]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/density-table.tex}
+    }
+    \end{table}
+    \begin{table}[h]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/ranked-density-table.tex}
+    }
+    \end{table}
 \end{example}
 
