@@ -81,7 +81,7 @@ assign the categories to our initial modes in the same way.\\
     
     We begin by calculating the frequencies and relative frequencies of our 
     attributes' values, which are stored in 
-    Tables~\ref{tab:freq}~\&~\ref{tab:rel-freq}, respectively.
+    Tables~\ref{tab:freq}~\&~\ref{tab:rel-freq}, respectively.\\
 
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
@@ -89,29 +89,6 @@ assign the categories to our initial modes in the same way.\\
     }
     \caption{Frequency table for attribute values.}\label{tab:freq}
     \end{table}
-
-    Now that we have the frequency distributions for our attributes, we can
-    arrange our attribute domains into descending order of frequency:
-    
-    \begin{equation}
-    \begin{aligned}
-    \nonumber
-    \centering
-        dom^*(\text{hair}) = \left[\false, \true\right], \
-        dom^*(\text{feathers}) = \left[\false, \true \right], & \ &
-        dom^*(\text{eggs}) = \left[\true, \false\right], \
-        dom^*(\text{milk}) = \left[\false, \true\right],
-        \\
-        {} & \vdots & {}
-        \\
-        dom^*(\text{legs}) = \left[\text{Four, Two, None, Six, Eight, 
-        Five}\right], \
-        dom^*(\text{tail}) = \left[\true, \false\right], & \ &
-        dom^*(\text{domestic}) = \left[\false, \true\right], \
-        dom^*(\text{catsize}) = \left[\false, \true\right]
-        \\
-    \end{aligned}
-    \end{equation}
 
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
@@ -124,10 +101,7 @@ assign the categories to our initial modes in the same way.\\
     attribute, we will take a sample of size one from the attribute domain
     according to the probability distribution represented in the corresponding
     column of Table~\ref{tab:rel-freq}. The following set of initial modes was 
-    obtained by using a short Python script (put in Appendix). It can be easily
-    checked that these vectors minimise our summed dissimilarity function
-    \(D(\textbf{X}, \mu)\) with value \(101\), thus satisfying 
-    Theorem~\ref{thm:1}.
+    obtained by using a short Python script (put in Appendix).\\
 
     \begin{equation}
     \nonumber
@@ -158,7 +132,7 @@ assign the categories to our initial modes in the same way.\\
         \\
         {} & \mu^{(7)} = \left[\true, \ \false, \ \true, \ \false, \ \false, \
         \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \ 
-        \text{Four}, \ \true, \ \false, \ \true\right]\}\\
+        \text{Four}, \ \true, \ \false, \ \true\right]\}
     \end{aligned}
     \end{equation}
 
@@ -166,9 +140,10 @@ assign the categories to our initial modes in the same way.\\
     the most similar point in our dataset such that no point is used twice.
     These \(k\) modes are given in Table~\ref{tab:huang-modes}.
     We also stipulate that if there is more than one entry in the set with the 
-    same attributes as another (for instance, aardvark and bear are identical in
-    this setting) that only one of these entries may be used as a replacement 
-    for one of our virtual modes.\\
+    same attributes as another (for instance, aardvark and bear are identical
+    with respect to their attributes' values) that only one of these entries may
+    be used as a replacement for one of our virtual modes so as to avoid empty
+    clusters down the line.\\
 
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
