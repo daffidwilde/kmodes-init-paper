@@ -1,9 +1,11 @@
-The \(k\)-modes algorithm is a part of the family of clustering algorithms known 
+The \(k\)-modes algorithm is a part of the family of clustering algorithms known
 as `prototype-based clustering', and is an extension of the \(k\)-means 
 algorithm for categorical data as set out in~\cite{Huang98}. This work will 
-outline the key differences between the two algorithms, and then aim to 
-examine how the initial cluster selection process has an impact on the 
-efficiency and quality of the \(k\)-modes algorithm.\\
+outline the key differences and similarities between two established
+initialisation methods for the \(k\)-modes algorithm, and in doing so we will be
+able to examine how the initial cluster selection process has an impact on the 
+efficiency and quality of the \(k\)-modes algorithm. From there, we will define
+a new initialisation method that makes use of elements of game theory.\\
 
 
 \subsection{Notation}\label{subsec:notation}
@@ -15,27 +17,50 @@ its points, our clusters and their representative points:
     \item Our dataset has \(N\) elements and is denoted by \textbf{X}.
     \item \textbf{X} is described by a set of \(m \in \mathbb{Z}_+\) attributes 
         \(\textbf{A} = \{A_1, \ldots, A_m\}\).
-    \item Each attribute \(A_j\) draws its values from a set \(dom(A_j) = 
-        \{a_1^{(j)}, \ldots, a_{d_j}^{(j)}\}\) where \(d_j = |dom(A_j)| \in 
-        \mathbb{Z}_+\) is sometimes used as shorthand.
-    \item We write each data point \(X^{(i)}\) as an \(m\)-dimensional vector:
-	\[
-		X^{(i)} = \left[A_1 = x_1^{(i)}, A_2 = x_2^{(i)}, \ldots, A_m = 
-        x_m^{(i)}\right], \ \ i=1, \ldots, N
-	\]
-        where \(x_j^{(i)}\) is the value of the \(j^{th}\) attribute of the
-        \(i^{th}\) data point, \(X^{(i)}\).
+    \item Each attribute \(A_j\) is considered as a set of attribute values 
+        \(A_j = \{a_1^{(j)}, \ldots, a_{d_j}^{(j)}\}\) where \(d_j = |A_j| \in 
+        \mathbb{Z}_+\) is sometimes used as shorthand for the size of the 
+        \(j^th\) attribute set.
+    \item We write each data point \(X^{(i)}, \ i = 1, \ldots, N\), as an 
+        \(m\)-dimensional vector:
+	    \[
+		    X^{(i)} = \left[x_1^{(i)}, x_2^{(i)}, \ldots, x_m^{(i)}\right], \
+            \text{where} \ x_j^{(i)} \in A_j \ \text{for all} \ j = 1, \ldots, 
+            m.
+	    \]
+        Here, we refer to \(x_j^{(i)}\) as the value of the \(j^{th}\) attribute
+        of the \(i^{th}\) data point, \(X^{(i)}\). A tabular representation is 
+        given below:
+        \begin{table}[h]
+        \centering
+        \begin{tabular}{cccccc}
+            {} & \(A_1\) & \(A_2\) & \quad \ldots \quad & \(A_{m-1}\) & \(A_m\)
+            \\
+            \midrule
+            \(X^{(1)}\) & \(x_1^{(1)}\) & \(x_2^{(1)}\) & \quad \ldots \quad & 
+            \(x_{m-1}^{(1)}\) & \(x_m^{(1)}\)
+            \\
+            \(X^{(2)}\) & \(x_1^{(2)}\) & \(x_2^{(2)}\) & \quad \ldots \quad &
+            \(x_{m-1}^{(2)}\) & \(x_m^{(2)}\)
+            \\
+            \vdots & \vdots & \vdots & {} & \vdots & \vdots
+            \\
+            \(X^{(N)}\) & \(x_1^{(N)}\) & \(x_2^{(N)}\) & \quad \ldots \quad &
+            \(x_{m-1}^{(N)}\) & \(x_m^{(N)}\)
+            \\
+        \end{tabular}
+        \end{table}
 	\item Prototype-based clustering algorithms partition the elements of 
-        \(\textbf{X}\) into \(k\) distinct sets (clusters) denoted by \(C_1, 
-        \ldots, C_k\), where \(k \in \mathbb{Z}_+\) is a pre-determined, fixed 
-        integer such that \(k \le N\). That is:
-	\[
-		C_1, \ldots, C_k \text{ are such that } \bigcup_{l=1}^k C_l = 
-		\textbf{X} \quad \text{and} \quad C_l \cap C_t = \emptyset 
-		\text{ for all } l \neq t
-	\]
+        \(\textbf{X}\) into \(k\) distinct sets (which we call clusters) denoted
+        by \(C_1, \ldots, C_k\), where \(k \in \mathbb{Z}_+\) is a 
+        pre-determined, fixed integer such that \(k \le N\). That is:
+	    \[
+		    C_1, \ldots, C_k \ \text{are such that} \ \bigcup_{l=1}^k C_l = 
+		    \textbf{X} \quad \text{and} \quad C_l \cap C_t = \emptyset \
+		    \text{for all} \ l \neq t
+	    \]
     \item Each cluster \(C_l\) has associated with it a representative point 
-		(see: Section~\ref{subsec:rep-points}) which we denote by 
+		(see Section~\ref{subsec:rep-points}) which we denote by 
         \(\mu^{(l)}~=~\left[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}\right]\).
 \end{itemize}
 
@@ -51,15 +76,15 @@ data. Instead, we utilise a dissimilarity measure - defined below - as our
 metric. It can be easily checked that this is indeed a distance measure.\\
 
 \begin{definition}\label{def:dissim}
-	Let $\textbf{X}$ be a data set and consider $X^{(a)}, X^{(b)} \in 
-    \textbf{X}$. We define the \emph{dissimilarity} between $X^{(a)}$ and 
-    $X^{(b)}$, denoted by \(d(X^{(a)}, X^{(b)})\), to be:
+    Let \(\textbf{X}\) be a dataset and consider \(X^{(a)}, X^{(b)} \in 
+    \textbf{X}\). We define the \emph{dissimilarity} between \(X^{(a)}\) and 
+    \(X^{(b)}\), denoted by \(d(X^{(a)}, X^{(b)})\), to be:
 	\[
-	d(X^{(a)}, X^{(b)}) = \sum_{j=1}^{m} \delta(x_j^{(a)}, x_j^{(b)}) \quad
-	\text{where} \quad \delta(x, y) = \begin{cases}
-                                        0, & x = y \\
-					                    1, & \text{otherwise}
-					                  \end{cases}
+	    d(X^{(a)}, X^{(b)}) = \sum_{j=1}^{m} \delta(x_j^{(a)}, x_j^{(b)}) \quad
+	    \text{where} \quad \delta(x, y) = \begin{cases}
+                                            0, & \text{if} \ x = y \\
+					                        1, & \text{otherwise}
+					                      \end{cases}
 	\]
 
     In other words, the dissimilarity between two points is simply the number of
@@ -74,10 +99,10 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     categorical dataset built for the classification of zoo animals (available
     at~\url{https://www.kaggle.com/uciml/zoo-animal-classification/data}).\\
 
-    Each instance in the set corresponds to a zoo animal, of which there are
-    101. These instances are described by 16 (mostly binary) attributes, as well
-    as the animal name, and a class label which indicates the type of animal 
-    they are. The first five rows of the dataset are given in 
+    The dataset is made up of \(N = 101\) instances, each of which describe a
+    zoo animal. These instances are defined by \(m = 16\) (mostly binary) 
+    attributes, as well as the animal name, and a class label which indicates 
+    the type of animal they are. The first five rows of the dataset are given in
     Table~\ref{tab:zoo-head}. Please note that there is an additional, unheaded
     column on the left hand side showing the index starting at \(1\) and going 
     up to \(101\).\\
@@ -106,7 +131,7 @@ metric. It can be easily checked that this is indeed a distance measure.\\
             x_2^{(2)} = \false, \ldots, \ x_{15}^{(2)} = \false, \ x_{16}^{(2)} 
             = \true\right]
         \\
-        \textbf{Bass:} \quad & X^{(3)} = \left[x_1^{(3)} = \false, \ x_2^{(3)} = 
+        \textbf{Bass:} \quad & X^{(3)} = \left[x_1^{(3)} = \false, \ x_2^{(3)} =
             \false, \ \ldots, \ x_{15}^{(3)} = \false, \ x_{16}^{(3)} = 
             \false\right]
         \\
@@ -148,14 +173,14 @@ a representative point. We call such a point a mode of \textbf{X}.\\
         D(\textbf{X}, \mu) = \sum_{i=1}^{N} d(X^{(i)}, \mu)
 	\end{equation}
 	
-    Note that \(\mu\) is not necessarily in \textbf{X}. We call such a vector
+    Note that \(\mu\) is not necessarily in \textbf{X}, and in this case we call
     \(\mu\) a \emph{virtual mode} of \textbf{X}.
 \end{definition}
 
 \begin{definition}\label{def:rel-freq}
     Let \textbf{X} be a dataset with attributes \(A_1, \ldots, A_m\). Then we
     denote by \(n(a_s^{(j)})\) the \emph{frequency} of the \(s^{th}\) category 
-    \(a_s^{(j)}\) of \(A_j\) in \textbf{X}. That is, 
+    \(a_s^{(j)}\) of \(A_j\) in \textbf{X}. That is: 
 	
     \[
 	    n(a_s^{(j)}) := |{\{X^{(i)} \in \textbf{X}: x_j^{(i)} = a_s^{(j)}\}}|
@@ -166,16 +191,17 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 \end{definition}
 
 \begin{remark}
-    Note that we have \(1 \le n(a_s^{(j)}) \le N\) for all \(s\) and \(j = 1, 
-    \ldots, m\).\\
+    Note that we have \(1 \le n(a_s^{(j)}) \le N\) for all \(s\) and
+    \(j~=~1,~\ldots,~m\).\\
 \end{remark}
 
 \begin{theorem}\label{thm:1}
     Consider a dataset \textbf{X} and some \(X^{(i)} \in \textbf{X}\). Then:
 	
     \[
-	    D(\textbf{X}, X^{(i)}) \text{ is minimised } \iff n(x_j^{(i)}) \geq 
-	    n(a_s^{(j)}) \text{ for all } s \text{ and } j = 1, \ldots, m 
+	    D(\textbf{X}, X^{(i)}) \ \text{is minimised} \ \iff n(x_j^{(i)}) \geq 
+	    n(a_s^{(j)}) \ \text{for all} \ s~=~1,~\ldots,~d_j \ \text{for each} \
+        j~=~1,~\ldots,~m. 
 	\]
 \end{theorem}
 A proof of this theorem can be found in the Appendix of~\cite{Huang98}.\\
@@ -201,35 +227,45 @@ A proof of this theorem can be found in the Appendix of~\cite{Huang98}.\\
     }
     \end{table}
 
-    To be consistent with our definition for a mode, we should also calculate 
-    our summed dissimilarity:
-    \[
-        D(\textbf{X}, \mu) = 501
-    \]
+    To be consistent with our definition for a mode, we will also calculate our 
+    summed dissimilarity, \(D(\textbf{X}, \mu)\). It is easily determined that
+    this is \(501\), and that this is the only point in our data which minimises
+    the summed dissimilarity. It follows immediately that \(\mu\) is in fact the
+    only actual mode of our dataset.
 \end{example}
+
+\begin{remark}
+    Many practical implementations of the \(k\)-modes algorithm do not actually
+    consider \(k\) modes, as there may not be that many points in the dataset
+    which minimise the summed dissimilarity. We will still refer to all of the 
+    representative points found by the algorithm as modes, however.
+\end{remark}
 
 \subsection{The cost function}\label{subsec:cost}
 
 We can use Definitions~\ref{def:dissim}~\&~\ref{def:mode} to determine a cost 
-function for our algorithm. Let \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\) 
-be a set of \(k\) modes of \textbf{X}, and let \(W = (w_{i,l})\) be an \(N 
-\times k\) matrix such that:
+function for our algorithm. When any clustering of the data has been determined,
+we can measure the performance of the algorithm against this cost function. Let
+our clusters be given by \(C_1, \ldots, C_k\) and our current set of modes be
+given by \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\). Then we define \(W =
+(w_{i, l})\) to be an \(N \times k\) partition matrix of \textbf{X} such that:
 
 \[ 
     w_{i,l} = \begin{cases}
-                1, & X^{(i)} \in C_l \\
+                1, & \text{if} \ X^{(i)} \in C_l \\
                 0, & \text{otherwise}
               \end{cases}
 \]\\
 
-Then we define our \emph{cost function} to be the summed within-cluster 
-dissimilarity:
+\begin{definition}\label{def:cost}
+    For the \(k\)-modes alogrithm, we define our \emph{cost function} to be the 
+    summed within-cluster dissimilarity:
 
-\begin{equation}
-    \text{Cost}(W, \bar{\mu}) = \sum_{l=1}^{k} \sum_{i=1}^{N} 
-                                \sum_{j=1}^{m} w_{i,l} 
-                                \delta(x_{i,j}, \mu_{l,j})
-\end{equation}
+    \[
+        \text{Cost}(W, \bar{\mu}) = \sum_{l=1}^{k} \sum_{i=1}^{N} \sum_{j=1}^{m}
+        w_{i,l} \delta(x_{i,j}, \mu_{l,j})
+    \]
+\end{definition}
 
 
 \subsection{The \(k\)-modes algorithm}\label{subsec:kmodes}
