@@ -272,62 +272,7 @@ given by \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\). Then we define \(W =
 
 Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
 
-\begin{algorithm}[H]
-    \caption{\(k\)-modes}\label{alg:kmodes}
-	\begin{algorithmic}[0]
-        \State{\textbf{Input:} a dataset \textbf{X}, a number of clusters to
-        form \(k\)}
-        \State{\textbf{Output:} a clustering of the dataset \(C_1, \ldots, 
-        C_k\)}
-        \\
-        \Procedure{Update}{$\mu^{(l)}$}\Comment{How to update a current mode}
-        \State{Find \(\mu^{(l_{\text{new}})}\) that satisfies: 
-            \[
-                D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 \times \cdots
-                \times A_m} \left\{D(C_l, \mu)\right\}
-            \]
-        }
-        \State{\(\mu^{(l)} \gets \mu^{(l_{\text{new}})}\)}
-        \EndProcedure
-        \\
-        \State{\(\bar{\mu} \gets \emptyset\)}\Comment{Initialisation step}
-        \For{\(l \in \{1, \ldots, k\}\)}
-            \State{\(C_l \gets \emptyset\)}
-		\EndFor
-        \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)} \in
-        \textbf{X}\).}
-        \State{\(\bar{\mu} \gets \left\{\mu^{(1)}, \ldots, 
-            \mu^{(k)}\right\}\)}
-        \\
-        \For{\(X_i \in \textbf{X}\)}\Comment{First cluster assignment}
-            \State{Select \(l^*\) that satisfies: 
-                \[
-                    d(X^{(i)}, \mu^{(l^*)}) = \min_{1 \le l \le m} 
-                    \left\{d(X^{(i)}, \mu^{(l)})\right\}
-                \]
-            }
-            \State{\(C_{l^*} \gets C_{l^*} \cup \{X^{(i)}\}\)}
-            \State{\textsc{Update}\((\mu^{(l^*)})\).}
-		\EndFor
-        \\
-        \Repeat\Comment{Continue reassigning points to the appropriate cluster
-            until no point moves}{%
-            \For{\(X^{(i)} \in \textbf{X}\)}
-                \For{\(\mu^{(l)} \in \bar{\mu}\)}
-                    \State{Calculate \(d(X^{(i)}, \mu^{(l)})\)}
-				\EndFor
-                \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \text{ 
-                for some } l' \neq l^*\)}
-                    \State{\(C_{l^*} \gets C_{l^*} \setminus \{X^{(i)}\}\)}
-                    \State{\(C_{l'} \gets C_{l'} \cup \{X^{(i)}\}\)}
-                    \State{\textsc{Update}\((\mu^{(l^*)})\) and 
-                    \textsc{Update}\((\mu^{(l')})\).}
-				\EndIf
-			\EndFor
-        }
-		\Until{No point changes cluster after a full cycle through \textbf{X}.}
-	\end{algorithmic}
-\end{algorithm}
+\input{tex/k-modes-algorithm.tex}
 
 \begin{remark}
     The processes by which the \(k\) initial modes are selected are detailed in 

@@ -17,46 +17,7 @@ in~\cite{Huang98}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
 \(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
 is the set of modes to go on to be used by the \(k\)-modes algorithm.\\
 
-\begin{algorithm}[H]
-\caption{Huang's method}\label{alg:huang}
-    \begin{algorithmic}[0]
-        \State{\textbf{Input:} a dataset \textbf{X}, with attribute sets \(A_1,
-        \ldots, A_m\), and a number of modes to find \(k\)}
-        \State{\textbf{Output:} a set of \(k\) initial modes \(\bar{\mu}\)}
-        \\
-        \State{\(\tilde{\mu} \gets \emptyset\)}\Comment{Initialisation step}
-        \State{\(\bar{\mu} \gets \emptyset\)}
-        \For{\(j = 1, \ldots, m\)}
-            \For{\(s = 1, \ldots, d_j\)}
-                \State{Calculate the relative frequency of each attribute value:
-                    \(\frac{n(a_s^{(j)})}{N}\).}
-	        \EndFor
-        \EndFor
-        \\
-        \For{\(l = 1, \ldots, k\)}\Comment{Distribute most common attribute 
-        values}
-            \For{\(j = 1, \ldots, m\)}
-            \State{Sample \(a_{s^*}^{(j)}\) from \(A_j\) by considering the 
-                relative frequencies of the elements of \(A_j\) as a probability
-                distribution.}
-                \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
-	        \EndFor
-            \State{\(\tilde{\mu} \gets \tilde{\mu} \cup \{\mu^{(l)}\}\)}
-	    \EndFor
-        \\
-        \For{\(\mu \in \tilde{\mu}\)}\Comment{Replace with points in dataset to
-        avoid empty clusters}
-            \State{Select \(X^{(i^*)} \in \textbf{X}\) such that: 
-                \[
-                    X^{(i^*)} = \argmin_{1 \leq i \leq N} \left\{ d(X^{(i)}, 
-                    \mu): \ X^{(i^*)} \neq \mu'  \ \forall \mu' \in 
-                    \bar{\mu}\right\}
-                \]
-            }
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i^*)}\right\}\)}
-        \EndFor
-    \end{algorithmic}
-\end{algorithm} 
+\input{tex/huang-algorithm.tex} 
 
 In the original statement of Huang's method~\cite{Huang98}, the algorithm states
 that the most frequent categories should be assigned `equally' to the \(k\) 
@@ -217,46 +178,7 @@ that such an \(X^{(i)}\) with maximal average density in \textbf{X} with respect
 to \textbf{A} is, in fact, a mode of \textbf{X}. This notion helps justify the 
 method proposed by Cao et al. as discussed below.\\
 
-\begin{algorithm}[H]
-\caption{Cao's method}\label{alg:cao}
-	\begin{algorithmic}[0]
-        \State{\(\bar{\mu} \gets \emptyset\)}\Comment{Initialisation step}
-        \For{\(X^{(i)} \in \textbf{X}\)}
-            \State{Calculate \(\text{Dens}(X^{(i)})\).}
-		\EndFor
-        \\
-        \State{Select \(X^{(i_1)} \in \textbf{X}\) which satisfies:\Comment{%
-            Select the point with maximal density}
-        \[
-            X^{(i_1)} = \argmax_{1 \leq i \leq N} 
-            \left\{\text{Dens}(X^{(i)})\right\}
-        \]
-        }
-        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_1)}\)}
-        \\
-        \State{Select \(X^{(i_2)} \in \textbf{X}\) which satisfies:\Comment{%
-            Maximise both density and distance from the first mode} 
-		\[
-            X^{(i_2)} = \argmax_{1 \leq i \leq N} \left\{\text{Dens}(X^{(i)})
-            \times d(X^{(i)}, X^{(i_1)})\right\}
-		\]
-        }
-        \\
-        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_2)}\)}
-        \\
-        \While{\(|\bar{\mu}| < k\)}\Comment{Continue to choose points in this
-        fashion until \(k\) are chosen}
-            \State{Select \(X^{(i_3)} \in \textbf{X}\) which satisfies:
-			\[
-                X^{(i_3)} = \argmax_{1 \leq i \leq N} \left\{\min_{\mu^{(l)} \in
-                \bar{\mu}} \left\{\text{Dens}(X^{(i)}) \times d(X^{i}, 
-                \mu^{(l)})\right\}\right\}
-			\]
-            }
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_3)}\)}
-		\EndWhile
-	\end{algorithmic}
-\end{algorithm}
+\input{tex/cao-algorithm.tex}
 
 \begin{example}\label{ex:cao}
     Cao's method with zoo animal dataset

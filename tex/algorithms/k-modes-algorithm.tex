@@ -1,0 +1,62 @@
+\begin{algorithm}[H]
+    \caption{\(k\)-modes}\label{alg:kmodes}
+	\begin{algorithmic}[0]
+        \State{\textbf{Input:} a dataset \textbf{X}, a number of clusters to
+        form \(k\)}
+        \State{\textbf{Output:} a clustering of the dataset \(C_1, \ldots, 
+        C_k\)\\}
+        \\
+        \Comment{How to update a mode}
+        \Procedure{Update}{$\mu^{(l)}$}
+        \State{Find \(\mu^{(l_{\text{new}})}\) that satisfies: 
+            \[
+                D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 \times \cdots
+                \times A_m} \left\{D(C_l, \mu)\right\}
+            \]
+        }
+        \State{\(\mu^{(l)} \gets \mu^{(l_{\text{new}})}\)}
+        \EndProcedure
+        \\
+        \\
+        \Comment{Initialisation step}
+        \State{\(\bar{\mu} \gets \emptyset\)}
+        \For{\(l \in \{1, \ldots, k\}\)}
+            \State{\(C_l \gets \emptyset\)}
+		\EndFor
+        \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)} \in
+        \textbf{X}\).}
+        \State{\(\bar{\mu} \gets \left\{\mu^{(1)}, \ldots, 
+            \mu^{(k)}\right\}\)\\}
+        \\
+        \Comment{First cluster assignment}
+        \For{\(X_i \in \textbf{X}\)}
+            \State{Select \(l^*\) that satisfies: 
+                \[
+                    d(X^{(i)}, \mu^{(l^*)}) = \min_{1 \le l \le m} 
+                    \left\{d(X^{(i)}, \mu^{(l)})\right\}
+                \]
+            }
+            \State{\(C_{l^*} \gets C_{l^*} \cup \{X^{(i)}\}\)}
+            \State{\textsc{Update}\((\mu^{(l^*)})\).}
+		\EndFor
+        \\
+        \\
+        \Comment{Continue to reassign poiunts to the most similar cluster until
+        no point moves}
+        \Repeat{%
+            \For{\(X^{(i)} \in \textbf{X}\)}
+                \For{\(\mu^{(l)} \in \bar{\mu}\)}
+                    \State{Calculate \(d(X^{(i)}, \mu^{(l)})\)}
+				\EndFor
+                \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \text{ 
+                for some } l' \neq l^*\)}
+                    \State{\(C_{l^*} \gets C_{l^*} \setminus \{X^{(i)}\}\)}
+                    \State{\(C_{l'} \gets C_{l'} \cup \{X^{(i)}\}\)}
+                    \State{\textsc{Update}\((\mu^{(l^*)})\) and 
+                    \textsc{Update}\((\mu^{(l')})\).}
+				\EndIf
+			\EndFor
+        }
+		\Until{No point changes cluster after a full cycle through \textbf{X}.}
+	\end{algorithmic}
+\end{algorithm}

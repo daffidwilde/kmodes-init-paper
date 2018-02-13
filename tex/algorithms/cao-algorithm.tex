@@ -1,0 +1,49 @@
+\begin{algorithm}[H]
+\caption{Cao's method}\label{alg:cao}
+	\begin{algorithmic}[0]
+        \State{\textbf{Input:} a dataset \textbf{X}, with attribute sets \(A_1,
+        \ldots, A_m\), and a number of modes to find \(k\)}
+        \State{\textbf{Output:} a set of \(k\) initial modes \(\bar{\mu}\)\\}
+        \\
+        \Comment{Initialisation step}
+        \State{\(\bar{\mu} \gets \emptyset\)}
+        \For{\(X^{(i)} \in \textbf{X}\)}
+            \State{Calculate \(\text{Dens}(X^{(i)})\).}
+		\EndFor
+        \\
+        \\
+        \Comment{Select the point with maximal density}
+        \State{Select \(X^{(i_1)} \in \textbf{X}\) which satisfies:
+        \[
+            X^{(i_1)} = \argmax_{1 \leq i \leq N} 
+            \left\{\text{Dens}(X^{(i)})\right\}
+        \]
+        }
+        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_1)}\)\\}
+        \\
+        \Comment{Second point maximises both density and distance from the first
+        mode}
+        \State{Select \(X^{(i_2)} \in \textbf{X}\) which satisfies: 
+		\[
+            X^{(i_2)} = \argmax_{1 \leq i \leq N} \left\{\text{Dens}(X^{(i)})
+            \times d(X^{(i)}, X^{(i_1)})\right\}
+		\]
+        }
+        \\
+        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_2)}\)\\}
+        \\
+        \Comment{Continue to choose points in this fashion until \(k\) are
+        chosen}
+        \While{\(|\bar{\mu}| < k\)}
+            \State{Select \(X^{(i_3)} \in \textbf{X}\) which satisfies:
+			\[
+                X^{(i_3)} = \argmax_{1 \leq i \leq N} \left\{\min_{\mu^{(l)} \in
+                \bar{\mu}} \left\{\text{Dens}(X^{(i)}) \times d(X^{i}, 
+                \mu^{(l)})\right\}\right\}
+			\]
+            }
+            \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_3)}\)}
+		\EndWhile
+	\end{algorithmic}
+\end{algorithm}
+
