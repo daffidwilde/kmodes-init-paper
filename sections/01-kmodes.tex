@@ -274,21 +274,44 @@ Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
 
 \begin{algorithm}[H]
     \caption{\(k\)-modes}\label{alg:kmodes}
-	\begin{algorithmic}[0] 
-        \State{\(\bar{\mu} \gets \emptyset\)}
+	\begin{algorithmic}[0]
+        \State{\textbf{Input:} a dataset \textbf{X}, a number of clusters to
+        form \(k\)}
+        \State{\textbf{Output:} a clustering of the dataset \(C_1, \ldots, 
+        C_k\)}
+        \\
+        \Procedure{Update}{$\mu^{(l)}$}\Comment{How to update a current mode}
+        \State{Find \(\mu^{(l_{\text{new}})}\) that satisfies: 
+            \[
+                D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 \times \cdots
+                \times A_m} \left\{D(C_l, \mu)\right\}
+            \]
+        }
+        \State{\(\mu^{(l)} \gets \mu^{(l_{\text{new}})}\)}
+        \EndProcedure
+        \\
+        \State{\(\bar{\mu} \gets \emptyset\)}\Comment{Initialisation step}
         \For{\(l \in \{1, \ldots, k\}\)}
             \State{\(C_l \gets \emptyset\)}
 		\EndFor
-        \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)}\).}
-        \State{\(\bar{\mu} \gets \{\mu^{(1)}, \ldots, \mu^{(k)}\}\)}
-        \For{\(X_i \in \textbf{X}\)}
-            \State{Select \(l^* \text{ that satisfies } \displaystyle{d(X^{(i)}, 
-                \mu^{(l^*)}) = \min_{1 \le l \le m} \{d(X^{(i)},
-                \mu^{(l)})\}}\).}
-            \State{\(C_{j^*} \gets C_{j^*} \cup \{X^{(i)}\}\)}
-            \State{Update \(\mu^{(l^*)}\).}
+        \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)} \in
+        \textbf{X}\).}
+        \State{\(\bar{\mu} \gets \left\{\mu^{(1)}, \ldots, 
+            \mu^{(k)}\right\}\)}
+        \\
+        \For{\(X_i \in \textbf{X}\)}\Comment{First cluster assignment}
+            \State{Select \(l^*\) that satisfies: 
+                \[
+                    d(X^{(i)}, \mu^{(l^*)}) = \min_{1 \le l \le m} 
+                    \left\{d(X^{(i)}, \mu^{(l)})\right\}
+                \]
+            }
+            \State{\(C_{l^*} \gets C_{l^*} \cup \{X^{(i)}\}\)}
+            \State{\textsc{Update}\((\mu^{(l^*)})\).}
 		\EndFor
-        \Repeat{%
+        \\
+        \Repeat\Comment{Continue reassigning points to the appropriate cluster
+            until no point moves}{%
             \For{\(X^{(i)} \in \textbf{X}\)}
                 \For{\(\mu^{(l)} \in \bar{\mu}\)}
                     \State{Calculate \(d(X^{(i)}, \mu^{(l)})\)}
@@ -297,7 +320,8 @@ Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
                 for some } l' \neq l^*\)}
                     \State{\(C_{l^*} \gets C_{l^*} \setminus \{X^{(i)}\}\)}
                     \State{\(C_{l'} \gets C_{l'} \cup \{X^{(i)}\}\)}
-                    \State{Update both \(\mu^{(l^*)} \text{ and } \mu^{(j')}\).}
+                    \State{\textsc{Update}\((\mu^{(l^*)})\) and 
+                    \textsc{Update}\((\mu^{(l')})\).}
 				\EndIf
 			\EndFor
         }

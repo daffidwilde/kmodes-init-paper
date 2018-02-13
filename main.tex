@@ -13,12 +13,18 @@
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
 \usepackage{algorithm}
+\renewcommand{\algorithmiccomment}[1]{%
+    \textcolor{red}{\hfill$\triangleright$ #1}
+}
 %\usepackage{minted}
 \newcommand{\true}{\text{True}}
 \newcommand{\false}{\text{False}}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 % Importing images, tables and referencing
 \usepackage{graphicx}
+\usepackage{xcolor}
 %\usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{float}
