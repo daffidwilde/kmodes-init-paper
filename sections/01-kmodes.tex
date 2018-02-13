@@ -245,11 +245,11 @@ Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
         C_k\) \\}
         
         \Procedure{Update}{$\mu^{(l)}$}
-        \State{Find \(\mu^{(l_{new})}\) that satisfies: \(\displaystyle{D(C_l, 
-            \mu^{(l_{new})}) = \min_{\mu \in A_1 \times \cdots \times A_m} 
-            \left(D(C_l, \mu)\right)}\)
+        \State{Find \(\mu^{(l_{\text{new}})}\) that satisfies: 
+            \(\displaystyle{D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 
+            \times \cdots \times A_m} \left\{D(C_l, \mu)\right\}\)
         }
-        \State{\(\mu^{(l)} \gets \mu^{(l_{new})}\)}
+        \State{\(\mu^{(l)} \gets \mu^{(l_{\text{new}})}\)}
         \EndProcedure
         
         \State{\\ \(\bar{\mu} \gets \emptyset\)}
@@ -258,11 +258,11 @@ Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
 		\EndFor
         \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)} \in
         \textbf{X}\).}
-        \State{\(\bar{\mu} \gets \{\mu^{(1)}, \ldots, \mu^{(k)}\}\)}
+        \State{\(\bar{\mu} \gets \left\{\mu^{(1)}, \ldots, \mu^{(k)}\right\}\)}
         \For{\(X_i \in \textbf{X}\)}
             \State{Select \(l^* \ \text{that satisfies} \ 
                 \displaystyle{d(X^{(i)}, \mu^{(l^*)}) = \min_{1 \le l \le m} 
-                \{d(X^{(i)}, \mu^{(l)})\}}\).}
+                \left\{d(X^{(i)}, \mu^{(l)})\right\}}\).}
             \State{\(C_{l^*} \gets C_{l^*} \cup \{X^{(i)}\}\)}
             \State{\textsc{Update}\((\mu^{(l^*)})\).}
 		\EndFor
