@@ -13,47 +13,48 @@ Sections~\ref{subsec:huang}~\&~\ref{subsec:cao}.\\
 In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
 chosen at random from \textbf{X}. Below is an alternative method of selecting
 these modes that forces some diversity between them, as described 
-in~\cite{Huang98}:\\
+in~\cite{Huang98}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
+\(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
+is the set of modes to go on to be used by the \(k\)-modes algorithm.\\
 
 \begin{algorithm}[H]
 \caption{Huang's method}\label{alg:huang}
     \begin{algorithmic}[0]
+        \State{\textbf{Input:} a dataset \textbf{X}, with attribute sets \(A_1,
+        \ldots, A_m\), and a number of modes to find \(k\)}
+        \State{\textbf{Output:} a set of \(k\) initial modes \(\bar{\mu}\)}
+        \\
+        \State{\(\tilde{\mu} \gets \emptyset\)}\Comment{Initialisation step}
         \State{\(\bar{\mu} \gets \emptyset\)}
-        \State{Let \(P = (p_{s,j})\) be an empty \(N \times m\) matrix.}
         \For{\(j = 1, \ldots, m\)}
-            \State{\(d \gets |dom(A_j)|\)}
-            \For{\(s = 1, \ldots, d\)}
-                \State{Calculate \(n(a_s^{(j)})\).}
+            \For{\(s = 1, \ldots, d_j\)}
+                \State{Calculate the relative frequency of each attribute value:
+                    \(\frac{n(a_s^{(j)})}{N}\).}
 	        \EndFor
-            \State{Sort \(dom(A_j) = \{a_1^{(j)}, \ldots, a_d^{(j)}\}\) into 
-            descending order by frequency, breaking ties arbitrarily.}
-            \State{Call this arrangement \(dom^*(A_j)\).}
-            \For{\(a_s^{(j)} \in dom^*{A_j}\)}
-                \State{\(p_{s,j} \gets \frac{n(a_s^{(j)})}{N}\)}
-	        \EndFor
-            \State{\(p_{s,j}\) is left empty for all \(s > d\).}
-	    \EndFor
-        \For{\(l = 1, \ldots, k\)}
+        \EndFor
+        \\
+        \For{\(l = 1, \ldots, k\)}\Comment{Distribute most common attribute 
+        values}
             \For{\(j = 1, \ldots, m\)}
-                \State{Take the nonempty entries of \(p_{*,j}\) as a vector and 
-                consider it as a probability distribution.}
-            \State{Sample \(a_{s^*}^{(j)}\) from \(dom^*(A_j)\) according to 
-            this probability distribution.}
-            \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
+            \State{Sample \(a_{s^*}^{(j)}\) from \(A_j\) by considering the 
+                relative frequencies of the elements of \(A_j\) as a probability
+                distribution.}
+                \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
 	        \EndFor
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup \mu^{(l)}\)}
+            \State{\(\tilde{\mu} \gets \tilde{\mu} \cup \{\mu^{(l)}\}\)}
 	    \EndFor
-        \For{\(l = 1, \ldots, k\)}
+        \\
+        \For{\(\mu \in \tilde{\mu}\)}\Comment{Replace with points in dataset to
+        avoid empty clusters}
             \State{Select \(X^{(i^*)} \in \textbf{X}\) such that: 
-            \[
-                d(X^{(i^*)}, \mu^{(l)}) = \min_{1 \le i \le  N} 
-                \{d(X^{(i)}, \mu^{(l)})\} \text{ and } X^{(i^*)} \ne \mu^{(l')}
-                \text{ for all } \mu^{(l')} \in \bar{\mu}
-            \]
+                \[
+                    X^{(i^*)} = \argmin_{1 \leq i \leq N} \left\{ d(X^{(i)}, 
+                    \mu): \ X^{(i^*)} \neq \mu'  \ \forall \mu' \in 
+                    \bar{\mu}\right\}
+                \]
             }
-            \State{\(\mu^{(l)} \gets X^{(i^*)}\)}
-            \State{\(\bar{\mu} \gets \mu^{(l)}\)}
-	    \EndFor
+            \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i^*)}\right\}\)}
+        \EndFor
     \end{algorithmic}
 \end{algorithm} 
 
@@ -244,34 +245,40 @@ method proposed by Cao et al. as discussed below.\\
 \begin{algorithm}[H]
 \caption{Cao's method}\label{alg:cao}
 	\begin{algorithmic}[0]
-        \State{\(\bar{\mu} \gets \emptyset\)}
+        \State{\(\bar{\mu} \gets \emptyset\)}\Comment{Initialisation step}
         \For{\(X^{(i)} \in \textbf{X}\)}
             \State{Calculate \(\text{Dens}(X^{(i)})\).}
 		\EndFor
-        \State{Select \(X^{(i_1)} \in \textbf{X}\) which satisfies:
+        \\
+        \State{Select \(X^{(i_1)} \in \textbf{X}\) which satisfies:\Comment{%
+            Select the point with maximal density}
         \[
-            \text{Dens}(X^{(i_1)}) = \max_{X^{(i)} \in \textbf{X}} 
-            \{\text{Dens}(X^{(i)})\}
+            X^{(i_1)} = \argmax_{1 \leq i \leq N} 
+            \left\{\text{Dens}(X^{(i)})\right\}
         \]
         }
         \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_1)}\)}
-        \State{Select \(X^{(i_2)} \in \textbf{X}\) such that: 
+        \\
+        \State{Select \(X^{(i_2)} \in \textbf{X}\) which satisfies:\Comment{%
+            Maximise both density and distance from the first mode} 
 		\[
-			\text{Dens}(X^{(i_2)}) \times d(X^{(i_1)}, X^{(i_2)}) =
-			\max_{X^{(i)} \in \textbf{X}} \{d(X^{(i)}, X^{(i_1)})\}
+            X^{(i_2)} = \argmax_{1 \leq i \leq N} \left\{\text{Dens}(X^{(i)})
+            \times d(X^{(i)}, X^{(i_1)})\right\}
 		\]
         }
+        \\
         \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_2)}\)}
-        \While{\(|\bar{\mu}| < k\)}
-            \State{Select \(X^{(i_t)} \in \textbf{X}\) such that for all 
-            \(\mu^{(l)} \in \bar{\mu}\):
+        \\
+        \While{\(|\bar{\mu}| < k\)}\Comment{Continue to choose points in this
+        fashion until \(k\) are chosen}
+            \State{Select \(X^{(i_3)} \in \textbf{X}\) which satisfies:
 			\[
-		        d(X^{(i_t)}, \mu^{(l)}) \times \text{Dens}(X_{i_t}) = 
-                \max_{X^{(i)} \in \textbf{X}} \{\min_{\mu^{(l)} \in \bar{\mu}} 
-				\{d(X^{i}, \mu^{(l)}) \times \text{Dens}(X^{(i)}) \}\}
+                X^{(i_3)} = \argmax_{1 \leq i \leq N} \left\{\min_{\mu^{(l)} \in
+                \bar{\mu}} \left\{\text{Dens}(X^{(i)}) \times d(X^{i}, 
+                \mu^{(l)})\right\}\right\}
 			\]
             }
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_t)}\)}
+            \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_3)}\)}
 		\EndWhile
 	\end{algorithmic}
 \end{algorithm}
