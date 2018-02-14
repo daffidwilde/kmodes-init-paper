@@ -62,34 +62,21 @@ that the most frequent categories should be assigned `equally' to the \(k\)
 initial modes. How the categories should be distributed `equally' is not 
 well-defined or easily seen from the example given. This ambiguity in the 
 definition of Huang's method means that a probabilistic element must be 
-introduced, and unless seeded pseudo-random numbers are used, computer-generated results are not necessarily reproducible.\\
+introduced, and unless seeded pseudo-random numbers are used, computer-generated
+results are not necessarily reproducible.\\
 
-In Section~\ref{sec:results}, an implementation of the \(k\)-modes algorithm 
-(written in Python) is used to compare the quality of the initialisation 
-processes discussed throughout this piece of work when applied to a collection 
-of datasets. That implementation distributes the attribute values by taking a
-sample from each attribute domain (with replacement) according to the 
-probability distribution formed by the relative frequencies of the attribute
-values, as is described in Algorithm~\ref{alg:huang}. In our examples, we will
-assign the categories to our initial modes in the same way.\\
+In our examples, and the implementation used to apply the \(k\)-modes algorithm
+in Section~\ref{sec:results}, we will consider `equally' to mean taking a sample
+from a probability distribution. This distribution will be formed by the
+relative frequencies of the attributes' values, as is described in
+Algorithm~\ref{alg:huang}.\\
 
 \begin{example}\label{ex:huang}
     Consider the zoo animal dataset. We will now find a set of initial modes for
     the \(k\)-modes algorithm using Huang's method. For the sake of this
-    example, we will let \(k = 7\) as there are \(7\) classes. Please be advised
-    that this may not be the optimal value for \(k\).\\
+    example, we will let \(k = 3\). Be advised that this may not be the optimal
+    value for \(k\).\\
     
-    We begin by calculating the frequencies and relative frequencies of our 
-    attributes' values, which are stored in 
-    Tables~\ref{tab:freq}~\&~\ref{tab:rel-freq}, respectively.\\
-
-    \begin{table}[h]
-    \resizebox{\textwidth}{!}{%
-        \input{tex/frequency-table.tex}
-    }
-    \caption{Frequency table for attribute values.}\label{tab:freq}
-    \end{table}
-
     \begin{table}[h]
     \resizebox{\textwidth}{!}{%
         \input{tex/rel-freq-frac-table.tex}
@@ -97,61 +84,52 @@ assign the categories to our initial modes in the same way.\\
     \caption{Relative frequency table for attribute values.}\label{tab:rel-freq}
     \end{table}
 
-    Now to find our set of (potentially) virtual modes, \(\bar{\mu}\). For each
-    attribute, we will take a sample of size one from the attribute domain
-    according to the probability distribution represented in the corresponding
-    column of Table~\ref{tab:rel-freq}. The following set of initial modes was 
-    obtained by using a short Python script (put in Appendix).\\
+    We begin by calculating the relative frequencies of our attributes' values, 
+    which are stored in Table~\ref{tab:rel-freq}. Now to find our set of 
+    (potentially) virtual modes, \(\tilde{\mu}\). For each attribute, we will 
+    take a sample of size one from the its set of values according to the 
+    probability distribution represented in the corresponding column of 
+    Table~\ref{tab:rel-freq}. For instance, say we are trying to find the value
+    of the \(13^{th}\) attribute, `legs', of our first mode in \(\tilde{\mu}\).
+    Then we have to sample from the following probability distribution:\\
+    
+    \begin{table}[h]
+    \centering
+    \begin{tabular}{cccccccc}
+        \(A_{13}\) \vline& None & Two & Four & Five & Six & Eight \\
+        \midrule\(\mathbb{P}(A_{13} = a_s^{13})\) \vline& \(\frac{23}{101}\) & 
+        \(\frac{27}{101}\) & \(\frac{38}{101}\) & \(\frac{1}{101}\) & 
+        \(\frac{10}{101}\) & \(\frac{2}{101}\) \\
+    \end{tabular}
+    \end{table}
+    
+    We sample one value from this distribution and set that value to be the 
+    \(13^{th}\) component of our first mode. This process is repeated for all
+    other \(l = 1, 2, 3\) and \(j = 1, \ldots, 16\) giving us \(3\)
+    \(m\)-dimensional vectors that fairly represent the most frequent attribute
+    values. This set of vectors is \(\tilde{\mu}\).\\
+
+    There are many ways of obtaining \(\tilde{\mu}\) from our relative frequency
+    table but we have opted to do so using a short Python script (see Appendix).
+    In this case, we have the following set of vectors:
 
     \begin{equation}
     \nonumber
     \begin{aligned}
-        \bar{\mu} = \ \{ & \mu^{(1)} = \left[\false, \ \false, \ \true, \ 
-        \false, \ \false, \ \true, \ \false, \ \true, \ \true, \ \true, \ 
-        \false, \ \false, \ \text{Two}, \ \true, \ \false, \ \false\right],
-        \\
-        {} & \mu^{(2)} = \left[\false, \ \true, \ \true, \ \true, \ \true, \
-        \true, \ \true, \ \true, \ \false, \ \true, \ \false, \ \true, \
-        \text{Two}, \ \true, \ \false, \ \true\right],
-        \\
-        {} & \mu^{(3)} = \left[\false, \ \false, \ \false, \ \true, \ \false, \
-        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \false, 
-        \text{None}, \ \true, \ \false, \ \false\right],
-        \\
-        {} & \mu^{(4)} = \left[\false, \ \false, \ \true, \ \false, \ \true, \
-        \false, \ \false, \ \false, \ \true, \ \true, \ \false, \false, \
-        \text{Four}, \ \false, \ \false, \false\right],
-        \\
-        {} & \mu^{(5)} = \left[\false, \ \false, \ \true, \ \false, \ \true, \
-        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \
-        \text{Four}, \ \false, \false, \false\right],
-        \\
-        {} & \mu^{(6)} = \left[\false, \ \false, \ \false, \ \true, \ \false, \
-        \false, \ \true, \ \false, \ \true, \ \true, \ \false, \ \false, \
-        \text{Four}, \ \true, \ \false, \ \false\right],
-        \\
-        {} & \mu^{(7)} = \left[\true, \ \false, \ \true, \ \false, \ \false, \
-        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \ 
-        \text{Four}, \ \true, \ \false, \ \true\right]\}
+        \tilde{\mu} = \left\{some \ vectors \right\}\\
     \end{aligned}
     \end{equation}
 
-    Finally, we take each element of \(\bar{\mu}\) in turn and replace it with
-    the most similar point in our dataset such that no point is used twice.
-    These \(k\) modes are given in Table~\ref{tab:huang-modes}.
-    We also stipulate that if there is more than one entry in the set with the 
-    same attributes as another (for instance, aardvark and bear are identical
-    with respect to their attributes' values) that only one of these entries may
-    be used as a replacement for one of our virtual modes so as to avoid empty
-    clusters down the line.\\
+    Finally, we take each element of \(\tilde{\mu}\) in turn and find its most
+    similar point in the dataset so that no point is used twice. This collection
+    of points in the dataset then forms our set of initial modes \(\bar{\mu}\)
+    to be passed on to the \(k\)-modes algorithm. We also stipulate that (since
+    there are duplicate rows in this dataset) no point which is identical to
+    another which has been already selected may be used as an initial mode. This
+    is done so as to avoid empty clusters further down the line.\\
 
-    \begin{table}[h]
-    \resizebox{\textwidth}{!}{%
-        \input{tex/huang-modes.tex}
-    }
-    \caption{The \(7\) initial modes found by Huang's
-    method.}\label{tab:huang-modes}
-    \end{table}
+    So, in the first case we have \(some \ vector\).
+
 \end{example}
 
 \subsection{Cao's method}\label{subsec:cao}
