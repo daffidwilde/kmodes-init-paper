@@ -13,146 +13,120 @@ Sections~\ref{subsec:huang}~\&~\ref{subsec:cao}.\\
 In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
 chosen at random from \textbf{X}. Below is an alternative method of selecting
 these modes that forces some diversity between them, as described 
-in~\cite{Huang98}:\\
+in~\cite{Huang98}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
+\(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
+is the set of modes to go on to be used by the \(k\)-modes algorithm.\\
 
-\begin{algorithm}[H]
-\caption{Huang's method}\label{alg:huang}
-    \begin{algorithmic}[0]
-        \State{\(\bar{\mu} \gets \emptyset\)}
-        \State{Let \(P = (p_{s,j})\) be an empty \(N \times m\) matrix.}
-        \For{\(j = 1, \ldots, m\)}
-            \State{\(d \gets |dom(A_j)|\)}
-            \For{\(s = 1, \ldots, d\)}
-                \State{Calculate \(n(a_s^{(j)})\).}
-	        \EndFor
-            \State{Sort \(dom(A_j) = \{a_1^{(j)}, \ldots, a_d^{(j)}\}\) into 
-            descending order by frequency, breaking ties arbitrarily.}
-            \State{Call this arrangement \(dom^*(A_j)\).}
-            \For{\(a_s^{(j)} \in dom^*{A_j}\)}
-                \State{\(p_{s,j} \gets \frac{n(a_s^{(j)})}{N}\)}
-	        \EndFor
-            \State{\(p_{s,j}\) is left empty for all \(s > d\).}
-	    \EndFor
-        \For{\(l = 1, \ldots, k\)}
-            \For{\(j = 1, \ldots, m\)}
-                \State{Take the nonempty entries of \(p_{*,j}\) as a vector and 
-                consider it as a probability distribution.}
-            \State{Sample \(a_{s^*}^{(j)}\) from \(dom^*(A_j)\) according to 
-            this probability distribution.}
-            \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
-	        \EndFor
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup \mu^{(l)}\)}
-	    \EndFor
-        \For{\(l = 1, \ldots, k\)}
-            \State{Select \(X^{(i^*)} \in \textbf{X}\) such that: 
-            \[
-                d(X^{(i^*)}, \mu^{(l)}) = \min_{1 \le i \le  N} 
-                \{d(X^{(i)}, \mu^{(l)})\} \text{ and } X^{(i^*)} \ne \mu^{(l')}
-                \text{ for all } \mu^{(l')} \in \bar{\mu}
-            \]
-            }
-            \State{\(\mu^{(l)} \gets X^{(i^*)}\)}
-            \State{\(\bar{\mu} \gets \mu^{(l)}\)}
-	    \EndFor
-    \end{algorithmic}
-\end{algorithm} 
+\input{tex/algorithms/huang.tex} 
 
 In the original statement of Huang's method~\cite{Huang98}, the algorithm states
 that the most frequent categories should be assigned `equally' to the \(k\) 
 initial modes. How the categories should be distributed `equally' is not 
 well-defined or easily seen from the example given. This ambiguity in the 
 definition of Huang's method means that a probabilistic element must be 
-introduced, and unless seeded pseudo-random numbers are used, computer-generated results are not necessarily reproducible.\\
+introduced, and unless seeded pseudo-random numbers are used, computer-generated
+results are not necessarily reproducible.\\
 
-In Section~\ref{sec:results}, an implementation of the \(k\)-modes algorithm 
-(written in Python) is used to compare the quality of the initialisation 
-processes discussed throughout this piece of work when applied to a collection 
-of datasets. That implementation distributes the attribute values by taking a
-sample from each attribute domain (with replacement) according to the 
-probability distribution formed by the relative frequencies of the attribute
-values, as is described in Algorithm~\ref{alg:huang}. In our examples, we will
-assign the categories to our initial modes in the same way.\\
+In our examples, and the implementation used to apply the \(k\)-modes algorithm
+in Section~\ref{sec:results}, we will consider `equally' to mean taking a sample
+from a probability distribution. This distribution will be formed by the
+relative frequencies of the attributes' values, as is described in
+Algorithm~\ref{alg:huang}.\\
 
 \begin{example}\label{ex:huang}
     Consider the zoo animal dataset. We will now find a set of initial modes for
     the \(k\)-modes algorithm using Huang's method. For the sake of this
-    example, we will let \(k = 7\) as there are \(7\) classes. Please be advised
-    that this may not be the optimal value for \(k\).\\
+    example, we will let \(k = 3\). Be advised that this may not be the optimal
+    value for \(k\).\\
     
-    We begin by calculating the frequencies and relative frequencies of our 
-    attributes' values, which are stored in 
-    Tables~\ref{tab:freq}~\&~\ref{tab:rel-freq}, respectively.\\
-
-    \begin{table}[h]
-    \resizebox{\textwidth}{!}{%
-        \input{tex/frequency-table.tex}
-    }
-    \caption{Frequency table for attribute values.}\label{tab:freq}
-    \end{table}
-
-    \begin{table}[h]
+    \begin{table}[H]
     \resizebox{\textwidth}{!}{%
         \input{tex/rel-freq-frac-table.tex}
     }
     \caption{Relative frequency table for attribute values.}\label{tab:rel-freq}
     \end{table}
 
-    Now to find our set of (potentially) virtual modes, \(\bar{\mu}\). For each
-    attribute, we will take a sample of size one from the attribute domain
-    according to the probability distribution represented in the corresponding
-    column of Table~\ref{tab:rel-freq}. The following set of initial modes was 
-    obtained by using a short Python script (put in Appendix).\\
-
-    \begin{equation}
-    \nonumber
-    \begin{aligned}
-        \bar{\mu} = \ \{ & \mu^{(1)} = \left[\false, \ \false, \ \true, \ 
-        \false, \ \false, \ \true, \ \false, \ \true, \ \true, \ \true, \ 
-        \false, \ \false, \ \text{Two}, \ \true, \ \false, \ \false\right],
-        \\
-        {} & \mu^{(2)} = \left[\false, \ \true, \ \true, \ \true, \ \true, \
-        \true, \ \true, \ \true, \ \false, \ \true, \ \false, \ \true, \
-        \text{Two}, \ \true, \ \false, \ \true\right],
-        \\
-        {} & \mu^{(3)} = \left[\false, \ \false, \ \false, \ \true, \ \false, \
-        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \false, 
-        \text{None}, \ \true, \ \false, \ \false\right],
-        \\
-        {} & \mu^{(4)} = \left[\false, \ \false, \ \true, \ \false, \ \true, \
-        \false, \ \false, \ \false, \ \true, \ \true, \ \false, \false, \
-        \text{Four}, \ \false, \ \false, \false\right],
-        \\
-        {} & \mu^{(5)} = \left[\false, \ \false, \ \true, \ \false, \ \true, \
-        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \
-        \text{Four}, \ \false, \false, \false\right],
-        \\
-        {} & \mu^{(6)} = \left[\false, \ \false, \ \false, \ \true, \ \false, \
-        \false, \ \true, \ \false, \ \true, \ \true, \ \false, \ \false, \
-        \text{Four}, \ \true, \ \false, \ \false\right],
-        \\
-        {} & \mu^{(7)} = \left[\true, \ \false, \ \true, \ \false, \ \false, \
-        \false, \ \true, \ \true, \ \true, \ \true, \ \false, \ \false, \ 
-        \text{Four}, \ \true, \ \false, \ \true\right]\}
-    \end{aligned}
-    \end{equation}
-
-    Finally, we take each element of \(\bar{\mu}\) in turn and replace it with
-    the most similar point in our dataset such that no point is used twice.
-    These \(k\) modes are given in Table~\ref{tab:huang-modes}.
-    We also stipulate that if there is more than one entry in the set with the 
-    same attributes as another (for instance, aardvark and bear are identical
-    with respect to their attributes' values) that only one of these entries may
-    be used as a replacement for one of our virtual modes so as to avoid empty
-    clusters down the line.\\
-
-    \begin{table}[h]
-    \resizebox{\textwidth}{!}{%
-        \input{tex/huang-modes.tex}
-    }
-    \caption{The \(7\) initial modes found by Huang's
-    method.}\label{tab:huang-modes}
+    We begin by calculating the relative frequencies of our attributes' values, 
+    which are stored in Table~\ref{tab:rel-freq}. Now to find our set of 
+    (potentially) virtual modes, \(\tilde{\mu}\). For each attribute, we will 
+    take a sample of size one from the its set of values according to the 
+    probability distribution represented in the corresponding column of 
+    Table~\ref{tab:rel-freq}. For instance, say we are trying to find the value
+    of the \(13^{th}\) attribute, `legs', of our first mode in \(\tilde{\mu}\).
+    Then we have to sample from the following probability distribution:\\
+    
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccc}
+        \(A_{13}\) &\vline& None & Two & Four & Five & Six & Eight \\
+        \midrule\(\mathbb{P}(A_{13} = a_s^{(13)})\) &\vline& \(\frac{23}{101}\)
+        & \(\frac{27}{101}\) & \(\frac{38}{101}\) & \(\frac{1}{101}\) & 
+        \(\frac{10}{101}\) & \(\frac{2}{101}\) \\
+    \end{tabular}
     \end{table}
+    
+    We sample one value from this distribution and set that value to be the 
+    \(13^{th}\) component of our first mode. This process is repeated for all
+    other \(l = 1, 2, 3\) and \(j = 1, \ldots, 16\) giving us \(3\)
+    \(m\)-dimensional vectors that fairly represent the most frequent attribute
+    values. This set of vectors is \(\tilde{\mu}\).\\
+
+    There are many ways of obtaining \(\tilde{\mu}\) from our relative frequency
+    table but we have opted to do so using a short Python script (see Appendix).
+    In this case, we have the following set of vectors:
+
+    \input{tex/huang-tilde-mu.tex}
+
+    Finally, we take each element of \(\tilde{\mu}\) in turn and find its most
+    similar point in the dataset. This collection of points in the dataset then
+    forms our set of initial modes \(\bar{\mu}\) to be passed on to the 
+    \(k\)-modes algorithm. We stipulate that no point which is identical to
+    another that has been already selected may be used as an initial mode. This
+    is done so as to avoid empty clusters further down the line. For example, in
+    our dataset an aardvark and a bear share the same attribute values, so if
+    one was selected as an initial mode, the other is not considered in any
+    subsequent selections.\\
+
+    Taking the first element of \(\tilde{\mu}\), we calculate the dissimilarity
+    between this vector and all of our datapoints. The `closest' \(5\) points 
+    and their dissimilarity to this vector are given in
+    Table~\ref{tab:huang-mode-dissim}. It follows that we should set our first
+    initial mode to be the entry corresponding to the nonvenomous frog. We
+    continue this process for the other elements of \(\tilde{\mu}\), 
+    disregarding any points (or identical points) that have already been
+    selected.\\
+    
+    \begin{table}[H]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/huang-mode-dissim.tex}
+    }
+    \caption{The five least dissimilar points to the first element of
+    \(\tilde{\mu}\).}\label{tab:huang-mode-dissim}
+    \end{table}
+
+    Using our Python implementation for Huang's initialisation method we have 
+    that the initial modes for this instance of the \(k\)-modes algorithm
+    correspond to the datapoints for the nonvenomous frog, the mole, and the
+    boar. These instances are given in Table~\ref{tab:huang-init-modes}.\\
+
+    \begin{table}[H]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/huang-init-modes.tex}
+    }
+    \caption{The \(3\) initial modes found in this instance of Huang's
+    initialisation method.}\label{tab:huang-init-modes}
+    \end{table}
+
 \end{example}
+
+\begin{remark}
+    In practice, taking a random sample according to some probability
+    distribution will lead to variation of results. For instance, in the example
+    above, the only true mode of the zoo animal dataset (the tuatara) was not
+    selected as an initial mode. This is due to the random sampling. As such,
+    when Huang's method is used to initialise the \(k\)-modes algorithm it is
+    typically ran several times and the result with lowest final cost is used.\\
+\end{remark}
 
 \subsection{Cao's method}\label{subsec:cao}
 
@@ -216,40 +190,7 @@ that such an \(X^{(i)}\) with maximal average density in \textbf{X} with respect
 to \textbf{A} is, in fact, a mode of \textbf{X}. This notion helps justify the 
 method proposed by Cao et al. as discussed below.\\
 
-\begin{algorithm}[H]
-\caption{Cao's method}\label{alg:cao}
-	\begin{algorithmic}[0]
-        \State{\(\bar{\mu} \gets \emptyset\)}
-        \For{\(X^{(i)} \in \textbf{X}\)}
-            \State{Calculate \(\text{Dens}(X^{(i)})\).}
-		\EndFor
-        \State{Select \(X^{(i_1)} \in \textbf{X}\) which satisfies:
-        \[
-            \text{Dens}(X^{(i_1)}) = \max_{X^{(i)} \in \textbf{X}} 
-            \{\text{Dens}(X^{(i)})\}
-        \]
-        }
-        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_1)}\)}
-        \State{Select \(X^{(i_2)} \in \textbf{X}\) such that: 
-		\[
-            \text{Dens}(X^{(i_2)}) \times d(X^{(i_1)}, X^{(i_2)}) =
-			\max_{X^{(i)} \in \textbf{X}} \{d(X^{(i)}, X^{(i_1)})\}
-		\]
-        }
-        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_2)}\)}
-        \While{\(|\bar{\mu}| < k\)}
-            \State{Select \(X^{(i_t)} \in \textbf{X}\) such that for all 
-            \(\mu^{(l)} \in \bar{\mu}\):
-			\[
-		        d(X^{(i_t)}, \mu^{(l)}) \times \text{Dens}(X_{i_t}) = 
-                \max_{X^{(i)} \in \textbf{X}} \{\min_{\mu^{(l)} \in \bar{\mu}} 
-				\{d(X^{i}, \mu^{(l)}) \times \text{Dens}(X^{(i)}) \}\}
-			\]
-            }
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_t)}\)}
-		\EndWhile
-	\end{algorithmic}
-\end{algorithm}
+\input{tex/algorithms/cao.tex}
 
 \begin{example}\label{ex:cao}
     We will now attempt to find \(3\) initial modes for our zoo animal dataset 
