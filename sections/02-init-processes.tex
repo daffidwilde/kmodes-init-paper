@@ -193,6 +193,70 @@ method proposed by Cao et al. as discussed below.\\
 \input{tex/algorithms/cao.tex}
 
 \begin{example}\label{ex:cao}
-    Cao's method with zoo animal dataset
+    We will now attempt to find \(3\) initial modes for our zoo animal dataset 
+    using Cao's method, as we did in Example~\ref{ex:huang}. We begin by 
+    calculating the average density of each of our points. We rank these in 
+    descending order, and take the point with maximal density as our first 
+    initial mode. The top \(10\) most dense points in our dataset are shown in
+    Table~\ref{tab:ranked-density}.
+
+    \begin{table}[H]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/ranked-density-table.tex}
+    }
+    \caption{The \(10\) points with highest average density.}\label{%
+    tab:ranked-density}
+    \end{table}
+
+    So, from Table~\ref{tab:ranked-density}, we see that the tuatara should be
+    taken as our first initial mode, \(\mu^{(1)}\). This is something we should
+    expect since it was seen in Example~\ref{ex:mode} that the tuatara has
+    minimal summed dissimilarity.\\
+    
+    Now, we wish to find the point which has the maximal product of its density
+    and its dissimilarity with the tuatara. One way of doing this is to 
+    calculate the dissimilarity between each point and the tuatara, append this
+    as a column to our table and multiply these two new columns by each other
+    to give \(\text{Dens}(X^{(i)}) \times d(X^{(92)}, X^{(i)})\) for each \(i =
+    1, \ldots, 101\). The entries are then ranked by this product, and the first
+    entry is taken as the second mode. By inspecting 
+    Table~\ref{tab:ranked-dens-dissim}, we see that the seal should be set as
+    the second initial mode, \(\mu^{(2)}\).\\
+
+    \begin{table}[H]
+    \resizebox{\textwidth}{!}{%
+        \input{tex/ranked-dens-dissim-table.tex}
+    }
+    \caption{The \(10\) points which have highest density-dissimilarity product
+    with the first mode.}\label{tab:ranked-dens-dissim}
+    \end{table}
+
+    In order to find the final initial mode, \(\mu^{(3)}\), we actually need to
+    find a pair \((X^{(i_3)}, \mu^{(m)})\) as is stated in 
+    Algorithm~\ref{alg:cao}. In order to do this, and if we needed to find any
+    further modes, we must consider all of our current initial modes, the 
+    dissimilarity between each point in our dataset and these modes, and the 
+    density of each point in the dataset. A convenient way of displaying all of
+    this information is to construct a density-dissimilarity matrix which we 
+    denote by \(\mathbb{D}\) and define as follows:
+    \begin{itemize}
+        \item \(\mathbb{D}\) has \(|\bar{\mu}|\) rows and \(N\) columns, where
+            \(|\bar{\mu}|\) is the number of initial modes already selected.
+        \item The entries of \(\mathbb{D}\) are given by:
+            \[
+                \mathbb{D}_{li} = \text{Dens}(X^{(i)}) \times d(X^{(i)},
+                \mu^{(l)}) \ \text{for all} \ l = 1, \ldots, |\bar{\mu}| \
+                \text{and} \ i = 1, \ldots, N \\
+            \]
+    \end{itemize}
+
+    Now, we go through each column and highlight the smallest value. These
+    represent which current mode has minimal density-dissimilarity with the
+    \(i^{th}\) datapoint (column). Then, we go through the highlighted entries
+    and select the column which has the largest value. This column corresponds
+    to the next datapoint to be selected as an initial mode.\\
+
+    Therefore, our set of initial modes, \(\bar{\mu}\), correspond to the
+    entries for the tuatara, the seal, and the honeybee.
 \end{example}
 
