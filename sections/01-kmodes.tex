@@ -61,7 +61,8 @@ its points, our clusters and their representative points:
 	    \]
     \item Each cluster \(C_l\) has associated with it a representative point 
 		(see Section~\ref{subsec:rep-points}) which we denote by 
-        \(\mu^{(l)}~=~\left[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}\right]\).
+        \(\mu^{(l)}~=~\left[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}\right]\). These
+        points are also referred to as cluster centers, modes and centroids.
 \end{itemize}
 
 
@@ -89,84 +90,80 @@ metric. It can be easily checked that this is indeed a distance measure.\\
 
     In other words, the dissimilarity between two points is simply the number of
     attributes where their values are not the same. It should also be clear that
-    the dissimilarity between a point and itself is always zero.
+    the dissimilarity between a point and itself is always zero.\\
 \end{definition}
 
 
 \begin{example}\label{ex:dissim}
     Throughout this work, we will make use of a number of small examples to aid 
-    our understanding of various concepts. These examples will utilise a small 
-    categorical dataset built for the classification of zoo animals (available
-    at~\url{https://www.kaggle.com/uciml/zoo-animal-classification/data}).\\
-
-    The dataset is made up of \(N = 101\) instances, each of which describe a
-    zoo animal. These instances are defined by \(m = 16\) (mostly binary) 
-    attributes, as well as the animal name, and a class label which indicates 
-    the type of animal they are. The first five rows of the dataset are given in
-    Table~\ref{tab:zoo-head}. Please note that there is an additional, unheaded
-    column on the left hand side showing the index starting at \(1\) and going 
-    up to \(101\).\\
+    our understanding of various concepts. These examples will utilise a very
+    small dataset describing some qualities about vehicles.\\
+    
+    The dataset is made
+    up of \(N = 10\) instances, each of which describe a vehicle. These
+    instances are defined by \(m = 6\) attributes, the first two of which are
+    ordinal variables taken from the set \(\{\text{L, M, H, V}\}\) standing for
+    low, medium, high, and very high, respectively. The next three are integer
+    variables and so can be considered as categorical, and the final attribute
+    is a binary variable indicating whether the vehicle is eco-friendly \((1)\)
+    or not \((0)\). The full dataset is given in Table~\ref{tab:dataset}. Please
+    note that there is an additional, unheaded column on the left hand side
+    showing the index starting at \(1\) and going up to \(5\).\\
     
     \begin{table}[H]
-    \resizebox{\textwidth}{!}{%
+    \centering
+    \resizebox{.8\textwidth}{!}{%
         \centering
-        \input{tex/zoo-head.tex}
+        \input{tex/example-table.tex}
     }
-    \caption{The head of the zoo animal dataset}\label{tab:zoo-head}
+    \caption{The vehicle dataset}\label{tab:dataset}
     \end{table}
 
-    Let us consider our first three data points: aardvark, antelope and bass. 
-    Our attributes are given in the central 16 columns (`hair' to `catsize'), 
-    and with the notation we laid out in Section~\ref{subsec:notation}, we can 
-    express these points as vectors in the following way:
+    Let us consider our first two datapoints. With the notation laid out in
+    Section~\ref{subsec:notation}, we can express these points as vectors in the
+    following way:
 
     \begin{equation}
     \nonumber
     \begin{aligned}
-        \textbf{Aardvark:} \quad & X^{(1)} = \left[x_1^{(1)} = \true, \ 
-            x_2^{(1)} = \false, \ldots, \ x_{15}^{(1)} = \false, \ x_{16}^{(1)} 
-            = \true\right]
+        X^{(1)} & = & \left[ x_1^{(1)} = \text{H}, \ x_2^{(1)} = \text{M}, \
+        x_3^{(1)} = 2, \ x_4^{(1)} = 2, \ x_5^{(1)} = 4, \ x_6^{(1)} = 0 
+        \right]
         \\
-        \textbf{Antelope:} \quad & X^{(2)} = \left[x_1^{(2)} = \true, \
-            x_2^{(2)} = \false, \ldots, \ x_{15}^{(2)} = \false, \ x_{16}^{(2)} 
-            = \true\right]
-        \\
-        \textbf{Bass:} \quad & X^{(3)} = \left[x_1^{(3)} = \false, \ x_2^{(3)} =
-            \false, \ \ldots, \ x_{15}^{(3)} = \false, \ x_{16}^{(3)} = 
-            \false\right]
+        X^{(2)} & = & \left[ x_1^{(2)} = \text{L}, \ x_2^{(2)} = \text{M}, \
+        x_3^{(2)} = 0, \ x_4^{(2)} = 1, \ x_5^{(2)} = 2, \ x_6^{(2)} = 0
+        \right]
         \\
     \end{aligned}
     \end{equation}
 
-    And using Definition~\ref{def:dissim}, their pairwise dissimilarities are:
+    And using Definition~\ref{def:dissim}, their pairwise dissimilarity is:
     \begin{equation}
     \nonumber
     \begin{aligned}
-        d(X^{(1)}, X^{(2)}) & = & 0 + 0 + 0 + 0 + 0 + 0 + 1 + 0 + 0 + 0 + 0 + 0 
-        + 0 + 1 + 0 + 0 & = 2
+        \centering
+        d(X^{(1)}, X^{(2)}) & = & \delta(\text{H}, \text{L}) & + & 
+        \delta(\text{M}, \text{M}) & + & \delta(3, 0) & + & \delta(2, 1) & + & 
+        \delta(4, 2) & + & \delta(0, 0) & {} & {}
         \\
-        d(X^{(1)}, X^{(3)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 0 + 0 + 0 + 1 + 0 + 1 
-        + 1 + 1 + 0 + 1 & = 9
-        \\
-        d(X^{(2)}, X^{(3)}) & = & 1 + 0 + 1 + 1 + 0 + 1 + 1 + 0 + 0 + 1 + 0 + 1
-        + 1 + 0 + 0 + 1 & = 9
+        {} & = & 1 \ & + & 0 \ & + & 1 \ & + & 1 \ & + & 1 \ & + & 0 \ & = & 4
         \\
     \end{aligned}
     \end{equation}
-    \\
 \end{example}
 
 \subsection{Representative points}\label{subsec:rep-points}
 
-Now that we have defined a metric on our space, we can turn our attention to 
-what we mean by the representative point \(\mu^{(l)}\) of a cluster \(C_l\). In 
-\(k\)-means, we call \(\mu^{(l)}\) a `centroid' and define it to be the average 
-of all points \(X^{(i)} \in C_l\) by Euclidean distance. With categorical data, 
-we use our revised distance measure from Definition~\ref{def:dissim} to specify 
-a representative point. We call such a point a mode of \textbf{X}.\\
+Now that we have defined a metric on our space, we can turn our attention to
+what we mean by the representative point \(\mu^{(l)}\) of a cluster \(C_l\). In
+\(k\)-means, these representative points are called centroids or cluster centers
+and are defined to be the average of all points \(X^{(i)} \in C_l\). With
+categorical data, we use our revised distance measure from
+Definition~\ref{def:dissim} to specify a representative point. We typically call
+these points a mode of \textbf{X}.\\
 
 \begin{definition}\label{def:mode}
-    We define a \emph{mode} of our set \textbf{X} to be any vector \(\mu = 
+    We define a \emph{mode} of our set \textbf{X} to be any vector \(\mu =
     [\mu_1, \ldots, \mu_m]\) that minimises the \emph{summed dissimilarity}:
 	
     \begin{equation}
@@ -179,8 +176,8 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 
 \begin{definition}\label{def:rel-freq}
     Let \textbf{X} be a dataset with attributes \(A_1, \ldots, A_m\). Then we
-    denote by \(n(a_s^{(j)})\) the \emph{frequency} of the \(s^{th}\) category 
-    \(a_s^{(j)}\) of \(A_j\) in \textbf{X}. That is: 
+    denote by \(n(a_s^{(j)})\) the \emph{frequency} of the \(s^{th}\) category
+    \(a_s^{(j)}\) of \(A_j\) in \textbf{X}. That is:
 	
     \[
 	    n(a_s^{(j)}) := |{\{X^{(i)} \in \textbf{X}: x_j^{(i)} = a_s^{(j)}\}}|
@@ -197,7 +194,7 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 
 \begin{theorem}\label{thm:1}
     Consider a dataset \textbf{X} and some \(X^{(i)} \in \textbf{X}\). Then:
-	
+
     \[
 	    D(\textbf{X}, X^{(i)}) \ \text{is minimised} \ \iff n(x_j^{(i)}) \geq 
 	    n(a_s^{(j)}) \ \text{for all} \ s~=~1,~\ldots,~d_j \ \text{for each} \
@@ -207,38 +204,26 @@ a representative point. We call such a point a mode of \textbf{X}.\\
 A proof of this theorem can be found in the Appendix of~\cite{Huang98}.\\
 
 \begin{example}\label{ex:mode}
-    Let us return to our zoo animal dataset from Example~\ref{ex:dissim}. Using 
+    Let us return to our vehicale dataset from Example~\ref{ex:dissim}. Using 
     Theorem~\ref{thm:1}, we can identify a mode of our set by taking the most 
-    commonly occurring value for each attribute. This gives us the following 
-    vector:
-    \[
-        \mu = \left[\false, \ \false, \ \true, \ \false, \ \false, \ \false, \
-        \true, \ \true, \ \true, \ \true, \ \false, \false, \ \text{Four}, \ 
-        \true, \ \false, \ \false\right]
-    \]
-
-    In fact, this vector appears in our dataset, and corresponds to the entry 
-    for the tuatara:
+    commonly occurring value for each attribute. We can then take these values
+    as a vector and call it \(\mu\). In this case, we have:
     
-    \begin{table}[H]
-        \resizebox{\textwidth}{!}{%
-        \centering
-        \input{tex/tuatara.tex}\label{tab:tuatara}
-    }
-    \end{table}
+    \input{tex/top-mode.tex}
 
-    To be consistent with our definition for a mode, we will also calculate our 
-    summed dissimilarity, \(D(\textbf{X}, \mu)\). It is easily determined that
-    this is \(501\), and that this is the only point in our data which minimises
-    the summed dissimilarity. It follows immediately that \(\mu\) is in fact the
-    only actual mode of our dataset.
+    This point actually appears in our dataset and corresponds to the first row.
+    It is easily verified (a Python script doing so is given as an Appendix)
+    that this point is in fact the only point in the span of the attribute space
+    \(A_1 \times \ldots \times A_6\) that minimises our summed dissimilarity. In
+    this way, we have that the first row of our dataset is the only true mode of
+    our set, virtual or not.\\
 \end{example}
 
 \begin{remark}
     Many practical implementations of the \(k\)-modes algorithm do not actually
     consider \(k\) modes, as there may not be that many points in the dataset
-    which minimise the summed dissimilarity. We will still refer to all of the 
-    representative points found by the algorithm as modes, however.
+    which minimise the summed dissimilarity - like in our example. However, we
+    will still use the term mode to refer to the cluster centers we find.
 \end{remark}
 
 \subsection{The cost function}\label{subsec:cost}
