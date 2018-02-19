@@ -24,7 +24,7 @@
                     \left\{d(X^{(i)}, \mu^{(l)})\right\}
                 \]
             }
-            \State{\(C_{l^*} \gets C_{l^*} \cup \{X^{(i)}\}\)}
+            \State{\(C_{l^*} \gets C_{l^*} \cup \left\{X^{(i)}\right\}\)}
             \State{\textsc{Update}\((\mu^{(l^*)})\).}
 		\EndFor
         \\
@@ -38,8 +38,9 @@
 				\EndFor
                 \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \ 
                 \text{for some} \ l' \neq l^*\)}
-                    \State{\(C_{l^*} \gets C_{l^*} \setminus \{X^{(i)}\}\)}
-                    \State{\(C_{l'} \gets C_{l'} \cup \{X^{(i)}\}\)}
+                    \State{\(C_{l^*} \gets C_{l^*} \setminus
+                    \left\{X^{(i)}\right\}\)}
+                    \State{\(C_{l'} \gets C_{l'} \cup \left\{X^{(i)}\right\}\)}
                     \State{\textsc{Update}\((\mu^{(l^*)})\) and 
                     \textsc{Update}\((\mu^{(l')})\).}
 				\EndIf
