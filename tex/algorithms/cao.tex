@@ -19,7 +19,7 @@
             \left\{\text{Dens}(X^{(i)})\right\}
         \]
         }
-        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_1)}\)\\}
+        \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i_1)}\right\}\)\\}
         \\
         \Comment{Second point maximises both density and distance from the first
         mode}
@@ -30,7 +30,7 @@
 		\]
         }
         \\
-        \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_2)}\)\\}
+        \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i_2)}\right\}\)\\}
         \\
         \Comment{Continue to choose points in this fashion until \(k\) are
         chosen}
@@ -42,7 +42,7 @@
                 \mu^{(l)})\right\}\right\}
 			\]
             }
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup X^{(i_3)}\)}
+            \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i_3)}\right\}\)}
 		\EndWhile
 	\end{algorithmic}
 \end{algorithm}
