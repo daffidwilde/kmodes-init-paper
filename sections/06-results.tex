@@ -1,15 +1,39 @@
 To give comparative results on the quality of the initialisation processes 
-defined in Sections~\ref{sec:init}~\&~\ref{sec:proposed-method}, four 
-well-known, categorical, labelled datasets - soybean, mushroom, breast cancer, 
-and zoo - will be clustered with the \(k\)-modes algorithm. Then the typical 
-performance measures of accuracy, precision, and recall will be calculated and 
-summarised below. As a general rule, each algorithm will be trained on 
-approximately two thirds of the respective dataset and tested against the final 
+defined in
+Sections~\ref{sec:init},~\ref{sec:proposed-method}~\&~\ref{sec:preferences},
+four well-known, categorical, labelled datasets - soybean, mushroom, breast
+cancer, and zoo animal - will be clustered with the \(k\)-modes algorithm with
+each of the initialisation processes. Rather than comparing our algorithms with
+the typical metrics for classification algorithms (accuracy, precision and
+recall) the comparison will be based on four clustering performance measures:
+adjusted Rand index, mutual information, homegeneity and completeness.
+Definitions of these metrics are given below. In addition to these, we will also
+consider the final cost and number of iterations of the best runs for each
+initialisation process. As a general rule, each algorithm will be trained on
+approximately two thirds of the respective dataset and tested against the final
 third.
 
-\begin{definition}\label{def:metrics}
+\subsection{Performance metrics}\label{subsec:metrics}
+
+Usually in the comparison of \(k\)-modes initialisation
+processes~\cite{Huang98}\cite{Cao09}, metrics for gauging the quality of
+classification algorithms are typically used. As \(k\)-modes is not a
+classification algorithm but one for clustering datasets, we will utilise less
+class-specific metrics. In their place are metrics built around more general
+characteristics of a given clustering. In some respects, however, the metrics
+defined below have been considered similar to their classification counterparts.
+
+\begin{definition}\label{def:adjusted-rand}
 \end{definition}
 
+\begin{definition}\label{def:mutual-info}
+\end{definition}
+
+\begin{definition}\label{def:homogeneity}
+\end{definition}
+
+\begin{definition}\label{def:completeness}
+\end{definition}
 
 \subsection{The datasets}\label{subsec:datasets}
 
