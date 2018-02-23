@@ -6,7 +6,7 @@ cancer, and zoo animal - will be clustered with the \(k\)-modes algorithm with
 each of the initialisation processes. Rather than comparing our algorithms with
 the typical metrics for classification algorithms (accuracy, precision and
 recall) the comparison will be based on four clustering performance measures:
-adjusted Rand index, mutual information, homegeneity and completeness.
+adjusted Rand index, adjusted mutual information, homegeneity and completeness.
 Definitions of these metrics are given below. In addition to these, we will also
 consider the final cost and number of iterations of the best runs for each
 initialisation process. As a general rule, each algorithm will be trained on
@@ -21,12 +21,55 @@ classification algorithms are typically used. As \(k\)-modes is not a
 classification algorithm but one for clustering datasets, we will utilise less
 class-specific metrics. In their place are metrics built around more general
 characteristics of a given clustering. In some respects, however, the metrics
-defined below have been considered similar to their classification counterparts.
+defined below have been considered similar to their classification
+counterparts.\\
 
-\begin{definition}\label{def:adjusted-rand}
+\begin{definition}\label{def:contingency}
+    Let \textbf{X} be a given dataset and consider two clusterings of this
+    dataset:
+    \[
+        U = \left\{U_1, \ldots, U_r\right\}
+        \ \text{and} \
+        V = \left\{V_1, \ldots, V_k\right\}
+    \]
+
+    We do not require that \(r = k\). Now we define a \emph{contingency table}
+    to summarise the similarity between our two clusterings. This table has
+    entries given by \(n_{ij} = |U_i \cap V_j|\), and a representation of this
+    table is shown in Table~\ref{tab:contingency}.
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{cccccc}
+        {} & \(V_1\) & \(V_2\) & \(\cdots\) & \(V_k\) & Total
+        \\ \midrule
+        \(U_1\) & \(n_{11}\) & \(n_{12}\) & \(\cdots\) & \(n_{1k}\) & \(a_1\)
+        \\
+        \(U_2\) & \(n_{21}\) & \(n_{22}\) & \(\cdots\) & \(n_{2k}\) & \(a_2\)
+        \\
+        \(\vdots\) & \(\vdots\) & \(\vdots\) & \(\ddots\) & \(\vdots\) &
+        \(\vdots\)
+        \\
+        \(U_r\) & \(n_{r1}\) & \(n_{r2}\) & \(\cdots\) & \(n_{rk}\) & \(a_r\)
+        \\ \midrule
+        Total & \(b_1\) & \(b_2\) & \(\cdots\) & \(b_k\) & {}
+    \end{tabular}
+    \caption{The contingency table for two clusterings \(U, V\) of a dataset
+    \textbf{X}.}\label{tab:contingency}
+    \end{table}
+
+    In addition to these entries, we have taken the sums of the each row and of
+    each column, and denoted them by \(a\)~and~\(b\), respectively. That is:
+    \[
+        a_i = \sum_{j=1}^k n_{ij} \ \forall i = 1, \ldots, r, \quad \text{and}
+        \quad b_j = \sum_{i=1}^r n_{ij} \ \forall j = 1, \ldots, k
+    \]\\
 \end{definition}
 
-\begin{definition}\label{def:mutual-info}
+\begin{definition}\label{def:adjusted-rand-index}
+\end{definition}
+
+\begin{definition}\label{def:adjusted-mutual-info}
 \end{definition}
 
 \begin{definition}\label{def:homogeneity}
@@ -46,11 +89,9 @@ Tables of results for each dataset and each initialisation process. Credit to
 \url{https://github.com/nicodv/kmodes} for the Python implementation of both the
 Huang and Cao processes, as well as the $k$-modes algorithm itself.
 
-\begin{example}
-\begin{figure}
-    \resizebox{\textwidth}{!}{%
-    \centering
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\centering
     \input{tex/zoo-results.tex}
 }
-\end{figure}
-\end{example}
+\end{table}
