@@ -1,15 +1,202 @@
 To give comparative results on the quality of the initialisation processes 
-defined in Sections~\ref{sec:init}~\&~\ref{sec:proposed-method}, four 
-well-known, categorical, labelled datasets - soybean, mushroom, breast cancer, 
-and zoo - will be clustered with the \(k\)-modes algorithm. Then the typical 
-performance measures of accuracy, precision, and recall will be calculated and 
-summarised below. As a general rule, each algorithm will be trained on 
-approximately two thirds of the respective dataset and tested against the final 
+defined in
+Sections~\ref{sec:init},~\ref{sec:proposed-method}~\&~\ref{sec:preferences},
+four well-known, categorical, labelled datasets \- soybean, mushroom, breast
+cancer, and zoo animal \- will be clustered with the \(k\)-modes algorithm with
+each of the initialisation processes. Rather than comparing our algorithms with
+the typical metrics for classification algorithms (accuracy, precision and
+recall) the comparison will be based on four clustering performance measures:
+adjusted Rand index, adjusted mutual information, homegeneity and completeness.
+Definitions of these metrics are given below. In addition to these, we will also
+consider the final cost and number of iterations of the best runs for each
+initialisation process. As a general rule, each algorithm will be trained on
+approximately two thirds of the respective dataset and tested against the final
 third.
 
-\begin{definition}\label{def:metrics}
+\subsection{Performance metrics}\label{subsec:metrics}
+
+In the comparison of \(k\)-modes initialisation
+processes~\cite{Huang98}\cite{Cao09}, metrics for gauging the quality of
+classification algorithms are typically used. Although we will make use of
+labelled datasets in this section, as \(k\)-modes is not a classification
+algorithm but one for clustering datasets, we will utilise less
+classification-specific metrics. In their place are metrics built around more
+general characteristics of a given clustering. In some respects, however, the
+metrics defined below have been considered similar to their classification
+counterparts.\\
+
+\begin{definition}\label{def:contingency}
+    Let \textbf{X} be a given dataset and consider two clusterings of this
+    dataset:
+    \[
+        U = \left\{U_1, \ldots, U_r\right\}
+        \ \text{and} \
+        V = \left\{V_1, \ldots, V_s\right\}
+    \]
+
+    We do not require that \(r = s\). Now we define a \emph{contingency table},
+    denoted by \(\left[n_{ij}\right]\), to summarise the similarity between our
+    two clusterings. This table has entries given by
+    \(n_{ij}~=~|U_i~\cap~V_j|\), and a representation of this table is shown in
+    Table~\ref{tab:contingency}.
+
+    \begin{table}[H]
+    \centering
+    \begin{tabular}{cccccc}
+        {} & \(V_1\) & \(V_2\) & \(\cdots\) & \(V_s\) & Total
+        \\ \midrule
+        \(U_1\) & \(n_{11}\) & \(n_{12}\) & \(\cdots\) & \(n_{1s}\) & \(a_1\)
+        \\
+        \(U_2\) & \(n_{21}\) & \(n_{22}\) & \(\cdots\) & \(n_{2s}\) & \(a_2\)
+        \\
+        \(\vdots\) & \(\vdots\) & \(\vdots\) & \(\ddots\) & \(\vdots\) &
+        \(\vdots\)
+        \\
+        \(U_r\) & \(n_{r1}\) & \(n_{r2}\) & \(\cdots\) & \(n_{rs}\) & \(a_r\)
+        \\ \midrule
+        Total & \(b_1\) & \(b_2\) & \(\cdots\) & \(b_s\) & {}
+    \end{tabular}
+    \caption{The contingency table for two clusterings \(U, V\) of a dataset
+    \textbf{X}.}\label{tab:contingency}
+    \end{table}
+
+    In addition to these entries, we have taken the sums of the each row and of
+    each column, and denoted them by \(a\)~and~\(b\), respectively. That is:
+    \[
+        a_i = \sum_{j=1}^s n_{ij} \ \forall i = 1, \ldots, r, \quad \text{and}
+        \quad b_j = \sum_{i=1}^r n_{ij} \ \forall j = 1, \ldots, s
+    \]\\
 \end{definition}
 
+\begin{definition}\label{def:adjusted-rand-index}
+    Let \textbf{X} be a dataset, \(U, V\) be two clusterings of the elements of
+    \textbf{X}, and \(\left[n_{ij}\right]\) be the corresponding contingency
+    table. Then the adjusted Rand index of these clusterings is given by:
+    \[
+        ARI(U, V) = \frac{\displaystyle{\sum_{ij} {n_{ij}\choose 2} -
+        \frac{1}{{N\choose 2}}\left[\sum_i {a_i\choose 2}\sum_j {b_j\choose
+        2}\right]}}{\displaystyle{\frac{1}{2} \left[\sum_i {a_i\choose 2} +
+        \sum_j{b_j\choose 2}\right] - \frac{1}{{N\choose 2}}\left[\sum_i
+        {a_i\choose 2}\sum_j {b_j\choose 2}\right]}}
+    \]
+\end{definition}
+
+\begin{remark}
+    In the case where one of \(U\) or \(V\) is a class label of \textbf{X}, we
+    can interpret the adjusted Rand index as being a higher-level classification
+    accuracy measure; `higher-level' in the sense that it is invariant of how
+    our clustering algorithm labels its clusters. The adjusted Rand index
+    considers the relationship between pairs of points in both clusterings of
+    the dataset rather than each point individually.\\
+    
+    Say, without loss of generality, that \(V\) is a class label of \textbf{X}
+    and \(U\) is some clustering of \textbf{X}. Then it follows that the
+    adjusted Rand index takes value \(1\) if \(U\) and \(V\) are indentical (up
+    to a permutation of the class labels), \(0\) if \(U\) is as good as a random
+    clustering of \textbf{X}, and can take values less than \(0\) if the
+    clustering \(U\) is worse than random.\\
+\end{remark}
+
+\begin{definition}\label{def:adjusted-mutual-info}
+    Let \textbf{X} be a dataset, \(U, V\) be two clusterings of the elements of
+    \textbf{X}, and \(\left[n_{ij}\right]\) be the corresponding contingency
+    table. Then we define the following quantities:
+    \begin{itemize}
+        \item Consider a clustering \(C = \left\{C_1, \ldots, C_k\right\}\) of
+            \textbf{X}. Then the \emph{entropy}, denoted by \(H(C)\), which is
+            associated with this clustering is defined to be:
+            \[
+                H(C) = - \sum_{i=1}^k P(C_i)\log_2 P(C_i), \quad \text{where}
+                \quad P(C_i) = \frac{\left|C_i\right|}{N}
+            \]
+
+            \(H(C)\) is non-negative and only takes the value \(0\) when
+            \(k~=~1\), i.e.\ there is only one cluster. We can also interpret a
+            class labelling of our dataset as a clustering, and so this too will
+            have an entropy associated with it.
+
+        \item Consider our two clusterings \(U, V\). We wish to quantify the
+            information shared by both clusterings. This quantity is called the
+            \emph{mutual information} between these clusterings, and is defined
+            to be:
+            \[
+                MI(U, V) = \sum_{i=1}^r \sum_{j=1}^s P(U_i, V_j)\log_2
+                \frac{P(U_i, V_j)}{P(U_i)P(V_j)}, \quad \text{where} \quad P(U_i,
+                V_j) = \frac{\left|U_i \cap V_j\right|}{N}
+            \]
+
+            \(MI(U, V)\) is also non-negative and is bounded from above by
+            \(H(U)\) and \(H(V)\).
+
+        \item Using a combinatorial approach (in a similar fashion to
+            Definition~\ref{def:adjusted-rand-index}), and a hypergeometric
+            model of randomness, we define the
+            \emph{expected~mutual~information} of two random clusterings to be:
+            \[
+                \mathbb{E}\left(MI(U, V)\right) = \sum_{i=1}^r \sum_{j=1}^s
+                \sum_{n_{ij}=n_{ij}^*}^{\min(a_i, b_j)} \frac{n_{ij}}{N}\log_2
+                \left(\frac{n_{ij} N}{a_i b_j}\right) \times \frac{a_i!\, b_j!\,
+                \left(N - a_i\right)!\, \left(N - b_j\right)!}{N!\, n_{ij}!\,
+                \left(a_i - n_{ij}\right)!\, \left(b_j - n_{ij}\right)!\,
+                \left(N - a_i - b_j + n_{ij}\right)!}
+            \]
+            Here, we have \(n_{ij}^* = \max(1, a_i + b_j - N)\).\\
+    \end{itemize}
+    
+    With these quantities, we define the \emph{adjusted mutual information} of
+    our pair of clusterings to be:
+    \[
+        AMI(U, V) = \frac{MI(U, V) - \mathbb{E}\left(MI(U, V)\right)}{\max
+        \left(H(U), H(V)\right) - \mathbb{E}\left(MI(U, V)\right)}
+    \]
+\end{definition}
+
+\begin{remark}
+    This adjusted quantity takes values in the interval \(\left[0, 1\right]\).
+    In fact, \(AMI(U, V)~=~1\) when \(U\) and \(V\) are indentical, and
+    \(AMI(U, V)~=~0\) when the mutual information between the two clusterings is
+    equal to the expectation of the mutual information (i.e.\ two random
+    cluserings of the data), by chance alone.\\
+\end{remark}
+
+\begin{definition}\label{def:homogeneity}
+    Let \textbf{X} be a dataset with class labelling \(V\), let \(U\) be a
+    clustering of \textbf{X} and let \(\left[n_{ij}\right]\) be the
+    corresponding contingency table. The \emph{homogeneity} of \(U\) is defined
+    to be:
+    \[
+        Hom(U) = \begin{cases}
+                    \frac{MI(U, V)}{H(V)}, & \ \text{if} \ U \neq V \\
+                    1, & \ \text{otherwise}
+                 \end{cases}
+    \]
+    
+    Here, \(MI(U, V)\) is the mutual information shared between \(U\) and \(V\),
+    and \(H(V)\) is the entropy of the class labelling \(V\).\\
+
+    We interpret the homogeneity of a clustering to be a measure of how `pure'
+    each of its cluster are. That is, a clustering satisfies homogeneity if each
+    of its clusters only contain points of a single class.\\
+\end{definition}
+
+\begin{definition}\label{def:completeness}
+    Let \textbf{X} be a dataset with class labelling \(V\), let \(U\) be a
+    clustering of \textbf{X} and let \(\left[n_{ij}\right]\) be the
+    corresponding contingency table. The \emph{completeness} of \(U\) is defined
+    to be:
+    \[
+        Com(U) = \begin{cases}
+                    \frac{MI(U, V)}{H(U)}, & \ \text{if} \ U \neq V \\
+                    1, & \ \text{otherwise}
+                 \end{cases}
+    \]
+    
+    Here, \(MI(U, V)\) is the mutual information shared between \(U\) and \(V\),
+    and \(H(U)\) is the entropy of our clustering, \(U\).\\
+
+    We say that a clustering is `complete' if all the elements of each class
+    from \textbf{X} are in the same clusters in \(U\).
+\end{definition}
 
 \subsection{The datasets}\label{subsec:datasets}
 
@@ -22,11 +209,9 @@ Tables of results for each dataset and each initialisation process. Credit to
 \url{https://github.com/nicodv/kmodes} for the Python implementation of both the
 Huang and Cao processes, as well as the $k$-modes algorithm itself.
 
-\begin{example}
-\begin{figure}
-    \resizebox{\textwidth}{!}{%
-    \centering
+\begin{table}[H]
+\resizebox{\textwidth}{!}{%
+\centering
     \input{tex/zoo-results.tex}
 }
-\end{figure}
-\end{example}
+\end{table}
