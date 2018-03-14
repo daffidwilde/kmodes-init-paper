@@ -9,3 +9,4 @@ main-blx.bib
 *.DS_Store
 
 data/
+.ipynb_checkpoints/
