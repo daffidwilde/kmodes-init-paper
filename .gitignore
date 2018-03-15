@@ -6,6 +6,8 @@ main.run.xml
 main-blx.bib
 
 *.swp
+*.DS_Store
 
+__pycache__
 data/
-nbs/
+.ipynb_checkpoints/
