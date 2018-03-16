@@ -33,8 +33,8 @@ def write_results(name, data, max_seed):
         Maximum number of runs to take results over
     """
 
-    clustering_path = Path(f'../tex/{name}_clustering_results.tex')
-    prediction_path = Path(f'../tex/{name}_predicting_results.tex')
+    clustering_path = Path(f'../../tex/{name}_clustering_results.tex')
+    prediction_path = Path(f'../../tex/{name}_predicting_results.tex')
 
     if not clustering_path.exists():
 
