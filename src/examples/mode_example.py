@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-vehicle = pd.read_csv('../data/vehicle.csv', dtype='object')
+vehicle = pd.read_csv('../../data/vehicle.csv', dtype='object')
 
 vehicle.columns = [col.replace('_', '-').title() for col in vehicle.columns]
 cols = ['Price', 'Maintenance', 'Doors', 'Passengers', 'Wheels', 'Eco-Friendly']
@@ -16,5 +16,5 @@ for value in mode:
 tex = tex[:-4]
 tex += '\\right] \n\]'
 
-with open('../tex/top_mode.tex', 'w') as out:
+with open('../../tex/top_mode.tex', 'w') as out:
     out.write(tex)
