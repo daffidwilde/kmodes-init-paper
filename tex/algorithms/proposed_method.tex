@@ -1,0 +1,61 @@
+\begin{algorithm}[H]
+\caption{The proposed initialisation method}
+    \begin{algorithmic}[0]
+        \State{\textbf{Input:} a dataset \textbf{X}, with attribute sets \(A_1,
+        \ldots, A_m\), and a number of modes to find \(k\)}
+        \State{\textbf{Output:} a set of \(k\) initial modes \(\bar{\mu}\)\\}
+        \\
+        \Comment{Initialisation step}
+        \State{\(\tilde{\mu} \gets \emptyset\)}
+        \State{\(\bar{\mu} \gets \emptyset\)}
+        \State{\(R \gets \emptyset\)}
+        \State{\(S \gets \emptyset\)}
+        \State{\(C \gets \{c_1, \ldots, c_k\}\)}
+
+        \For{\(j = 1, \ldots, m\)}
+            \For{\(s = 1, \ldots, d_j\)}
+                \State{Calculate the relative frequency of each attribute value:
+                    \(\frac{n(a_s^{(j)})}{N}\).}
+	        \EndFor%
+        \EndFor%
+        \\
+        \\
+        \Comment{Find the set of virtual modes, \(\tilde{\mu}\), according to
+        Huang's method.}
+        \For{\(l = 1, \ldots, k\)}
+            \For{\(j = 1, \ldots, m\)}
+                \State{Consider the probability distribution given by:
+                \(
+                    \mathbb{P}(A_j) := \left(\frac{n(a_s^{(j)})}{N} : a_s^{(j)}
+                    \in A_j\right)
+                \)}
+                \State{Sample \(a_{s^*}^{(j)}\) from \(A_j\) with respect to
+                \(\mathbb{P}(A_j)\).}
+                \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
+	        \EndFor%
+            \State{\(\tilde{\mu} \gets \tilde{\mu} \cup
+            \left\{\mu^{(l)}\right\}\)}
+	    \EndFor%
+        \\
+        \\
+        \Comment{Construct and solve a capacitated matching game.}
+        \State{\(R \gets \tilde{\mu}\)}
+        \For{\(r \in R\)}
+            \State{\(c_r \gets 1\)}
+            \State{Find the set of \(k\) vectors, \(S_r\), in \textbf{X} that 
+            are the least dissimilar to \(r\).}
+            \State{Arrange \(S_r\) into descending order of similarity.}
+            \State{\(S \gets S \cup S_r\)}
+        \EndFor%
+        \For{\(r \in R\)}
+            \State{\(g(r) \gets S_r\)}
+        \EndFor%
+        \State{Select a method for suitor preference lists and construct
+        \(f(s)\) accordingly for each \(s \in S\).}
+        \State{Solve the capacitated matching game defined by \((S, R, C)\) to
+        obtain a matching \(M:~R~\to~S\).}
+        \For{\(r \in R\)}
+            \State{\(\bar{\mu} \gets \bar{\mu} \cup \{M(r)\}\)}
+        \EndFor%
+    \end{algorithmic}
+\end{algorithm}

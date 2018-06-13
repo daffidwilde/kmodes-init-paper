@@ -3,13 +3,13 @@
     \begin{algorithmic}[0]
         \State{\textbf{Input:} a clustering \(C_1, \ldots, C_k\), and a mode to
         update \(\mu^{(l)}\)}
-        \State{\textbf{Output:} an updated mode \(\mu^{l_{\text{new}}}\)\\}
-        \\
+        \State{\textbf{Output:} an updated mode \(\mu^{l_{\text{new}}}\)}
+
         \State{Find \(\mu^{(l_{\text{new}})}\) that satisfies: 
-            \[
-                D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 \times \cdots
-                \times A_m} \left\{D(C_l, \mu)\right\}
-            \]
+        \[
+            D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 \times \cdots
+            \times A_m} \left\{D(C_l, \mu)\right\}
+        \]
         }
         \State{\(\mu^{(l)} \gets \mu^{(l_{\text{new}})}\)}
     \end{algorithmic}

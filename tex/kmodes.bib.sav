@@ -1,0 +1,69 @@
+% Encoding: UTF-8
+
+@Article{Huang98,
+  author  = {Huang Z},
+  title   = {Extensions to the k-Means Algorithm for Clustering Large Data Sets with Categorical Values},
+  journal = {Data Mining and Knowledge Discovery},
+  year    = {1998},
+  volume  = {2},
+  number  = {3},
+  pages   = {283--304},
+  month   = sep,
+  comment = {Expands on the k-means paradigm to incorporate categorical and mixed-type datasets.
+
+
+Initial representative points are chosen according to two methods for k-modes:
+    
+(1.) Take the first k datapoints (or take k at random) and set them as the inital modes.
+(2.) Store categories in an array according to their descending frequencies for each attribute. Assign the most frequent categories equally amongst k vectors (one for each mode) and replace each mode by the closest datapoint in the dataset without replacement. 
+
+I believe there is scope to implement game-theoretic concepts here to optimise this process, hopefully increasing the overall quality of the algorithm; rather than assigning a point to each mode in turn a matching game could provide closer-to-optimal initial results. Obviously, something to consider is the computational cost of this initial step as well as its effect on the diversity of the initial modes.
+
+
+It is worth noting that, in most cases, the effectiveness of both algorithms are based on a priori knowledge of the test data rather than standard unsupervised learning techniques such as silohouette plots. As a result, there is no substantial writing on how these algorithms hold up against varying the number of clusters. However, it is shown that they are (mostly) scalable to more complex and larger datasets with more clusters.
+
+
+Provides no proof for the convergence of k-modes algorithm.},
+  doi     = {10.1023/A:1009769707641},
+  url     = {https://doi.org/10.1023/A:1009769707641},
+}
+
+@Article{Cao09,
+  author  = {Cao F; Liang J; Bai L},
+  title   = {A new initialization method for categorical data clustering},
+  journal = {Expert Systems with Applications},
+  year    = {2009},
+  volume  = {36},
+  pages   = {10223--10228},
+  url     = {https://pdfs.semanticscholar.org/1955/c6801bca5e95a44e70ce14180f00fd3e55b8.pdf},
+}
+
+@Article{Ng07,
+  author  = {Ng M.K.; Li M.J.; Huang Z; He Z},
+  title   = {On the impact of dissimilarity measure in $k$-modes clustering algorithm},
+  journal = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year    = {2007},
+  volume  = {29},
+  number  = {3},
+  pages   = {503--507},
+  month   = mar,
+  url     = {http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=4069266},
+}
+
+@Article{Soybean,
+  author  = {R.S. Michalski, R.L. Chilausky},
+  title   = {Learning by Being Told and Learning from Examples: An Experimental Comparison of the Two Methods of Knowledge Acquisition in the Context of Developing an Expert System for Soybean Disease Diagnosis},
+  journal = {International Journal of Policy Analysis and Information Systems},
+  year    = {1980},
+  volume  = {4},
+  number  = {2},
+}
+
+@Misc{Mushroom,
+  author       = {G.H. Lincoff},
+  title        = {The Audubon Society Field Guide to North American Mushrooms},
+  howpublished = {R},
+  year         = {1981},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

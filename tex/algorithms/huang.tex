@@ -12,8 +12,8 @@
             \For{\(s = 1, \ldots, d_j\)}
                 \State{Calculate the relative frequency of each attribute value:
                     \(\frac{n(a_s^{(j)})}{N}\).}
-	        \EndFor
-        \EndFor
+	        \EndFor%
+        \EndFor%
         \\
         \\
         \Comment{Distribute most common attribute values}
@@ -23,10 +23,10 @@
                 relative frequencies of the elements of \(A_j\) as a probability
                 distribution.}
                 \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
-	        \EndFor
+	        \EndFor%
             \State{\(\tilde{\mu} \gets \tilde{\mu} \cup
             \left\{\mu^{(l)}\right\}\)}
-	    \EndFor
+	    \EndFor%
         \\
         \\
         \Comment{Replace \(\tilde{\mu}\) with points in \textbf{X} to avoid
@@ -40,6 +40,6 @@
                 \]
             }
             \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i^*)}\right\}\)}
-        \EndFor
+        \EndFor%
     \end{algorithmic}
 \end{algorithm}
