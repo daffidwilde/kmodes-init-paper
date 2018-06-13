@@ -1,16 +1,3 @@
-\abstract{
-The \(k\)-modes algorithm is a part of the family of clustering algorithms known
-as `prototype-based clustering', and is an extension of the \(k\)-means 
-algorithm for categorical data as set out in~\cite{Huang98}. This work will 
-outline the key differences and similarities between two established
-initialisation methods for the \(k\)-modes algorithm, and in doing so we will be
-able to examine how the initial cluster selection process has an impact on the 
-efficiency and quality of the \(k\)-modes algorithm. From there, we will define
-a new initialisation method that makes use of elements of game theory.
-}
-
-\clearpage
-
 \section{The \(k\)-modes algorithm}\label{sec:kmodes}
 
 \subsection{Notation}\label{subsec:notation}
@@ -107,7 +94,7 @@ metric. It can be easily checked that this is indeed a distance measure.
     The dataset is made up of \(N = 10\) instances, each of which describe a
     vehicle. These instances are defined by \(m = 6\) attributes, the first two
     of which are ordinal variables taken from the set \(\{\text{L, M, H, V}\}\)
-    standing for `low', `medium', `high', and `very high', respectively. The
+    standing for `low', `medium', `high', and `very high' respectively. The
     next three are integer variables and so can be considered as categorical,
     and the final attribute is a binary variable indicating whether the vehicle
     is eco-friendly \((1)\) or not \((0)\). The full dataset is given in
@@ -195,7 +182,7 @@ these points a mode of \textbf{X}.
 
 \begin{remark}
     Note that we have \(1 \le n(a_s^{(j)}) \le N\) for all \(s\) and
-    \(j~=~1,~\ldots,~m\).\\
+    \(j~=~1,~\ldots,~m\).
 \end{remark}
 
 \begin{theorem}\label{thm:1}
