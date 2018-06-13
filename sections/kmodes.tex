@@ -1,3 +1,4 @@
+\abstract{
 The \(k\)-modes algorithm is a part of the family of clustering algorithms known
 as `prototype-based clustering', and is an extension of the \(k\)-means 
 algorithm for categorical data as set out in~\cite{Huang98}. This work will 
@@ -5,8 +6,12 @@ outline the key differences and similarities between two established
 initialisation methods for the \(k\)-modes algorithm, and in doing so we will be
 able to examine how the initial cluster selection process has an impact on the 
 efficiency and quality of the \(k\)-modes algorithm. From there, we will define
-a new initialisation method that makes use of elements of game theory.\\
+a new initialisation method that makes use of elements of game theory.
+}
 
+\clearpage
+
+\section{The \(k\)-modes algorithm}\label{sec:kmodes}
 
 \subsection{Notation}\label{subsec:notation}
 
@@ -20,7 +25,7 @@ its points, our clusters and their representative points:
     \item Each attribute \(A_j\) is considered as a set of attribute values 
         \(A_j = \{a_1^{(j)}, \ldots, a_{d_j}^{(j)}\}\) where \(d_j = |A_j| \in 
         \mathbb{Z}_+\) is sometimes used as shorthand for the size of the 
-        \(j^th\) attribute set.
+        \(j^{th}\) attribute set.
     \item We write each data point \(X^{(i)}, \ i = 1, \ldots, N\), as an 
         \(m\)-dimensional vector:
 	    \[
@@ -73,50 +78,51 @@ that they deal with different types of data, and so the metric used to define
 the distance between two points in our space must be different. With 
 \(k\)-means, where the data has all-numeric attributes, Euclidean distance is 
 often used. However, we do not have this sense of distance with categorical 
-data. Instead, we utilise a dissimilarity measure - defined below - as our 
-metric. It can be easily checked that this is indeed a distance measure.\\
+data. Instead, we utilise a dissimilarity measure \-- defined below \-- as our 
+metric. It can be easily checked that this is indeed a distance measure.
 
 \begin{definition}\label{def:dissim}
-    Let \(\textbf{X}\) be a dataset and consider \(X^{(a)}, X^{(b)} \in 
+    Let \(\textbf{X}\) be a dataset and consider \(X^{(a)}, X^{(b)} \in
     \textbf{X}\). We define the \emph{dissimilarity} between \(X^{(a)}\) and 
     \(X^{(b)}\), denoted by \(d(X^{(a)}, X^{(b)})\), to be:
-	\[
-	    d(X^{(a)}, X^{(b)}) = \sum_{j=1}^{m} \delta(x_j^{(a)}, x_j^{(b)}) \quad
-	    \text{where} \quad \delta(x, y) = \begin{cases}
-                                            0, & \text{if} \ x = y \\
-					                        1, & \text{otherwise}
-					                      \end{cases}
-	\]
+    \[
+        d(X^{(a)}, X^{(b)}) = \sum_{j=1}^{m} \delta(x_j^{(a)}, x_j^{(b)}) \quad
+        \text{where} \quad \delta(x, y) = \begin{cases}
+                                              0, & \text{if} \ x = y \\
+			    		                      1, & \text{otherwise}
+				    	                  \end{cases}
+    \]
 
     In other words, the dissimilarity between two points is simply the number of
     attributes where their values are not the same. It should also be clear that
-    the dissimilarity between a point and itself is always zero.\\
+    the dissimilarity between a point and itself is always zero.
 \end{definition}
 
 
 \begin{example}\label{ex:dissim}
-    Throughout this work, we will make use of a number of small examples to aid 
-    our understanding of various concepts. These examples will utilise a very
-    small dataset describing some qualities about vehicles.\\
+    Throughout this work, we will make use of a number of small examples to aid
+    our understanding of various concepts. These examples will utilise a small,
+    artificial dataset describing some qualities about vehicles.
     
-    The dataset is made
-    up of \(N = 10\) instances, each of which describe a vehicle. These
-    instances are defined by \(m = 6\) attributes, the first two of which are
-    ordinal variables taken from the set \(\{\text{L, M, H, V}\}\) standing for
-    low, medium, high, and very high, respectively. The next three are integer
-    variables and so can be considered as categorical, and the final attribute
-    is a binary variable indicating whether the vehicle is eco-friendly \((1)\)
-    or not \((0)\). The full dataset is given in Table~\ref{tab:dataset}. Please
-    note that there is an additional, unheaded column on the left hand side
-    showing the index starting at \(1\) and going up to \(5\).\\
+    The dataset is made up of \(N = 10\) instances, each of which describe a
+    vehicle. These instances are defined by \(m = 6\) attributes, the first two
+    of which are ordinal variables taken from the set \(\{\text{L, M, H, V}\}\)
+    standing for `low', `medium', `high', and `very high', respectively. The
+    next three are integer variables and so can be considered as categorical,
+    and the final attribute is a binary variable indicating whether the vehicle
+    is eco-friendly \((1)\) or not \((0)\). The full dataset is given in
+    Table~\ref{tab:dataset}. Please note that there is an additional, unheaded
+    column on the left hand side showing the index starting at \(1\) and going
+    up to \(5\).
     
     \begin{table}[H]
-    \centering
-    \resizebox{.8\textwidth}{!}{%
         \centering
-        \input{tex/example-table.tex}
-    }
-    \caption{The vehicle dataset}\label{tab:dataset}
+        \singlespacing{%
+        \resizebox{.8\textwidth}{!}{%
+            \centering
+            \input{tex/example_table.tex}
+        }}
+        \caption{The vehicle dataset.}\label{tab:dataset}
     \end{table}
 
     Let us consider our first two datapoints. With the notation laid out in
@@ -124,31 +130,30 @@ metric. It can be easily checked that this is indeed a distance measure.\\
     following way:
 
     \begin{equation}
-    \nonumber
-    \begin{aligned}
-        X^{(1)} & = & \left[ x_1^{(1)} = \text{H}, \ x_2^{(1)} = \text{M}, \
-        x_3^{(1)} = 2, \ x_4^{(1)} = 2, \ x_5^{(1)} = 4, \ x_6^{(1)} = 0 
-        \right]
-        \\
-        X^{(2)} & = & \left[ x_1^{(2)} = \text{L}, \ x_2^{(2)} = \text{M}, \
-        x_3^{(2)} = 0, \ x_4^{(2)} = 1, \ x_5^{(2)} = 2, \ x_6^{(2)} = 0
-        \right]
-        \\
-    \end{aligned}
+        \nonumber
+        \begin{aligned}
+            X^{(1)} & = & \left[ x_1^{(1)} = \text{H}, \ x_2^{(1)} = \text{M}, \
+            x_3^{(1)} = 2, \ x_4^{(1)} = 2, \ x_5^{(1)} = 4, \ x_6^{(1)} = 0 
+            \right]
+            \\
+            X^{(2)} & = & \left[ x_1^{(2)} = \text{L}, \ x_2^{(2)} = \text{M}, \
+            x_3^{(2)} = 0, \ x_4^{(2)} = 1, \ x_5^{(2)} = 2, \ x_6^{(2)} = 0
+            \right]
+        \end{aligned}
     \end{equation}
 
-    And using Definition~\ref{def:dissim}, their pairwise dissimilarity is:
+    Then, by Definition~\ref{def:dissim}, their pairwise dissimilarity is:
     \begin{equation}
-    \nonumber
-    \begin{aligned}
-        \centering
-        d(X^{(1)}, X^{(2)}) & = & \delta(\text{H}, \text{L}) & + & 
-        \delta(\text{M}, \text{M}) & + & \delta(3, 0) & + & \delta(2, 1) & + & 
-        \delta(4, 2) & + & \delta(0, 0) & {} & {}
-        \\
-        {} & = & 1 \ & + & 0 \ & + & 1 \ & + & 1 \ & + & 1 \ & + & 0 \ & = & 4
-        \\
-    \end{aligned}
+        \nonumber
+        \begin{aligned}
+            \centering
+            d(X^{(1)}, X^{(2)}) & = & \delta(\text{H}, \text{L}) & + & 
+            \delta(\text{M}, \text{M}) & + & \delta(3, 0) & + & \delta(2, 1) &
+            + & \delta(4, 2) & + & \delta(0, 0) & {} & {}
+            \\
+            {} & = & 1 \ & + & 0 \ & + & 1 \ & + & 1 \ & + & 1 \ & + & 0 \ & = &
+            4
+        \end{aligned}
     \end{equation}
 \end{example}
 
@@ -160,15 +165,15 @@ what we mean by the representative point \(\mu^{(l)}\) of a cluster \(C_l\). In
 and are defined to be the average of all points \(X^{(i)} \in C_l\). With
 categorical data, we use our revised distance measure from
 Definition~\ref{def:dissim} to specify a representative point. We typically call
-these points a mode of \textbf{X}.\\
+these points a mode of \textbf{X}.
 
 \begin{definition}\label{def:mode}
     We define a \emph{mode} of our set \textbf{X} to be any vector \(\mu =
     [\mu_1, \ldots, \mu_m]\) that minimises the \emph{summed dissimilarity}:
-	
+
     \begin{equation}
-        D(\textbf{X}, \mu) = \sum_{i=1}^{N} d(X^{(i)}, \mu)
-	\end{equation}
+        D(\textbf{X}, \mu) = \sum_{i=1}^{N} d\left(X^{(i)}, \mu\right)
+    \end{equation}
 	
     Note that \(\mu\) is not necessarily in \textbf{X}, and in this case we call
     \(\mu\) a \emph{virtual mode} of \textbf{X}.
@@ -178,10 +183,11 @@ these points a mode of \textbf{X}.\\
     Let \textbf{X} be a dataset with attributes \(A_1, \ldots, A_m\). Then we
     denote by \(n(a_s^{(j)})\) the \emph{frequency} of the \(s^{th}\) category
     \(a_s^{(j)}\) of \(A_j\) in \textbf{X}. That is:
-	
+
     \[
-	    n(a_s^{(j)}) := |{\{X^{(i)} \in \textbf{X}: x_j^{(i)} = a_s^{(j)}\}}|
-	\]
+        n(a_s^{(j)}) := \abs*{{\{X^{(i)} \in \textbf{X}: x_j^{(i)} =
+        a_s^{(j)}\}}}
+    \]
 	
     We call \(\frac{n(a_s^{(j)})}{N}\) the \emph{relative frequency} of category 
     \(a_s^{(j)}\) in \textbf{X}.
@@ -194,35 +200,34 @@ these points a mode of \textbf{X}.\\
 
 \begin{theorem}\label{thm:1}
     Consider a dataset \textbf{X} and some \(X^{(i)} \in \textbf{X}\). Then:
-
     \[
 	    D(\textbf{X}, X^{(i)}) \ \text{is minimised} \ \iff n(x_j^{(i)}) \geq 
 	    n(a_s^{(j)}) \ \text{for all} \ s~=~1,~\ldots,~d_j \ \text{for each} \
-        j~=~1,~\ldots,~m. 
-	\]
+        j~=~1,~\ldots,~m.
+    \]
+    A proof of this theorem can be found in the Appendix of~\cite{Huang98}.
 \end{theorem}
-A proof of this theorem can be found in the Appendix of~\cite{Huang98}.\\
 
 \begin{example}\label{ex:mode}
     Let us return to our vehicale dataset from Example~\ref{ex:dissim}. Using 
     Theorem~\ref{thm:1}, we can identify a mode of our set by taking the most 
     commonly occurring value for each attribute. We can then take these values
     as a vector and call it \(\mu\). In this case, we have:
-    
-    \input{tex/top-mode.tex}
+
+    \input{tex/top_mode.tex}
 
     This point actually appears in our dataset and corresponds to the first row.
     It is easily verified (a Python script doing so is given as an Appendix)
     that this point is in fact the only point in the span of the attribute space
-    \(A_1 \times \ldots \times A_6\) that minimises our summed dissimilarity. In
+    \(A_1 \times \cdots \times A_6\) that minimises our summed dissimilarity. In
     this way, we have that the first row of our dataset is the only true mode of
-    our set, virtual or not.\\
+    our set, virtual or not.
 \end{example}
 
 \begin{remark}
     Many practical implementations of the \(k\)-modes algorithm do not actually
     consider \(k\) modes, as there may not be that many points in the dataset
-    which minimise the summed dissimilarity - like in our example. However, we
+    which minimise the summed dissimilarity \-- like in our example. However, we
     will still use the term mode to refer to the cluster centers we find.
 \end{remark}
 
@@ -240,10 +245,10 @@ given by \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\). Then we define \(W =
                 1, & \text{if} \ X^{(i)} \in C_l \\
                 0, & \text{otherwise}
               \end{cases}
-\]\\
+\]
 
 \begin{definition}\label{def:cost}
-    For the \(k\)-modes alogrithm, we define our \emph{cost function} to be the 
+    For the \(k\)-modes alogrithm, we define our \emph{cost function} to be the
     summed within-cluster dissimilarity:
 
     \[
@@ -257,11 +262,12 @@ given by \(\bar{\mu} = \{\mu^{(1)}, \ldots, \mu^{(k)}\}\). Then we define \(W =
 
 Below is a practical implementation of the \(k\)-modes algorithm~\cite{Huang98}:
 
-\input{tex/algorithms/kmodes.tex}
-\vspace{-5pt}\input{tex/algorithms/update-mode.tex}
+\begin{singlespace}
+    \input{tex/algorithms/kmodes.tex}
+    \vspace{-5pt}\input{tex/algorithms/update-mode.tex}
+\end{singlespace}
 
 \begin{remark}
     The processes by which the \(k\) initial modes are selected are detailed in 
     Sections~\ref{sec:init}~\&~\ref{sec:proposed-method}.
 \end{remark}
-

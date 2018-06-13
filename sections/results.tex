@@ -1,0 +1,105 @@
+\section{Experimental results}\label{sec:results}
+
+To give comparative results on the quality of the initialisation processes 
+defined in
+Sections~\ref{sec:init},~\ref{sec:proposed-method}~\&~\ref{sec:preferences},
+four well-known, categorical, labelled datasets \- soybean, mushroom, breast
+cancer, and zoo animal \- will be clustered by the \(k\)-modes algorithm with
+each of the initialisation processes using their respective number of classes as
+the number of clusters. These datasets have been chosen to fall in line with the
+established literature, and for their relative sizes and complexities.
+
+Typically, the quality of a clustering algorithm is measured by its performance
+at classifying datasets~\cite{Huang98}\cite{Cao09}. In this work, however, we
+will not follow this approach since our motivation is to compare the quality of
+the clustering produced when using these initialisation methods. So, for the
+purposes of measuring the performance of our various initialisation methods as
+parts of a clustering algorithm, we will make use of internal metrics that are
+independent of any external information such as a class labelling. This family
+of metrics are built up from two characteristics of the clusters found: cohesion
+and separation. Cluster cohesion is effectively the summed, within-cluster
+variation or dissimilarity of its points, whereas a cluster's separation is a
+sum of the distances between all points in the cluster and every other point not
+in the cluster. In this analysis, we will make use of two internal measures for
+cluster validity: our cost function from Definition~\ref{def:cost} and the
+average silhouette coefficient, or silhouette score, of our clustering, defined
+below. 
+
+\begin{definition}\label{def:silhouette}
+    Let \textbf{X} be a dataset and consider a clustering of \textbf{X} into
+    \(k\) parts, denoted by \(C = \left\{C_1, \ldots, C_k\right\}\). For each
+    \(X^{(i)} \in \textbf{X}\), we define the following two quantities:
+    \begin{itemize}
+        \item Let \(a\left(X^{(i)}\right)\) denote the average dissimilarity
+            between \(X^{(i)}\) and every other point in its cluster. Without
+            loss of generality, let \(X^{(i)} \in C_l\). Then:
+            \[
+                a\left(X^{(i)}\right) := \frac{1}{|C_l|} D\left(C_l,
+                X^{(i)}\right)
+            \]
+        \item Let \(b\left(X^{(i)}\right)\) denote the lowest average 
+            dissimilarity between \(X^{(i)}\) and all other points in each
+            cluster other than \(C_l\). That is:
+            \[
+                b\left(X^{(i)}\right) := \min_{l' \neq l} \left\{
+                \frac{1}{|C_{l'}|} D\left(C_{l'}, X^{(i)}\right) \right\}
+            \]\\
+    \end{itemize}
+
+    With these quantities we define, for each point in our datset, their
+    \emph{silhouette coefficient}, denoted by \(s(X^{(i)})\):
+    \[
+        s(X^{(i)}) := \frac{a\left(X^{(i)}\right) -
+        b\left(X^{(i)}\right)}{\max\left\{a\left(X^{(i)}\right),
+        b\left(X^{(i)}\right)\right\}}
+    \]
+
+    The \emph{silhouette score} of a clustering \(C\) is simply the average of
+all the silhouette coefficients.
+\end{definition}
+
+
+\subsection{The datasets}\label{subsec:datasets}
+
+As stated above, the datasets being used for this work are well-known and openly
+available. Below is a summary of their properties and access links for each.
+
+\subsubsection*{Soybean}
+
+The soybean dataset describes 35 characteristics of 307 soybean instances to
+classify which disease is present. The attributes are encoded numerically as
+integers but will be considered as strings for this analysis.
+The diseases form 19 classes, though the first 15 are the only ones used since
+they contain a considerable number of instances each~\cite{Soybean}. 
+Available~at:~\url{https://archive.ics.uci.edu/ml/datasets/Soybean+(Large)}
+
+\subsubsection*{Mushroom}
+
+The mushroom dataset was constructed to classify 8124 mushroom instances forming
+23 species found in North America into two classes: edible and poisonous. The
+attributes describe the physical characteristics and habitat of the mushrooms,
+and are encoded as strings~\cite{Mushroom}.
+Available~at:~\url{https://archive.ics.uci.edu/ml/datasets/mushroom}
+
+\subsubsection*{Breast cancer}
+
+Wisconsin University constructed the breast cancer dataset using a decision tree
+with linear programming as a diagnostic tool. The features were created using
+digital images of a fine needle aspirate of a breast mass to describe the
+structure of cell nuclei. There are 569 instances and 32 attributes in total.
+Available~upon~request~at:~\url{https://archive.ics.uci.edu/ml/datasets/
+Breast+Cancer+Wisconsin+(Diagnostic)}
+
+\subsubsection*{Zoo animal}
+
+The zoo animal dataset is an entirely artificial dataset used to classify 101
+animals into 7 classes, those being mammal, reptile, amphibian, bird, fish,
+insect, and crustacean. The 17 attributes include the name of the animal and a
+series of Boolean variables describing characteristics and the habitat of the
+animals. Available~at:~\url{http://archive.ics.uci.edu/ml/datasets/zoo}
+
+\subsection{Results}\label{subsec:results}
+
+\textcolor{red}{Tables of results for each dataset. Credit to
+\url{https://github.com/nicodv/kmodes} for the Python implementation of both the
+Huang and Cao processes, as well as the $k$-modes algorithm itself.}
