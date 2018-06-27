@@ -1,8 +1,49 @@
 \section{Resident preference lists}\label{sec:preferences}
 
-\textcolor{red}{%
-    Some examples and hopefully some mathematical reasoning to justify that
-    certain choices of preference lists reduce down to near equivalent results
-    of Huang's method (or others). This then suggests the proposed method is in
-    fact a generalisation of the other method(s).
-}
+For the purposes of this piece of work and to demonstrate how preference lists
+can be generated, a small number will be defined and used. While these
+preference lists do not necessarily hold any mathematical justification for why
+they could be appropriate or useful at all, they are the simplest methods
+available. In fact, research into this area could prove to be promising as a
+means of incorporating prior or expert knowledge into the clustering algorithm.
+
+\begin{definition}\label{def:preferences}
+    The three preference list methods to be used will be referred to as `Best',
+    `Worst' and `Random' from this point, most notably in
+    Section~\ref{sec:results}. Their definitions are somewhat self-explanatory
+    but are given below.
+
+    Let \((S, R, C)\) be a capacitated matching game where \(R = \tilde{\mu}\)
+    and \(S = \left\{S_r : r \in R\right\}\) as in the proposed method. Then the
+    reviewer-suitor preference function \(g\) is well-defined by the proposed
+    method. Consider some \(s \in S\). Then their preference function \(f(s)\)
+    could be defined in the following way:
+    \begin{itemize}
+        \item \textbf{Best:} Rank the elements of \(R\) in \emph{ascending}
+            order of dissimilarity with respect to \(s\) and set this to be
+            \(f(s)\).
+        \item \textbf{Worst:} Rank the elements of \(R\) in \emph{descending}
+            order of dissimilarity with respect to \(s\) and set this to be
+            \(f(s)\).
+        \item \textbf{Random:} Take a random permutation of the elements of
+            \(R\) and set this to be \(f(s)\).
+    \end{itemize}
+\end{definition}
+
+\begin{remark}
+    It should be noted that `Best' could be considered the greediest approach to
+    take since it involves choosing the most preferred option for each of the
+    slots available in the list. `Random' should also be expected to perform
+    badly on average since it creates an element of stupidity in a method that
+    is intended to be an intelligent cluster selection. `Worst' is included to
+    observe the effects of deliberately choosing a preference list that goes
+    against common sense approaches.
+
+    Note also that each of these preference list operators requires a suitor to
+    rank all of the reviewers. A slight modification to some (such as the
+    inclusion of a threshold on dissimilarity) could drastically improve their
+    performance. Also, it is possible to generate a preference list such that
+    the proposed method produces an initial clustering identical to that found
+    by Huang's method, though that is not discussed here as it has been
+    considered trivial.
+\end{remark}
