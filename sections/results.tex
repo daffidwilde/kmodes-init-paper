@@ -10,20 +10,20 @@ the number of clusters. These datasets have been chosen to fall in line with the
 established literature, and for their relative sizes and complexities.
 
 Typically, the quality of a clustering algorithm is measured by its performance
-at classifying datasets~\cite{Huang98}\cite{Cao09}. In this work, however, we
-will not follow this approach since our motivation is to compare the quality of
-the clustering produced when using these initialisation methods. So, for the
-purposes of measuring the performance of our various initialisation methods as
-parts of a clustering algorithm, we will make use of internal metrics that are
-independent of any external information such as a class labelling. This family
-of metrics are built up from two characteristics of the clusters found: cohesion
-and separation. Cluster cohesion is effectively the summed, within-cluster
-variation or dissimilarity of its points, whereas a cluster's separation is a
-sum of the distances between all points in the cluster and every other point not
-in the cluster. In this analysis, we will make use of two internal measures for
-cluster validity: our cost function from Definition~\ref{def:cost} and the
-average silhouette coefficient, or silhouette score, of our clustering, defined
-below. 
+at classifying datasets~\cite{Huang1998}\cite{Cao2009}~\cite{Olaode2014}. In
+this work, however, we will not follow this approach since our motivation is to
+compare the quality of the clustering produced when using these initialisation
+methods. So, for the purposes of measuring the performance of our various
+initialisation methods as parts of a clustering algorithm, we will make use of
+internal metrics that are independent of any external information such as a
+class labelling. This family of metrics are built up from two characteristics of
+the clusters found: cohesion and separation. Cluster cohesion is effectively the
+summed, within-cluster variation or dissimilarity of its points, whereas a
+cluster's separation is a sum of the distances between all points in the cluster
+and every other point not in the cluster. In this analysis, we will make use of
+two internal measures for cluster validity: our cost function from
+Definition~\ref{def:cost} and the average silhouette coefficient, or silhouette
+score, of our clustering, defined below. 
 
 \begin{definition}\label{def:silhouette}
     Let \textbf{X} be a dataset and consider a clustering of \textbf{X} into
@@ -71,15 +71,15 @@ classify which disease is present. The attributes are encoded numerically as
 integers but will be considered as strings for this analysis.
 The diseases form 19 classes, though the first 15 are the only ones used since
 they contain a considerable number of instances each~\cite{Soybean}. 
-Available~at:~\url{https://archive.ics.uci.edu/ml/datasets/Soybean+(Large)}
+Available~at:~\url{https://archive.ics.uci.edu/ml/datasets/Soybean+(Large)}.
 
 \subsubsection*{Mushroom}
 
 The mushroom dataset was constructed to classify 8124 mushroom instances forming
 23 species found in North America into two classes: edible and poisonous. The
 attributes describe the physical characteristics and habitat of the mushrooms,
-and are encoded as strings~\cite{Mushroom}.
-Available~at:~\url{https://archive.ics.uci.edu/ml/datasets/mushroom}
+and are encoded as strings~\cite{Mushroom}. Available~at:~\url{https://archive.
+ics.uci.edu/ml/datasets/mushroom}.
 
 \subsubsection*{Breast cancer}
 
@@ -87,8 +87,8 @@ Wisconsin University constructed the breast cancer dataset using a decision tree
 with linear programming as a diagnostic tool. The features were created using
 digital images of a fine needle aspirate of a breast mass to describe the
 structure of cell nuclei. There are 569 instances and 32 attributes in total.
-Available~upon~request~at:~\url{https://archive.ics.uci.edu/ml/datasets/
-Breast+Cancer+Wisconsin+(Diagnostic)}
+Available~upon~request~to~members~of~the~academic~community~at:~\url{https://
+archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)}.
 
 \subsubsection*{Zoo animal}
 
@@ -96,10 +96,67 @@ The zoo animal dataset is an entirely artificial dataset used to classify 101
 animals into 7 classes, those being mammal, reptile, amphibian, bird, fish,
 insect, and crustacean. The 17 attributes include the name of the animal and a
 series of Boolean variables describing characteristics and the habitat of the
-animals. Available~at:~\url{http://archive.ics.uci.edu/ml/datasets/zoo}
+animals. Available~at:~\url{http://archive.ics.uci.edu/ml/datasets/zoo}.
 
 \subsection{Results}\label{subsec:results}
 
-\textcolor{red}{Tables of results for each dataset. Credit to
-\url{https://github.com/nicodv/kmodes} for the Python implementation of both the
-Huang and Cao processes, as well as the $k$-modes algorithm itself.}
+In this section, two sets of results will be considered. The first are the more
+classically seen tables of metrics defined above, and the latter are a
+collection of plots showing the descent in the cost function of the \(k\)-modes
+algorithm over time. In either case, results are generated using the Python
+library \href{https://github.com/nicodv/kmodes}{\texttt{kmodes}} to which the
+proposed method has been added as another initialisation method.
+
+\subsubsection{Metric results}
+
+Each of the tables of results given below were obtained by running the
+\(k\)-modes algorithm 25 times with each initialisation method on the dataset in
+question. For each of these 25 runs, the simulation is seeded to make the
+results reproducible.
+
+At each run of the experiment the number of epochs to termination, the initial
+and final costs, and the average silhouette score were recorded for the
+clustering found. These metrics are summarised below in
+Tables~\ref{tab:soybean_results}~\--~\ref{tab:zoo_animal_results} by their mean and
+median values, and their standard deviation over the 25 runs.
+
+\singlespacing%
+\begin{table}[H]
+    \centering
+    \resizebox{.9\textwidth}{!}{%
+        \input{./tex/soybean_results.tex}
+    }
+    \captionof{table}{Summative metric results for the soybean dataset with
+    \(k=15\).}\label{tab:soybean_results}\vspace{20pt}
+
+    \resizebox{.9\textwidth}{!}{%
+        \input{./tex/mushroom_results.tex}
+    }
+    \captionof{table}{Summative metric results for the mushroom dataset with
+    \(k=2\).}\label{tab:mushroom_results}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \resizebox{.9\textwidth}{!}{%
+        \input{./tex/breast_cancer_results.tex}
+    }
+    \captionof{table}{Summative metric results for the breast cancer dataset
+    with \(k=2\).}\label{tab:breast_cancer_results}\vspace{20pt}
+
+    \resizebox{.9\textwidth}{!}{%
+        \input{./tex/zoo_animal_results.tex}
+    }
+    \captionof{table}{Summative metric results for the zoo animal dataset with
+    \(k=7\).}\label{tab:zoo_animal_results}
+\end{table}
+\doublespacing%
+
+\subsubsection{Epoch costs}
+
+\begin{figure}[h!]
+    \centering
+    \begin{minipage}{.495\textwidth}
+        \includegraphics[width=\linewidth]{./img/epoch_plot_soybean.pdf}
+    \end{minipage}
+\end{figure}

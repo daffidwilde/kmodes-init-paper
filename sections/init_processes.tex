@@ -2,10 +2,10 @@
 
 From the literature surrounding this topic, it has been established that the 
 initial choice of clusters impacts the final solution of the \(k\)-modes
-algorithm~\cite{Huang98}~\cite{Cao09}. While some works attempt to improve the 
-quality of \(k\)-modes and similar algorithms by considering an alternative 
-dissimilarity measure~\cite{Ng07}, this work will examine the way in which these
-\(k\) initial representative points are chosen. Two established methods of 
+algorithm~\cite{Huang1998}~\cite{Cao2009}. While some works attempt to improve
+the quality of \(k\)-modes and similar algorithms by considering an alternative 
+dissimilarity measure~\cite{Ng2007}, this work will examine the way in which
+these \(k\) initial representative points are chosen. Two established methods of 
 selecting these initial points are described in
 Sections~\ref{subsec:huang}~\&~\ref{subsec:cao}.
 
@@ -15,7 +15,7 @@ Sections~\ref{subsec:huang}~\&~\ref{subsec:cao}.
 In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
 chosen at random from \textbf{X}. Below is an alternative method of selecting
 these modes that forces some diversity between them, as described 
-in~\cite{Huang98}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
+in~\cite{Huang1998}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
 \(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
 is the set of modes to go on to be used by the \(k\)-modes algorithm.
 
@@ -23,13 +23,13 @@ is the set of modes to go on to be used by the \(k\)-modes algorithm.
     \input{tex/algorithms/huang.tex}
 \end{singlespace}
 
-In the original statement of Huang's method~\cite{Huang98}, the algorithm states
-that the most frequent categories should be assigned `equally' to the \(k\) 
-initial modes. How the categories should be distributed `equally' is not 
-well-defined or easily seen from the example given. This ambiguity in the 
-definition of Huang's method means that a probabilistic element must be 
-introduced, and unless seeded pseudo-random numbers are used, computer-generated
-results are not necessarily reproducible.
+In the original statement of Huang's method, the algorithm states that the most
+frequent categories should be assigned `equally' to the \(k\) initial modes. How
+the categories should be distributed `equally' is not well-defined or easily
+seen from the example given. This ambiguity in the definition of Huang's method
+means that a probabilistic element must be introduced, and unless seeded
+pseudo-random numbers are used, computer-generated results are not necessarily
+reproducible.
 
 In our examples, and the implementation used to apply the \(k\)-modes algorithm
 in Section~\ref{sec:results}, we will consider `equally' to mean taking a sample
@@ -139,7 +139,7 @@ broken (see Example~\ref{ex:cao}).
     Consider a data set \(\textbf{X}\) with attribute set \(\textbf{A} = 
     \{A_1, \ldots, A_m\}\). Then the \emph{average density} of any point 
     \(X_i \in \textbf{X}\) with respect to \(\textbf{A}\) is 
-    defined~\cite{Cao09} as:
+    defined~\cite{Cao2009} as:
 	\[
 	    \text{Dens}(X^{(i)}) = \frac{\sum_{j=1}^m \text{Dens}_{j}(X^{(i)})}{m}, 
         \quad \text{where} \quad \text{Dens}_{j}(X^{(i)}) = \frac{|\{X^{(t)} \in 
