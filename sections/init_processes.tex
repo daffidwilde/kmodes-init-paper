@@ -2,8 +2,8 @@
 
 From the literature surrounding this topic, it has been established that the 
 initial choice of clusters impacts the final solution of the \(k\)-modes
-algorithm~\cite{Huang1998}~\cite{Cao2009}. While some works attempt to improve
-the quality of \(k\)-modes and similar algorithms by considering an alternative 
+algorithm~\cite{Cao2009, Huang1998}. While some works attempt to improve the
+quality of \(k\)-modes and similar algorithms by considering an alternative 
 dissimilarity measure~\cite{Ng2007}, this work will examine the way in which
 these \(k\) initial representative points are chosen. Two established methods of 
 selecting these initial points are described in
@@ -101,12 +101,12 @@ Algorithm~\ref{alg:huang}.
     \end{table}
 
     Taking the first element of \(\tilde{\mu}\), we calculate the dissimilarity
-    between this vector and all of our datapoints. Table~\ref{huang-mode-dissim}
-    shows the elements of our dataset ranked in ascending order of their
-    dissimilarity to this vector. It follows that we should set our first
-    initial mode to be the sixth entry of our dataset. We continue this process
-    for the other elements of \(\tilde{\mu}\), disregarding any points that have
-    already been selected.
+    between this vector and all of our datapoints.
+    Table~\ref{tab:huang-mode-dissim} shows the elements of our dataset ranked
+    in ascending order of their dissimilarity to this vector. It follows that we
+    should set our first initial mode to be the sixth entry of our dataset. We
+    continue this process for the other elements of \(\tilde{\mu}\),
+    disregarding any points that have already been selected.
     
     Using our Python implementation for Huang's initialisation method we have 
     that the set of initial modes for this instance of the \(k\)-modes algorithm
@@ -130,7 +130,7 @@ Algorithm~\ref{alg:huang}.
 Cao's method selects representative points by the average density of a point in
 the dataset. As will be seen in the following definition, this average density 
 is in fact the average relative frequency of all the attribute values of that 
-point. This method is considered deterministic as there is no probabilistic 
+point. This method is considered deterministic as there is no probabilistic
 element \- unlike Huang's method or a random initialisation. So, we can consider
 the results to be largely reproducible, except in the case where a tie must be
 broken (see Example~\ref{ex:cao}).
@@ -264,7 +264,7 @@ broken (see Example~\ref{ex:cao}).
     \(i^{th}\) datapoint (column). Then, we go through the highlighted entries
     and select the column which has the largest value. This column corresponds
     to the next datapoint to be selected as an initial mode. This process is
-    shown in Figures~\ref{fig:cao-matrix-1}~\-~\ref{fig:cao-matrix-3}.
+    shown in Figure~\ref{fig:cao-matrix}.
     
     \begin{figure}[H]
         \centering
@@ -280,11 +280,9 @@ broken (see Example~\ref{ex:cao}).
                 1.2\dot{6} & 1.3
             \end{pmatrix}
             \)
-            \captionof{figure}{Our density-dissimilarity matrix
-            \(\mathbb{D}\).}\label{fig:cao-matrix-1}
         \end{minipage}
 
-        \vspace{1cm}
+        \vspace{10pt}
 
         \begin{minipage}{\textwidth}
             \centering
@@ -300,12 +298,9 @@ broken (see Example~\ref{ex:cao}).
                 \underline{1.15} & 1.91\dot{6} & 1.2\dot{6} & 1.3
             \end{pmatrix}
             \)
-            \captionof{figure}{Highlighting which mode has smaller
-                density-dissimilarity product for each
-                datapoint.}\label{fig:cao-matrix-2}
         \end{minipage}
 
-        \vspace{1cm}
+        \vspace{10pt}
 
         \begin{minipage}{\textwidth}
             \centering
@@ -321,15 +316,17 @@ broken (see Example~\ref{ex:cao}).
                 \underline{1.15} & 1.91\dot{6} & 1.2\dot{6} & 1.3
             \end{pmatrix}
             \)
-            \captionof{figure}{Selecting point with maximal
-                density-dissimilarity product of those
-                highlighted.}\label{fig:cao-matrix-3}
         \end{minipage}
         }
+        \caption{The stages of selecting the \(l^{th}\) mode with a
+        density-dissimilarity matrix, for \(l > 2\). First, the row with smaller
+        value is highlighted in each column (underlined here). Then of those
+        highlighted entries, the entry with maximal value is selected (shown in
+    red). Ties are broken arbitrarily.}\label{fig:cao-matrix}
     \end{figure}
 
     Therefore, our set of initial modes, \(\bar{\mu}\), correspond to the first,
-    fourth and fifth rows of our dataset. That is,
+    fourth and fifth rows of our dataset. That is:
     
     \input{tex/cao_initial_modes.tex}
 \end{example}

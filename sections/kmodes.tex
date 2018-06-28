@@ -39,7 +39,6 @@ its points, our clusters and their representative points:
             \\
             \(X^{(N)}\) & \(x_1^{(N)}\) & \(x_2^{(N)}\) & \quad \ldots \quad &
             \(x_{m-1}^{(N)}\) & \(x_m^{(N)}\)
-            \\
         \end{tabular}
         \end{table}
 	\item Prototype-based clustering algorithms partition the elements of 
@@ -47,9 +46,9 @@ its points, our clusters and their representative points:
         by \(C_1, \ldots, C_k\), where \(k \in \mathbb{Z}_+\) is a 
         pre-determined, fixed integer such that \(k \le N\). That is:
 	    \[
-		    C_1, \ldots, C_k \ \text{are such that} \ \bigcup_{l=1}^k C_l = 
-		    \textbf{X} \quad \text{and} \quad C_l \cap C_t = \emptyset \
-		    \text{for all} \ l \neq t
+            C_1, \ldots, C_k \subset \textbf{X} \quad \text{are such that} \quad
+            \bigcup_{l=1}^k C_l = \textbf{X} \quad \text{and} \quad C_l \cap C_t
+            = \emptyset \ \text{for all} \ l \neq t
 	    \]
     \item Each cluster \(C_l\) has associated with it a representative point 
 		(see Section~\ref{subsec:rep-points}) which we denote by 
