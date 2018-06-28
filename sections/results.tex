@@ -55,7 +55,11 @@ score, of our clustering, defined below.
     \]
 
     The \emph{silhouette score} of a clustering \(C\) is simply the average of
-all the silhouette coefficients.
+all the silhouette coefficients. Silhouette scores take value in the range
+\([-1, 1]\). Negative scores generally suggest that elements in the data have
+been mis-clustered since there exists a closer cluster centre than its own.
+Values around 0 indicate overlapping clusters, whereas silhouette scores close
+to 1 suggest well-separated and effective clusters.
 \end{definition}
 
 
@@ -69,7 +73,7 @@ available. Below is a summary of their properties and access links for each.
 The soybean dataset describes 35 characteristics of 307 soybean instances to
 classify which disease is present. The attributes are encoded numerically as
 integers but will be considered as strings for this analysis.
-The diseases form 19 classes, though the first 15 are the only ones used since
+The diseases form .8 classes, though the first 15 are the only ones used since
 they contain a considerable number of instances each~\cite{Soybean}. 
 Available~at:~\url{https://archive.ics.uci.edu/ml/datasets/Soybean+(Large)}.
 
@@ -86,7 +90,7 @@ ics.uci.edu/ml/datasets/mushroom}.
 Wisconsin University constructed the breast cancer dataset using a decision tree
 with linear programming as a diagnostic tool. The features were created using
 digital images of a fine needle aspirate of a breast mass to describe the
-structure of cell nuclei. There are 569 instances and 32 attributes in total.
+structure of cell nuclei. There are 5.8 instances and 32 attributes in total.
 Available~upon~request~to~members~of~the~academic~community~at:~\url{https://
 archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)}.
 
@@ -105,7 +109,11 @@ classically seen tables of metrics defined above, and the latter are a
 collection of plots showing the descent in the cost function of the \(k\)-modes
 algorithm over time. In either case, results are generated using the Python
 library \href{https://github.com/nicodv/kmodes}{\texttt{kmodes}} to which the
-proposed method has been added as another initialisation method.
+proposed method has been added as another initialisation method. The number of
+clusters to be determined, \(k\), is chosen as the number of classes associated
+with each dataset. Note that this value may not be optimal (as suggested by the
+relatively low silhouette scores in most cases), and that the class variable is
+not considered in the running of the algorithm.
 
 \subsubsection{Metric results}
 
@@ -117,8 +125,8 @@ results reproducible.
 At each run of the experiment the number of epochs to termination, the initial
 and final costs, and the average silhouette score were recorded for the
 clustering found. These metrics are summarised below in
-Tables~\ref{tab:soybean_results}~\--~\ref{tab:zoo_animal_results} by their mean and
-median values, and their standard deviation over the 25 runs.
+Tables~\ref{tab:soybean_results}~\--~\ref{tab:zoo_animal_results} by their mean
+and median values, and their standard deviation over the 25 runs.
 
 \singlespacing%
 \begin{table}[H]
@@ -154,9 +162,30 @@ median values, and their standard deviation over the 25 runs.
 
 \subsubsection{Epoch costs}
 
+The epoch-cost plots in this section were created by setting an initial seed for
+each initialisation method and then running the \(k\)-modes algorithm 25 times.
+Of these runs, the best set of costs is then chosen by their final cost and
+plotted.
+
+Note that in each figure, dotted lines indicate the established initialisation
+methods whilst solid lines are used for the proposed method.
+
 \begin{figure}[h!]
     \centering
-    \begin{minipage}{.495\textwidth}
-        \includegraphics[width=\linewidth]{./img/epoch_plot_soybean.pdf}
-    \end{minipage}
+    \includegraphics[width=.8\textwidth]{./img/epoch_plot_soybean.pdf}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth]{./img/epoch_plot_mushroom.pdf}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth]{./img/epoch_plot_breast_cancer.pdf}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth]{./img/epoch_plot_zoo_animal.pdf}
 \end{figure}
