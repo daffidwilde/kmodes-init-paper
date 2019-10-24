@@ -7,6 +7,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[margin=1in, includefoot, footskip=30pt]{geometry}
 
+% Bibliography
+\usepackage[numbers]{natbib}
+\bibliographystyle{plain}
+
 % Writing mathematics, algorithms and code
 \usepackage{mathtools}
 \usepackage{amsmath}
@@ -63,14 +67,18 @@
 
 \theoremstyle{example} \newtheorem{example}{Example}
 
-\title{A new game-theoretic initialisation process for the \(k\)-modes algorithm
-using the hospital-resident assignment problem}
-\author{Henry Wilde}
+\title{%
+    A novel game-theoretic initialisation process for the \(k\)-modes
+    algorithm using the hospital-resident assignment problem
+}
+\author{Henry Wilde, Vincent Knight and Jonathan Gillard}
 
 \begin{document}
+
 \maketitle%
 \input{sections/abstract.tex}
-\clearpage
+\clearpage%
+
 \input{sections/kmodes.tex}
 \input{sections/init_processes.tex}
 \input{sections/matching_games.tex}
@@ -78,7 +86,6 @@ using the hospital-resident assignment problem}
 \input{sections/preference_lists.tex}
 \input{sections/results.tex}
 
-\clearpage
-\bibliographystyle{plain}
+\clearpage%
 \bibliography{references}
 \end{document}
