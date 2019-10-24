@@ -2,27 +2,29 @@
 
 \subsection{Notation}\label{subsec:notation}
 
-We will use the following notation throughout this work to describe our dataset,
-its points, our clusters and their representative points:
+The following notation will be used throughout this work to describe the objects
+associated with clustering a dataset:
 
 \begin{itemize}
-    \item Our dataset has \(N\) elements and is denoted by \textbf{X}.
-    \item \textbf{X} is described by a set of \(m \in \mathbb{Z}_+\) attributes 
-        \(\textbf{A} = \{A_1, \ldots, A_m\}\).
-    \item Each attribute \(A_j\) is considered as a set of attribute values 
-        \(A_j = \{a_1^{(j)}, \ldots, a_{d_j}^{(j)}\}\) where \(d_j = |A_j| \in 
-        \mathbb{Z}_+\) is sometimes used as shorthand for the size of the 
-        \(j^{th}\) attribute set.
-    \item We write each data point \(X^{(i)}, \ i = 1, \ldots, N\), as an 
-        \(m\)-dimensional vector:
-	    \[
-		    X^{(i)} = \left[x_1^{(i)}, x_2^{(i)}, \ldots, x_m^{(i)}\right], \
-            \text{where} \ x_j^{(i)} \in A_j \ \text{for all} \ j = 1, \ldots, 
-            m.
-	    \]
-        Here, we refer to \(x_j^{(i)}\) as the value of the \(j^{th}\) attribute
-        of the \(i^{th}\) data point, \(X^{(i)}\). A tabular representation is 
-        given below:
+    \item Let \(\mathcal{A} := A_1 \times \cdots \times A_m\) denote the
+        \textit{attribute space}. In this work, only categorical attributes are
+        considered and so it is intuitive to describe each attribute as a set of
+        its values, i.e.\ for each \(j = 1, \ldots, m\) we have:
+        \[
+            A_j := \left\{a_1^{(j)}, \ldots, a_{d_j}^{(j)}\right\}
+        \]
+        where \(d_j = |A_j|\) is considered the size of the \(j^{th}\)
+        attribute.
+    \item Let \(\mathcal{X} := \left\{X^{(1)}, \ldots, X^{(N)}\right\} \subset
+        \mathcal{A}\) denote a \textit{dataset} where each \(X^{(i)} \in
+        \mathcal{X}\) is defined as an \(m\)-tuple:
+        \[
+            X^{(i)} := \left(x_1^{(i)}, \ldots, x_m^{(i)}\right)
+        \]
+        where \(x_j^{(i)} \in A_j\) for each \(j = 1, \ldots, m\). We refer to
+        the elements of \(\mathcal{X}\) as \textit{data points} or
+        \textit{instances}. A dataset \(\mathcal{X}\) can be represented as a
+        table like so:
         \begin{table}[H]
         \centering
         \begin{tabular}{cccccc}
@@ -41,19 +43,16 @@ its points, our clusters and their representative points:
             \(x_{m-1}^{(N)}\) & \(x_m^{(N)}\)
         \end{tabular}
         \end{table}
-	\item Prototype-based clustering algorithms partition the elements of 
-        \(\textbf{X}\) into \(k\) distinct sets (which we call clusters) denoted
-        by \(C_1, \ldots, C_k\), where \(k \in \mathbb{Z}_+\) is a 
-        pre-determined, fixed integer such that \(k \le N\). That is:
-	    \[
-            C_1, \ldots, C_k \subset \textbf{X} \quad \text{are such that} \quad
-            \bigcup_{l=1}^k C_l = \textbf{X} \quad \text{and} \quad C_l \cap C_t
-            = \emptyset \ \text{for all} \ l \neq t
-	    \]
-    \item Each cluster \(C_l\) has associated with it a representative point 
+    \item Let \(\mathcal{Z} := \left\{Z_1, \ldots, Z_k\right\}\) be a partition
+        of a dataset \(\mathcal{X}\) into \(k \in \mathbb{Z}^{+}\) distinct,
+        non-empty parts. We call \(\mathcal{Z}\) a \textit{clustering} of
+        \(\mathcal{X}\).
+    \item Each cluster \(Z_l\) has associated with it a \textit{representative
+        point}
 		(see Section~\ref{subsec:rep-points}) which we denote by 
-        \(\mu^{(l)}~=~\left[\mu_1^{(l)},~\ldots,~\mu_m^{(l)}\right]\). These
-        points are also referred to as cluster centers, modes and centroids.
+        \(z^{(l)} = \left(z_1^{(l)},~\ldots,~z_m^{(l)}\right) \in \mathcal{A}\).
+        These points may also be referred to as cluster centroids, centres or
+        modes.
 \end{itemize}
 
 
