@@ -1,51 +1,31 @@
-\begin{algorithm}[H]
-    \caption{\(k\)-modes}\label{alg:kmodes}
-	\begin{algorithmic}[0]
-        \State{\textbf{Input:} a dataset \textbf{X}, a number of clusters to
-        form \(k\)}
-        \State{\textbf{Output:} a clustering of the dataset \(C_1, \ldots, 
-        C_k\)\\}
-        \\
-        \Comment{Initialisation step}
-        \State{\(\bar{\mu} \gets \emptyset\)}
-        \For{\(l \in \{1, \ldots, k\}\)}
-            \State{\(C_l \gets \emptyset\)}
-		\EndFor
-        \State{Select \(k\) initial modes, \(\mu^{(1)}, \ldots, \mu^{(k)} \in
-        \textbf{X}\).}
-        \State{\(\bar{\mu} \gets \left\{\mu^{(1)}, \ldots, 
-            \mu^{(k)}\right\}\)\\}
-        \\
-        \Comment{First cluster assignment}
-        \For{\(X_i \in \textbf{X}\)}
-            \State{Select \(l^*\) that satisfies: 
-                \[
-                    d(X^{(i)}, \mu^{(l^*)}) = \min_{1 \le l \le m} 
-                    \left\{d(X^{(i)}, \mu^{(l)})\right\}
-                \]
+\balg%
+    \caption{The \(k\)-modes algorithm}\label{alg:kmodes}
+    \KwIn{a dataset \(\mathcal{X}\), a number of clusters to form \(k\)}
+    \KwOut{a clustering \(\mathcal{Z}\) of \(\mathcal{X}\)}
+
+    Select \(k\) initial modes \(z^{(1)}, \ldots, z^{(k)} \in \mathcal{X}\)\;
+    \(\overline Z \gets \left\{z^{(1)}, \ldots, z^{(k)}\right\}\)\;
+    \(\mathcal{Z} \gets \left(\left\{z^{(1)}\right\}, \ldots,
+    \left\{z^{(k)}\right\}\right)\)\;
+
+    \For{\(X^{(i)} \in \mathcal{X}\)}{%
+        Select \(l^* \) that minimises \(d(X^{(i)}, z^{(l)})\)\;
+        \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
+        \(\textsc{Update}(z^{(l^*)})\)\;
+    }
+
+    \Repeat{No point changes cluster after a full cycle through
+    \(\mathcal{X}\)}{%
+        \For{\(X^{(i)} \in \textbf{X}\)}{%
+            \For{\(\mu^{(l)} \in \bar{\mu}\)}{%
+                Calculate \(d(X^{(i)}, \mu^{(l)})\)\;
             }
-            \State{\(C_{l^*} \gets C_{l^*} \cup \left\{X^{(i)}\right\}\)}
-            \State{\textsc{Update}\((\mu^{(l^*)})\).}
-		\EndFor
-        \\
-        \\
-        \Comment{Continue to reassign points to the most similar cluster until
-        no point moves}
-        \Repeat{%
-            \For{\(X^{(i)} \in \textbf{X}\)}
-                \For{\(\mu^{(l)} \in \bar{\mu}\)}
-                    \State{Calculate \(d(X^{(i)}, \mu^{(l)})\)}
-				\EndFor
-                \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \ 
-                \text{for some} \ l' \neq l^*\)}
-                    \State{\(C_{l^*} \gets C_{l^*} \setminus
-                    \left\{X^{(i)}\right\}\)}
-                    \State{\(C_{l'} \gets C_{l'} \cup \left\{X^{(i)}\right\}\)}
-                    \State{\textsc{Update}\((\mu^{(l^*)})\) and 
-                    \textsc{Update}\((\mu^{(l')})\).}
-				\EndIf
-			\EndFor
+            \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \ \text{for some} \ l' \neq l^*\)}{%
+                \(C_{l^*} \gets C_{l^*} \setminus \left\{X^{(i)}\right\}\)\;
+                \(C_{l'} \gets C_{l'} \cup \left\{X^{(i)}\right\}\)\;
+                \textsc{Update}\((\mu^{(l^*)})\) and \textsc{Update}\((\mu^{(l')})\).\;
+            }
         }
-		\Until{No point changes cluster after a full cycle through \textbf{X}.}
-	\end{algorithmic}
-\end{algorithm}
+    }
+\ealg%
+

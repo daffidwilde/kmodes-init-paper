@@ -1,16 +1,9 @@
-\begin{algorithm}[H]
+\balg%
     \caption{\textsc{Update}}
-    \begin{algorithmic}[0]
-        \State{\textbf{Input:} a clustering \(C_1, \ldots, C_k\), and a mode to
-        update \(\mu^{(l)}\)}
-        \State{\textbf{Output:} an updated mode \(\mu^{l_{\text{new}}}\)}
+    \KwIn{an attribute space \(\mathcal{A}\), a mode to update \(z^{(l)}\) and
+    its cluster \(Z_l\)}
+    \KwOut{an updated mode}
 
-        \State{Find \(\mu^{(l_{\text{new}})}\) that satisfies: 
-        \[
-            D(C_l, \mu^{(l_{\text{new}})}) = \min_{\mu \in A_1 \times \cdots
-            \times A_m} \left\{D(C_l, \mu)\right\}
-        \]
-        }
-        \State{\(\mu^{(l)} \gets \mu^{(l_{\text{new}})}\)}
-    \end{algorithmic}
-\end{algorithm}
+    Find \(z \in \mathcal{A}\) that minimises \(D(Z_l, z)\)\;
+    \(z^{(l)} \gets z\)\;
+\ealg%

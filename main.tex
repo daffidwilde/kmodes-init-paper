@@ -15,12 +15,15 @@
 \usepackage{mathtools}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{algpseudocode}
-\usepackage{algorithmicx}
-\usepackage{algorithm}
-\renewcommand{\algorithmiccomment}[1]{%
-    \textcolor{red}{$\triangleright$ #1}
+\usepackage[boxruled]{algorithm2e}
+
+\newcommand{\balg}[1][htbp]{%
+    \begin{algorithm}[#1]\DontPrintSemicolon
 }
+\newcommand{\ealg}{%
+    \end{algorithm}
+}
+
 \newcommand{\true}{\text{True}}
 \newcommand{\false}{\text{False}}
 \DeclareMathOperator*{\argmax}{arg\,max}
@@ -28,13 +31,6 @@
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
-
-% Swap the definition of \abs* and \norm*, so that \abs
-% and \norm resizes the size of the brackets, and the 
-% starred version does not.
-\makeatletter
-\let\oldabs\abs
-\def\abs{\@ifstar{\oldabs}{\oldabs*}}
 
 % Importing images, tables and referencing
 \usepackage{graphicx}
@@ -51,7 +47,7 @@
 
 % For indexing sections, etc.
 \usepackage{amsthm}
-\theoremstyle{definition} \newtheorem{definition}{Definition}
+\theoremstyle{definition} \newtheorem{definition}{Definition}[section]
 \newtheorem*{remark}{Remark}
 \newtheorem{theorem}{Theorem}
 

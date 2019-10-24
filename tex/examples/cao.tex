@@ -1,0 +1,134 @@
+\begin{example}\label{ex:cao}
+    We will now attempt to find \(3\) initial modes for our vehicle dataset 
+    using Cao's method, as we did in Example~\ref{ex:huang}. We begin by 
+    calculating the average density of each of our points. We rank these in 
+    descending order, and take the point with maximal density as our first 
+    initial mode. This ranking is shown in Table~\ref{tab:ranked-density}.
+
+    \begin{table}[H]
+        \centering
+        \singlespacing{%
+        \resizebox{.8\textwidth}{!}{%
+            \input{tex/ranked_density_table.tex}
+        }}
+        \caption{The dataset ranked by average
+            density.}\label{tab:ranked-density}
+    \end{table}
+
+    So, from Table~\ref{tab:ranked-density}, we see that the first row should be
+    taken as our first initial mode, \(\mu^{(1)}\). This is something we should
+    expect since it was seen in Example~\ref{ex:mode} that this entry has
+    minimal summed dissimilarity, and from Equation~\ref{eq:alt-def} we know
+    that this is equivalent to maximising density.
+    
+    Now, we wish to find the point which has the maximal product of its density
+    and its dissimilarity with our first mode. One way of doing this is to 
+    calculate the dissimilarity between each point and the mode, append this
+    as a column to our table and multiply these two new columns by each other
+    to give \(\text{Dens}(X^{(i)}) \times d(\mu^{(1)}, X^{(i)})\) for each \(i =
+    1, \ldots, 10\). The entries are then ranked by this product, and the first
+    entry is taken as the second mode. By inspecting 
+    Table~\ref{tab:ranked-dens-dissim}, we see that there is a tie. In practical
+    implementations we can only assume that ties are broken arbitrarily. So, we
+    shall take the fourth row as our second initial mode, \(\mu^{(2)}\).
+
+    \begin{table}[H]
+        \singlespacing{%
+        \resizebox{\textwidth}{!}{%
+            \input{tex/ranked_dens_dissim_table.tex}
+        }}
+        \caption{A ranking of the dataset by those who have highest
+            density-dissimilarity product with the first
+            mode.}\label{tab:ranked-dens-dissim}
+    \end{table}
+
+    In order to find the final initial mode, \(\mu^{(3)}\), we actually need to
+    find a pair \((X^{(i_3)}, \mu^{(m)})\) as is stated in 
+    Algorithm~\ref{alg:cao}. In order to do this, and the process would be the
+    same for any further modes, we must consider all of our current initial
+    modes, the dissimilarity between each point in our dataset and these modes,
+    and the density of each point in the dataset. A convenient way of displaying
+    all of this information is to construct a density-dissimilarity matrix which
+    we denote by \(\mathbb{D}\) and define as follows:
+    \begin{itemize}
+        \item \(\mathbb{D}\) has \(|\bar{\mu}|\) rows and \(N\) columns, where
+            \(|\bar{\mu}|\) is the number of initial modes already selected.
+        \item The entries of \(\mathbb{D}\) are given by:
+            \[
+                \mathbb{D}_{li} = \text{Dens}(X^{(i)}) \times d(X^{(i)},
+                \mu^{(l)}) \ \text{for all} \ l = 1, \ldots, |\bar{\mu}| \
+                \text{and} \ i = 1, \ldots, N
+            \]
+    \end{itemize}
+
+    Now, we go through each column and highlight the smallest value. These
+    represent which current mode has minimal density-dissimilarity with the
+    \(i^{th}\) datapoint (column). Then, we go through the highlighted entries
+    and select the column which has the largest value. This column corresponds
+    to the next datapoint to be selected as an initial mode. This process is
+    shown in Figure~\ref{fig:cao-matrix}.
+    
+    \begin{figure}[H]
+        \centering
+        \singlespacing{%
+        \begin{minipage}{\textwidth}
+            \centering
+            \(
+            \begin{pmatrix}
+                0 & 1.2 & 1.1\dot{3} & 1.5\dot{3} & 1.3 & 1.4\dot{6} &
+                1.5\dot{3} & 1.15 & 0.95 & 0.8\dot{6}
+                \\
+                1.9\dot{3} & 1.8 & 1.7 & 0 & 1.3 & 1.1 & 1.15 & 1.91\dot{6} &
+                1.2\dot{6} & 1.3
+            \end{pmatrix}
+            \)
+        \end{minipage}
+
+        \vspace{10pt}
+
+        \begin{minipage}{\textwidth}
+            \centering
+            \(
+            \begin{pmatrix}
+                \underline{0} & \underline{1.2} &
+                \underline{1.1\dot{3}} & 1.5\dot{3} & \underline{1.3}
+                & 1.4\dot{6} & 1.5\dot{3} & \underline{1.15} &
+                \underline{0.95} & \underline{0.8\dot{6}}
+                \\
+                1.9\dot{3} & 1.8 & 1.7 & \underline{0} &
+                \underline{1.3} & \underline{1.1} &
+                \underline{1.15} & 1.91\dot{6} & 1.2\dot{6} & 1.3
+            \end{pmatrix}
+            \)
+        \end{minipage}
+
+        \vspace{10pt}
+
+        \begin{minipage}{\textwidth}
+            \centering
+            \(
+            \begin{pmatrix}
+                \underline{0} & \underline{1.2} & \underline{1.1\dot{3}} &
+                1.5\dot{3} & \textcolor{red}{\underline{1.3}} & 1.4\dot{6} &
+                1.5\dot{3} & \underline{1.15} & \underline{0.95} &
+                \underline{0.8\dot{6}}
+                \\
+                1.9\dot{3} & 1.8 & 1.7 & \underline{0} &
+                \textcolor{red}{\underline{1.3}} & \underline{1.1} &
+                \underline{1.15} & 1.91\dot{6} & 1.2\dot{6} & 1.3
+            \end{pmatrix}
+            \)
+        \end{minipage}
+        }
+        \caption{The stages of selecting the \(l^{th}\) mode with a
+        density-dissimilarity matrix, for \(l > 2\). First, the row with smaller
+        value is highlighted in each column (underlined here). Then of those
+        highlighted entries, the entry with maximal value is selected (shown in
+    red). Ties are broken arbitrarily.}\label{fig:cao-matrix}
+    \end{figure}
+
+    Therefore, our set of initial modes, \(\bar{\mu}\), correspond to the first,
+    fourth and fifth rows of our dataset. That is:
+    
+    \input{tex/cao_initial_modes.tex}
+\end{example}
