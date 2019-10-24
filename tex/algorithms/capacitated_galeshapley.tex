@@ -1,51 +1,28 @@
-\begin{algorithm}[H]
-\caption{Capacitated Gale-Shapley}\label{alg:cap-galeshapley}
-    \begin{algorithmic}[0]
-        \State{\textbf{Input:} two sets of objects \(S, R\), a set of capacities
-        for the elements of \(R\), denoted by
-        \(C~=~\left\{c_1,~\ldots,~c_{|R|}\right\}\), and two preference list
-        functions, \(f, g\)}
-        \State{\textbf{Output:} a surjective matching \(M\) between \(S\) and
-        \(R\)\\}
-        \\
-        \Comment{Initialise all suitors and reviewers to be unmatched}
-        \For{\(s \in S\)}
-            \State{\(M(s) \gets \emptyset\)}
-	    \EndFor%
-        \For{\(r \in R\)}
-            \State{\(M^{-1}(r) \gets \emptyset\)}
-	    \EndFor%
-        \State{\(S_u \gets S\)}
-        \\
-        \\
-        \Comment{Find a tentative match for some currently unmatched suitor}
-        \While{\(|S_u| > 0\)}
-            \State{Select any \(s \in S_u\).}
-            \If{\(|f(s)| = 0\)}
-                \State{\(S_u \gets S_u \setminus \{s\}\)}
-		    \Else%
-                \State{Select \(s\)'s most preferred reviewer \(r \in R\).}
-                \\
-                \Comment{If \(r\) has room, match to \(s\)}
-                \If{\(|M(r)| < c_r\)}
-                    \State{\(M(r) \gets M(r) \cup \{s\}\)}
-                    \State{\(S_u \gets S_u \setminus \{s\}\)}
-		        \Else%
-                \\
-                \Comment{Otherwise determine whether their matching would be
-                preferable to \(r\) over its worst current matching}
-                    \State{Find \(s' \in M(r)\) such that \(r\) prefers \(s'\)
-                    least.}
-                    \If{\(r\) prefers \(s\) to \(s'\)}
-                        \State{\(M(r) \gets M(r) \cup \{s\}\)}
-                        \State{\(S_u \gets S_u \cup \{s\}\)}
-                        \State{\(M(r) \gets M(r) \setminus \{s'\}\)}
-                        \State{\(S_u \gets S_u \cup \{s'\}\)}
-				    \Else%
-                        \State{\(f(s) \gets f(s) \setminus \{r\}\)}
-		            \EndIf%
-                \EndIf%
-		    \EndIf%
-	    \EndWhile%
-	\end{algorithmic}
-\end{algorithm}
+\balg%
+    \caption{The hospital-resident algorithm
+        (resident-optimal)}\label{alg:hospital-resident}
+    \KwIn{a set of residents \(R\), a set of hospitals \(H\), a set of hospital
+        capacities \(C\), two preference list functions \(f, g\)}
+    \KwOut{a stable, resident-optimal mapping \(M\) between \(R\) and \(H\)}
+
+    \For{\(h \in H\)}{%
+        \(M^{-1}(h) \gets \emptyset\)
+    }
+    \While{There exists any unmatched \(r \in R\) with a non-empty preference
+        list}{%
+        Take any such resident \(r\)\;
+        Take their most preferred hospital \(h\)\;
+        \(\textsc{MatchPair}(s, h)\)\;
+
+        \If{\(\abs*{M^{-1}(h)} > c_h\)}{%
+            Find their worst match \(r' \in M^{-1}(h)\)\;
+            \(\textsc{UnmatchPair}(r', h)\)\;
+        }
+        \If{\(\abs*{M^{-1}(h)} = c_h\)}{%
+            Find their worst match \(r' \in M^{-1}(h)\)\;
+            \For{each successor \(s \in g(h)\) to \(r'\)}{%
+                \(\textsc{DeletePair}(s, h)\)
+            }
+        }
+    }
+\ealg%

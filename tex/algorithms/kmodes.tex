@@ -9,21 +9,20 @@
     \left\{z^{(k)}\right\}\right)\)\;
 
     \For{\(X^{(i)} \in \mathcal{X}\)}{%
-        Select \(l^* \) that minimises \(d(X^{(i)}, z^{(l)})\)\;
+        \(Z_{l^*} \gets \textsc{SelectClosest}\left(X^{(i)}\right)\)\;
         \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
-        \(\textsc{Update}(z^{(l^*)})\)\;
+        \(\textsc{Update}\left(z^{(l^*)}\right)\)\;
     }
 
-    \Repeat{No point changes cluster after a full cycle through
-    \(\mathcal{X}\)}{%
+    \Repeat{No point changes cluster}{%
         \For{\(X^{(i)} \in \textbf{X}\)}{%
-            \For{\(\mu^{(l)} \in \bar{\mu}\)}{%
-                Calculate \(d(X^{(i)}, \mu^{(l)})\)\;
-            }
-            \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \ \text{for some} \ l' \neq l^*\)}{%
-                \(C_{l^*} \gets C_{l^*} \setminus \left\{X^{(i)}\right\}\)\;
-                \(C_{l'} \gets C_{l'} \cup \left\{X^{(i)}\right\}\)\;
-                \textsc{Update}\((\mu^{(l^*)})\) and \textsc{Update}\((\mu^{(l')})\).\;
+            Let \(Z_l\) be the cluster \(X^{(i)}\) currently belongs to\;
+            \(Z_{l^*} \gets \textsc{SelectClosest}\left(X^{(i)}\right)\)\;
+            \If{\(l \neq l^*\)}{%                
+                \(Z_{l} \gets Z_{l} \setminus \left\{X^{(i)}\right\}\) and
+                \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
+                \(\textsc{Update}\left(z^{(l)}\right)\) and
+                \(\textsc{Update}\left(z^{(l^*)}\right)\)\;
             }
         }
     }
