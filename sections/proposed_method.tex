@@ -4,12 +4,12 @@ Now that we have defined what we mean by a matching game, with the algorithm
 described above, we can construct an alternative initialisation process for the 
 \(k\)-modes algorithm.
 
-Let \textbf{X} be a dataset with attribute set \textbf{A}, and let \(\bar{\mu}\) 
-be the set of virtual modes found by Huang's method (i.e.\ the set of centroids 
-found in the mode which are to be assigned to points in \textbf{X}). We then 
-take this set of virtual modes \(\bar{\mu}\) and construct a capacitated 
-matching game to be solved by the capacitated Gale-Shapley algorithm in the 
-following way.
+Let \textbf{X} be a dataset with attribute set \textbf{A}, and let
+\(\tilde{\mu}\) be the set of virtual modes found by Huang's method (i.e.\ the
+set of virtual centroids to be assigned to points in \textbf{X}). We then take
+this set of virtual modes \(\tilde{\mu}\) and construct a capacitated matching
+game to be solved by the capacitated Gale-Shapley algorithm in the following
+way.
 
 \begin{singlespace}
     \input{tex/algorithms/proposed_method.tex}

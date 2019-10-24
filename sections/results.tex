@@ -3,25 +3,25 @@
 To give comparative results on the quality of the initialisation processes 
 defined in
 Sections~\ref{sec:init},~\ref{sec:proposed-method}~\&~\ref{sec:preferences},
-four well-known, categorical, labelled datasets \- soybean, mushroom, breast
-cancer, and zoo animal \- will be clustered by the \(k\)-modes algorithm with
+four well-known, categorical, labelled datasets \--- soybean, mushroom, breast
+cancer, and zoo animal \--- will be clustered by the \(k\)-modes algorithm with
 each of the initialisation processes using their respective number of classes as
 the number of clusters. These datasets have been chosen to fall in line with the
 established literature, and for their relative sizes and complexities.
 
 Typically, the quality of a clustering algorithm is measured by its performance
-at classifying datasets~\cite{Huang1998}\cite{Cao2009}~\cite{Olaode2014}. In
-this work, however, we will not follow this approach since our motivation is to
-compare the quality of the clustering produced when using these initialisation
-methods. So, for the purposes of measuring the performance of our various
-initialisation methods as parts of a clustering algorithm, we will make use of
-internal metrics that are independent of any external information such as a
-class labelling. This family of metrics are built up from two characteristics of
-the clusters found: cohesion and separation. Cluster cohesion is effectively the
-summed, within-cluster variation or dissimilarity of its points, whereas a
-cluster's separation is a sum of the distances between all points in the cluster
-and every other point not in the cluster. In this analysis, we will make use of
-two internal measures for cluster validity: our cost function from
+at classifying datasets~\cite{Cao2009, Huang1998, Olaode2014}. In this work,
+however, we will not follow this approach since our motivation is to compare the
+quality of the clustering produced when using these initialisation methods. So,
+for the purposes of measuring the performance of our various initialisation
+methods as parts of a clustering algorithm, we will make use of internal metrics
+that are independent of any external information such as a class labelling.
+This family of metrics are built up from two characteristics of the clusters
+found: cohesion and separation. Cluster cohesion is effectively the summed,
+within-cluster variation or dissimilarity of its points, whereas a cluster's
+separation is a sum of the distances between all points in the cluster and every
+other point not in the cluster. In this analysis, we will make use of two
+internal measures for cluster validity: our cost function from
 Definition~\ref{def:cost} and the average silhouette coefficient, or silhouette
 score, of our clustering, defined below. 
 
@@ -43,7 +43,7 @@ score, of our clustering, defined below.
             \[
                 b\left(X^{(i)}\right) := \min_{l' \neq l} \left\{
                 \frac{1}{|C_{l'}|} D\left(C_{l'}, X^{(i)}\right) \right\}
-            \]\\
+            \]
     \end{itemize}
 
     With these quantities we define, for each point in our datset, their
@@ -90,7 +90,7 @@ ics.uci.edu/ml/datasets/mushroom}.
 Wisconsin University constructed the breast cancer dataset using a decision tree
 with linear programming as a diagnostic tool. The features were created using
 digital images of a fine needle aspirate of a breast mass to describe the
-structure of cell nuclei. There are 5.8 instances and 32 attributes in total.
+structure of cell nuclei. There are 699 instances and 32 attributes in total.
 Available~upon~request~to~members~of~the~academic~community~at:~\url{https://
 archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)}.
 
