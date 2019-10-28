@@ -2,7 +2,8 @@
 
 % Setting up the page
 \usepackage{setspace}
-    \doublespacing%
+    \newcommand{\standardspacing}{\singlespacing}
+    \standardspacing%
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
@@ -18,10 +19,10 @@
 \usepackage[boxruled]{algorithm2e}
 
 \newcommand{\balg}[1][htbp]{%
-    \begin{algorithm}[#1]\DontPrintSemicolon
+    \begin{algorithm}[#1]\DontPrintSemicolon\singlespacing%
 }
 \newcommand{\ealg}{%
-    \end{algorithm}
+    \end{algorithm}\standardspacing%
 }
 
 \newcommand{\true}{\text{True}}
