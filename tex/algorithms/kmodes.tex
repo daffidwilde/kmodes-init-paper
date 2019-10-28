@@ -9,23 +9,44 @@
     \left\{z^{(k)}\right\}\right)\)\;
 
     \For{\(X^{(i)} \in \mathcal{X}\)}{%
-        Select \(l^* \) that minimises \(d(X^{(i)}, z^{(l)})\)\;
+        \(Z_{l^*} \gets \textsc{SelectClosest}\left(X^{(i)}\right)\)\;
         \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
-        \(\textsc{Update}(z^{(l^*)})\)\;
+        \(\textsc{Update}\left(z^{(l^*)}\right)\)\;
     }
 
-    \Repeat{No point changes cluster after a full cycle through
-    \(\mathcal{X}\)}{%
+    \Repeat{No point changes cluster}{%
         \For{\(X^{(i)} \in \textbf{X}\)}{%
-            \For{\(\mu^{(l)} \in \bar{\mu}\)}{%
-                Calculate \(d(X^{(i)}, \mu^{(l)})\)\;
-            }
-            \If{\(d(X^{(i)}, \mu^{(l^*)}) > d(X^{(i)}, \mu^{(l')}) \ \text{for some} \ l' \neq l^*\)}{%
-                \(C_{l^*} \gets C_{l^*} \setminus \left\{X^{(i)}\right\}\)\;
-                \(C_{l'} \gets C_{l'} \cup \left\{X^{(i)}\right\}\)\;
-                \textsc{Update}\((\mu^{(l^*)})\) and \textsc{Update}\((\mu^{(l')})\).\;
+            Let \(Z_l\) be the cluster \(X^{(i)}\) currently belongs to\;
+            \(Z_{l^*} \gets \textsc{SelectClosest}\left(X^{(i)}\right)\)\;
+            \If{\(l \neq l^*\)}{%                
+                \(Z_{l} \gets Z_{l} \setminus \left\{X^{(i)}\right\}\) and
+                \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
+                \(\textsc{Update}\left(z^{(l)}\right)\) and
+                \(\textsc{Update}\left(z^{(l^*)}\right)\)\;
             }
         }
     }
 \ealg%
 
+\balg%
+    \caption{\textsc{SelectClosest}}\label{alg:select_closest}
+    \KwIn{%
+        a data point \(X^{(i)}\), a set of current clusters \(mathcal{Z}\) and
+        their modes \(\overline Z\)
+    }
+    \KwOut{the cluster whose mode is closest to the data point \(Z_{l^*}\)}
+
+    Select \(z^{l^*} \in \overline Z\) that minimises:
+    \(d\left(X^{(i)}, z_{l^*}\right)\)\;
+    Find their associated cluster \(Z_{l^*}\)
+\ealg%
+
+\balg%
+    \caption{\textsc{Update}}
+    \KwIn{an attribute space \(\mathcal{A}\), a mode to update \(z^{(l)}\) and
+    its cluster \(Z_l\)}
+    \KwOut{an updated mode}
+
+    Find \(z \in \mathcal{A}\) that minimises \(D(Z_l, z)\)\;
+    \(z^{(l)} \gets z\)\;
+\ealg%
