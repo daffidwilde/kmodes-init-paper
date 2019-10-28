@@ -28,3 +28,25 @@
     }
 \ealg%
 
+\balg%
+    \caption{\textsc{SelectClosest}}\label{alg:select_closest}
+    \KwIn{%
+        a data point \(X^{(i)}\), a set of current clusters \(mathcal{Z}\) and
+        their modes \(\overline Z\)
+    }
+    \KwOut{the cluster whose mode is closest to the data point \(Z_{l^*}\)}
+
+    Select \(z^{l^*} \in \overline Z\) that minimises:
+    \(d\left(X^{(i)}, z_{l^*}\right)\)\;
+    Find their associated cluster \(Z_{l^*}\)
+\ealg%
+
+\balg%
+    \caption{\textsc{Update}}
+    \KwIn{an attribute space \(\mathcal{A}\), a mode to update \(z^{(l)}\) and
+    its cluster \(Z_l\)}
+    \KwOut{an updated mode}
+
+    Find \(z \in \mathcal{A}\) that minimises \(D(Z_l, z)\)\;
+    \(z^{(l)} \gets z\)\;
+\ealg%

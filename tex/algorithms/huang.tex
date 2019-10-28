@@ -4,32 +4,42 @@
     find \(k\)}
     \KwOut{a set of \(k\) initial modes \(\overline Z\)}
 
-    \(\widehat Z \gets \emptyset\)\;
     \(\overline Z \gets \emptyset\)\;
-    \For{\(j = 1, \ldots, m\)}{%
-        \For{\(s = 1, \ldots, d_j\)}{%
-            Calculate \(\frac{n(a_s^{(j)})}{N}\)
-        }
-    }
-
-    \For{\(l = 1, \ldots, k\)}{%
-        Create an empty \(m\)-tuple \(\hat{z}^{(l)}\)\;
-        \For{\(j = 1, \ldots, m\)}{%
-            Sample \(a_{s^*}^{(j)}\) from \(A_j\) with respect to the 
-            relative frequencies of \(A_j\)\;
-            \(\hat{z}_j^{(l)} \gets a_{s^*}^{(j)}\)
-        }
-
-        \(\widehat Z \gets \widehat Z \cup \left\{\hat{z}^{(l)}\right\}\)
-    }
+    \(\widehat Z \gets \textsc{SamplePotentialModes}\left(\mathcal{X}\right)\)\;
 
     \For{\(\hat{z} \in \widehat Z\)}{%
-        Select \(X^{(i^*)} \in \mathcal{X}\) that satisfies: 
+        Select \(X^{(i^*)} \in \mathcal{X} \setminus \overline Z\) that
+        satisfies: 
         \[
-            \min_{1 \leq i \leq N} \left\{d\left(X^{(i)}, \hat{z}\right) \ | \
-            X^{(i^*)} \notin \overline Z\right\}
+            \min_{1 \leq i \leq N} \left\{d\left(X^{(i)}, \hat{z}\right)\right\}
         \]
 
         \(\overline Z \gets \overline Z \cup \left\{X^{(i^*)}\right\}\)
+    }
+\ealg%
+
+\balg%
+    \caption{\textsc{SamplePotentialModes}}\label{alg:potential_modes}
+    \KwIn{%
+        a dataset \(\mathcal{X} \subset \mathcal{A}\), a number of modes to find
+        \(k\)
+    }
+    \KwOut{a set of \(k\) potential modes \(\widehat Z\)}
+
+    \(\widehat Z \gets \emptyset\)\;
+    \For{\(j = 1, \ldots, m\)}{%
+        \For{\(s = 1, \ldots, d_j\)}{%
+            Calculate \(\frac{n\left(a_s^{(j)}\right)}{N}\)
+        }
+    }
+
+    \While{\(\abs*{\widehat Z} < k\)}{%
+        Create an empty \(m\)-tuple \(\hat{z}^{(l)}\)\;
+        \For{\(j = 1, \ldots, m\)}{%
+            Sample \(a_{s^*}^{(j)}\) from \(A_j\) with respect to the
+            relative frequencies of \(A_j\)\;
+            \(\hat{z}_j^{(l)} \gets a_{s^*}^{(j)}\)
+        }
+        \(\widehat Z \gets \widehat Z \cup \left\{\hat{z}^{(l)}\right\}\)
     }
 \ealg%

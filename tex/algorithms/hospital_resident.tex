@@ -10,8 +10,7 @@
     }
     \While{There exists any unmatched \(r \in R\) with a non-empty preference
         list}{%
-        Take any such resident \(r\)\;
-        Take their most preferred hospital \(h\)\;
+        Take any such resident \(r\) and their most preferred hospital \(h\)\;
         \(\textsc{MatchPair}(s, h)\)\;
 
         \If{\(\abs*{M^{-1}(h)} > c_h\)}{%
@@ -25,4 +24,29 @@
             }
         }
     }
+\ealg%
+
+\balg%
+    \caption{\textsc{MatchPair}}\label{alg:match}
+    \KwIn{a resident \(r\), a hospital \(h\), a matching \(M\)}
+    \KwOut{an updated matching \(M\)}
+
+    \(M^{-1}(h) \gets M^{-1}(h) \cup \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{\textsc{UnmatchPair}}\label{alg:unmatch}
+    \KwIn{a resident \(r\), a hospital \(h\), a matching \(M\)}
+    \KwOut{an updated matching \(M\)}
+
+    \(M^{-1}(h) \gets M^{-1}(h) \setminus \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{\textsc{DeletePair}}\label{alg:delete}
+    \KwIn{a resident \(r\), a hospital \(h\)}
+    \KwOut{updated preference lists}
+
+    \(f(r) \gets f(r) \setminus \left\{h\right\}\)\;
+    \(g(h) \gets g(h) \setminus \left\{r\right\}\)\;
 \ealg%
