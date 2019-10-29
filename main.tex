@@ -1,5 +1,6 @@
 \documentclass[12pt]{article}
 
+
 % Setting up the page
 \usepackage{setspace}
     \newcommand{\standardspacing}{\singlespacing}
@@ -25,16 +26,15 @@
     \end{algorithm}\standardspacing%
 }
 
-\newcommand{\true}{\text{True}}
-\newcommand{\false}{\text{False}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
 
-% Importing images, tables and referencing
+% Images, tables and referencing
 \usepackage{graphicx}
+    \newcommand{\imgwidth}{.9\textwidth}
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage[colorlinks=true,
@@ -63,6 +63,7 @@
 {} % Head spec (normal)
 
 \theoremstyle{example} \newtheorem{example}{Example}
+
 
 \title{%
     A novel game-theoretic initialisation process for the \(k\)-modes
