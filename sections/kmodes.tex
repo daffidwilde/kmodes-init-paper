@@ -64,11 +64,12 @@ metric. It can be easily checked that this is indeed a distance measure.
     \mathcal{X}\). The dissimilarity between \(X^{(a)}\) and \(X^{(b)}\),
     denoted by \(d\left(X^{(a)}, X^{(b)}\right)\), is given by:
     \begin{equation}
-        d(X^{(a)}, X^{(b)}) := \sum_{j=1}^{m} \delta(x_j^{(a)}, x_j^{(b)}) \quad
-        \text{where} \quad \delta(x, y) = \begin{cases}
-                                              0, & \text{if} \ x = y \\
-			    		                      1, & \text{otherwise.}
-				    	                  \end{cases}
+        d\left(X^{(a)}, X^{(b)}\right) := \sum_{j=1}^{m} \delta\left(x_j^{(a)},
+        x_j^{(b)}\right) \quad \text{where} \quad \delta\left(x, y\right) =
+        \begin{cases}
+            0, & \text{if} \ x = y \\
+            1, & \text{otherwise.}
+        \end{cases}
     \end{equation}
     In other words, the dissimilarity between two points is the number of
     attributes where their values are not the same.
@@ -82,37 +83,37 @@ what we mean by the representative point \(\mu^{(l)}\) of a cluster \(C_l\). In
 and are defined to be the average of all points \(X^{(i)} \in C_l\). With
 categorical data, we use our revised distance measure from
 Definition~\ref{def:dissim} to specify a representative point. We typically call
-these points a mode of \textbf{X}.
+these points a mode of \(\mathcal{X}\).
 
 \begin{definition}\label{def:mode}
     Let \(\mathcal{X} \subset \mathcal{A}\) be a dataset and consider some point
     \(z = \left(z_1, \ldots, z_m\right) \in \mathcal{A}\). Then \(z\) is called
     a \emph{mode} of \(\mathcal{X}\) if it minimises the following:
     \begin{equation}\label{eq:summed-dissim}
-        D(\mathcal{X}, z) = \sum_{i=1}^{N} d\left(X^{(i)}, z\right)
+        D\left(\mathcal{X}, z\right) = \sum_{i=1}^{N} d\left(X^{(i)}, z\right)
     \end{equation}
 \end{definition}
 
 \begin{definition}\label{def:rel-freq}
-    Let \(\mathcal{X} \subset \mathcal{A}\) be a dataset. Then \(n(a_s^{(j)})\)
-    denotes the \emph{frequency} of the \(s^{th}\) category
-    \(a_s^{(j)}\) of \(A_j\) in \(\mathcal{X}\), i.e.\ for each \(A_j \in
-    \mathcal{A}\) and each \(s = 1, \ldots, d_j\):
+    Let \(\mathcal{X} \subset \mathcal{A}\) be a dataset. Then
+    \(n\left(a_s^{(j)}\right)\) denotes the \emph{frequency} of the \(s^{th}\)
+    category \(a_s^{(j)}\) of \(A_j\) in \(\mathcal{X}\), i.e.\ for each \(A_j
+    \in \mathcal{A}\) and each \(s = 1, \ldots, d_j\):
     \begin{equation}
-        n(a_s^{(j)}) := \abs*{%
+        n\left(a_s^{(j)}\right) := \abs*{%
             {\left\{X^{(i)} \in \mathcal{X}: x_j^{(i)} = a_s^{(j)}\right\}}
         }
     \end{equation}
 	
-    Furthermore, \(\frac{n(a_s^{(j)})}{N}\) is called the \emph{relative
-    frequency} of category \(a_s^{(j)}\) in \textbf{X}.
+    Furthermore, \(\frac{n\left(a_s^{(j)}\right)}{N}\) is called the
+    \emph{relative frequency} of category \(a_s^{(j)}\) in \(\mathcal{X}\).
 \end{definition}
 
 \begin{theorem}\label{thm:1}
     Consider a dataset \(\mathcal{X} \subset \mathcal{A}\) and some \(U = (u_1,
     \ldots, u_m) \in \mathcal{A}\). Then \(D(\mathcal{X}, U)\) is minimised if
-    and only if \(n(u_j) \geq n(a_s^{(j)})\) for all \(s=1, \ldots, d_j\) for
-    each \(j = 1, \ldots, m\).
+    and only if \(n\left(u_j\right) \geq n\left(a_s^{(j)}\right)\) for all
+    \(s=1, \ldots, d_j\) for each \(j = 1, \ldots, m\).
 
     A proof of this theorem can be found in the Appendix of~\cite{Huang1998}.
 \end{theorem}
@@ -123,8 +124,8 @@ these points a mode of \textbf{X}.
     Let \(\mathcal{Z} = \left\{Z_1, \ldots, Z_k\right\}\) be a clustering of a
     dataset \(\mathcal{X}\), and let \(\overline Z = \left\{z^{(1)},
     \ldots, z^{(k)}\right\}\) be the corresponding cluster modes. Then \(W =
-    (w_{i, l})\) is an \(N \times k\) \emph{partition matrix} of \(\mathcal{X}\)
-    such that:
+    \left(w_{i, l}\right)\) is an \(N \times k\) \emph{partition matrix} of
+    \(\mathcal{X}\) such that:
     \[
         w_{i, l} = \begin{cases}
                      1, & \text{if} \ X^{(i)} \in Z_l\\
@@ -135,7 +136,7 @@ these points a mode of \textbf{X}.
     With this, the \emph{cost function} is defined to be the summed
     within-cluster dissimilarity:
     \begin{equation}
-        C\left(W, \overline Z\right) = \sum_{l=1}^{k} \sum_{i=1}^{N}
+        C\left(W, \overline Z\right) := \sum_{l=1}^{k} \sum_{i=1}^{N}
         \sum_{j=1}^{m} w_{i,l} \ \delta\left(x_j^{(i)}, z_j^{(l)}\right)
     \end{equation}
 \end{definition}
