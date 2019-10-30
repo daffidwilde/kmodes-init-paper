@@ -1,4 +1,4 @@
-\section{Initialisation processes}\label{sec:init}
+\section{Initialisation processes}\label{sec:inits}
 
 From the literature surrounding this topic, it has been established that the 
 initial choice of clusters impacts the final solution of the \(k\)-modes
@@ -13,8 +13,8 @@ Sections~\ref{subsec:huang}~\&~\ref{subsec:cao}.
 \subsection{Huang's method}\label{subsec:huang}
 
 In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
-chosen at random from \textbf{X}. Below is an alternative method of selecting
-these modes that forces some diversity between them, as described 
+chosen at random from \(\mathcal{X}\). Below is an alternative method of
+selecting these modes that forces some diversity between them, as described 
 in~\cite{Huang1998}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
 \(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
 is the set of modes to go on to be used by the \(k\)-modes algorithm.
@@ -53,48 +53,65 @@ the results to be largely reproducible, except in the case where a tie must be
 broken (see Example~\ref{ex:cao}).
 
 \begin{definition}\label{def:density}	
-    Consider a data set \(\textbf{X}\) with attribute set \(\textbf{A} = 
+    Consider a data set \(\mathcal{X}\) with attribute set \(\mathcal{A} = 
     \{A_1, \ldots, A_m\}\). Then the \emph{average density} of any point 
-    \(X_i \in \textbf{X}\) with respect to \(\textbf{A}\) is 
+    \(X_i \in \mathcal{X}\) with respect to \(\mathcal{A}\) is 
     defined~\cite{Cao2009} as:
-	\[
-	    \text{Dens}(X^{(i)}) = \frac{\sum_{j=1}^m \text{Dens}_{j}(X^{(i)})}{m}, 
-        \quad \text{where} \quad \text{Dens}_{j}(X^{(i)}) = \frac{|\{X^{(t)} \in 
-        \textbf{X} : x_j^{(i)} = x_j^{(t)}\}|}{N} = \frac{n(x_j^{(i)})}{N}
-	\]
+    \begin{equation}\label{eq:density}
+        \text{Dens}\left(X^{(i)}\right) = \frac{%
+            \sum_{j=1}^m \text{Dens}_{j}\left(X^{(i)}\right)
+        }{m}
+        \ \ \text{where} \ \
+        \text{Dens}_{j}\left(X^{(i)}\right) = \frac{%
+            \abs*{%
+                \left\{X^{(t)} \in \mathcal{X} : x_j^{(i)} = x_j^{(t)}\right\}
+            }
+        }{N}
+    \end{equation}
 
     Observe that:
     \[
-	    |\{X^{(t)} \in \textbf{X} : x_j^{(i)} = x_j^{(t)}\}| = n(x_j^{(i)}) = 
-	    \sum_{t=1}^N (1 - \delta(x_j^{(i)}, x_j^{(t)}))
+        \abs*{\left\{X^{(t)} \in \mathcal{X} : x_j^{(i)} = x_j^{(t)}\right\}}%
+        = n\left(x_j^{(i)}\right)%
+        = \sum_{t=1}^N \left(1 - \delta\left(x_j^{(i)}, x_j^{(t)}\right)\right)
     \]
 
-    And so, we can find an alternative definition for \(\text{Dens}(X^{(i)})\):
-    \begin{equation}\label{eq:alt-def}
+    And so, an alternative definition for~(\ref{eq:density}) can be derived:
+    \begin{equation}\label{eq:density-alt}
     \begin{aligned}
-        \text{Dens}(X^{(i)}) = {} & {} \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N (1
-        - \delta(x_j^{(i)}, x_j^{(t)}))
-        \\
-        = {} & {} \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N 1 - \frac{1}{mN}
-        \sum_{j=1}^m \sum_{t=1}^N \delta(x_j^{(i)}, x_j^{(t)})
-        \\
-        = {} & {} \frac{mN}{mN} - \frac{1}{mN} \sum_{t=1}^N d(X^{(i)}, X^{(t)})
-        \\
-        = {} & {} 1 - \frac{1}{mN} D(\textbf{X}, X^{(i)})
+        \text{Dens}\left(X^{(i)}\right)
+        & = \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N \left(%
+            1 - \delta\left(x_j^{(i)}, x_j^{(t)}\right)
+        \right)\\
+        & = \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N 1%
+            - \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N
+            \delta\left(x_j^{(i)}, x_j^{(t)}\right)\\
+        & = \frac{mN}{mN} - \frac{1}{mN} \sum_{t=1}^N
+            d\left(X^{(i)}, X^{(t)}\right)\\
+        & = 1 - \frac{1}{mN} D\left(\mathcal{X}, X^{(i)}\right)
     \end{aligned}
     \end{equation}
 \end{definition}
 
 \begin{remark}
-    It is worth noting that we have \(\frac{1}{N} \leq \text{Dens}(X^{(i)})
+    It is worth noting that for all \(X^{(i)} \in \mathcal{X}\) it follows that
+    \(\frac{1}{N} \leq \text{Dens}\left(X^{(i)}\right)
     \leq 1\), since:		
 	\begin{itemize}	
-        \item If \(n(x_j^{(i)}) = 1\) for all \(j = 1, \ldots, m\), then
-            \(\text{Dens}(X^{(i)}) = \frac{\sum_{j=1}^m \frac{1}{N}}{m} =
-            \frac{m}{mN} = \frac{1}{N}\)
-        \item If \(n(x_j^{(i)}) = N\) for all \(j = 1, \ldots, m\), then
-            \(\text{Dens}(X^{(i)}) = \frac{\sum_{j=1}^m 1}{m} = \frac{m}{m} =
-            1\)
+        \item If \(n\left(x_j^{(i)}\right) = 1\) for all \(j = 1, \ldots, m\)
+            then \(%
+                \text{Dens}\left(X^{(i)}\right)
+                = \frac{\sum_{j=1}^m \frac{1}{N}}{m}
+                = \frac{m}{mN}
+                = \frac{1}{N}
+            \).
+        \item If \(n\left(x_j^{(i)}\right) = N\) for all \(j = 1, \ldots, m\)
+            then \(%
+                \text{Dens}\left(X^{(i)}\right)
+                = \frac{\sum_{j=1}^m 1}{m}
+                = \frac{m}{m}
+                = 1
+            \).
 	\end{itemize}
 \end{remark}
 
@@ -103,12 +120,12 @@ broken (see Example~\ref{ex:cao}).
 \begin{remark}
     With this alternative definition, we see \-- since \(m\) and \(N\) are fixed
     positive integers \-- that \(\text{Dens}(X^{(i)})\) is maximised when
-    \(D(\textbf{X}, X^{(i)})\) is minimised. Then by Theorem~\ref{thm:1} we have
-    that such an \(X^{(i)}\) with maximal average density in \textbf{X} with
-    respect to \textbf{A} is, in fact, a mode of \textbf{X}. This observation
-    allows us to consider some sense of similarity between Huang and Cao's
-    methods, as they seem to be trying to achieve the same objective \-- if only
-    from opposite ends.
+    \(D(\mathcal{X}, X^{(i)})\) is minimised. Then by Theorem~\ref{thm:1} we have
+    that such an \(X^{(i)}\) with maximal average density in \(\mathcal{X}\)
+    with respect to \(\mathcal{A}\) is, in fact, a mode of \(\mathcal{X}\). This
+    observation allows us to consider some sense of similarity between Huang and
+    Cao's methods, as they seem to be trying to achieve the same objective \--
+    if only from opposite ends.
 \end{remark}
 
 %\input{tex/examples/cao.tex}
