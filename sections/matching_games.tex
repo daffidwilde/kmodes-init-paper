@@ -1,4 +1,31 @@
-\section{Matching games}\label{sec:matching}
+\section{Matching games and the proposed method}\label{sec:method}
+
+Both of the initialisation methods described in Section~\ref{sec:inits} have a
+greedy component. In the case of Cao's method, it would be entirely greedy if it
+did not also attempt to force separation between the set of initial modes. In
+the case of Huang's, however, the greediness only comes in at the end of the
+method, after \(\textsc{SamplePotentialModes}\). In any practical implementation
+of this method, the order in which a set of potential modes is iterated over
+will alter the initial set of modes returned; this is down to each allocation
+being locally optimal, i.e.\ greedy. The initialisation method proposed in this
+work aims to extend Huang's method to be order-invariant in the final allocation
+\-- thereby eliminating its greedy component. This is done by constructing and
+solving a matching game between the set of potential modes and some subset of
+the data.
+
+In general, matching games are defined by two sets of players in which each
+player ranks at least some of the players in the other set. The objective then
+is to find a mapping between the two sets of players such that no pair of
+players is (rationally) unhappy with their mapping.
+
+One of the simplest matching games models the Stable Marriage Problem
+(SM)~\cite{Gale1962}. In this game the sets of players must be of equal size and
+rank each other strictly (i.e.\ no ties allowed) and entirely. As the motivation
+of the proposed method is to avoid greediness, this kind of game was not
+considered as it effectively reduces down to Huang's method. That is, each
+potential mode gets to pick the data point it is closest to but that hasn't
+already been picked. When the game is solved, each potential mode is assigned to
+its choice.
 
 The primary motivation for this work is to move away from the greedy approaches
 defined above by incorporating some techniques from game theory, namely:
