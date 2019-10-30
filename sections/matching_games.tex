@@ -1,126 +1,139 @@
 \section{Matching games and the proposed method}\label{sec:method}
 
 Both of the initialisation methods described in Section~\ref{sec:inits} have a
-greedy component. In the case of Cao's method, it would be entirely greedy if it
-did not also attempt to force separation between the set of initial modes. In
-the case of Huang's, however, the greediness only comes in at the end of the
-method, after \(\textsc{SamplePotentialModes}\). In any practical implementation
-of this method, the order in which a set of potential modes is iterated over
-will alter the initial set of modes returned; this is down to each allocation
-being locally optimal, i.e.\ greedy. The initialisation method proposed in this
-work aims to extend Huang's method to be order-invariant in the final allocation
-\-- thereby eliminating its greedy component. This is done by constructing and
-solving a matching game between the set of potential modes and some subset of
-the data.
+greedy component. In the case of Cao's method, it would be embarrassingly greedy
+with respect to density if it did not also attempt to force separation between
+the set of initial modes. In the case of Huang's, however, the greediness only
+comes in at the end of the method, after the set of potential modes has been
+found. In any practical implementation of this method, the order in which a set
+of potential modes is iterated over will alter the initial set of modes
+returned; this is down to each allocation being locally optimal, i.e.\ greedy.
 
-In general, matching games are defined by two sets of players in which each
-player ranks at least some of the players in the other set. The objective then
-is to find a mapping between the two sets of players such that no pair of
-players is (rationally) unhappy with their mapping.
+The initialisation method proposed in this work aims to extend Huang's method to
+be order-invariant in the final allocation \-- thereby eliminating its greedy
+component \-- and an intelligent starting point for the \(k\)-modes algorithm.
+This is done by constructing and solving a matching game between the set of
+potential modes and some subset of the data.
 
-One of the simplest matching games models the Stable Marriage Problem
-(SM)~\cite{Gale1962}. In this game the sets of players must be of equal size and
-rank each other strictly (i.e.\ no ties allowed) and entirely. As the motivation
-of the proposed method is to avoid greediness, this kind of game was not
-considered as it effectively reduces down to Huang's method. That is, each
-potential mode gets to pick the data point it is closest to but that hasn't
-already been picked. When the game is solved, each potential mode is assigned to
-its choice.
+In general, matching games are defined by two sets of players (often termed
+suitors and reviewers) in which each player creates a preference list of at
+least some of the players in the other set. The objective then is to find a
+mapping between the two sets of players such that no pair of players is
+(rationally) unhappy with their mapping. Such a mapping is considered stable.
+Algorithms to find stable matchings to instances of SM are often structured to
+be party-oriented and aim to maximise some form of
+optimality~\cite{Fuku2006,Gale1962,Kwanashie2015}.
 
-The primary motivation for this work is to move away from the greedy approaches
-defined above by incorporating some techniques from game theory, namely:
-matching games. The purpose of solving a matching game is to link the elements
-of two sets in a `fair' way so that no element could feasibly be better off. By
-considering the virtual modes found during Huang's method with some suitable
-subset of our dataset as a matching game to be solved, we hope to find a
-closer-to-optimal set of initial modes for the \(k\)-modes algorithm.
+One of the simplest matching games models the Stable Marriage Problem (SM). In
+this game the sets of players must be of equal size and rank each other strictly
+(i.e.\ no ties allowed) and entirely. An algorithm was presented in the seminal
+work by D.\ Gale and L.\ Shapley~\cite{Gale1962} that `solves' any instance of
+SM by finding for it a unique, suitor-optimal, stable matching. This kind of
+game is not considered in this work as it effectively reduces down to Huang's
+method.  Note that the concept of preference between points in an attribute
+space is synonymous with similarity. Thus, when constructing the game, each
+potential mode gets to pick the data point it is closest to but that has not
+already been picked. Then, up to an arbitrary breaking of any ties in the
+preference lists, each potential mode is assigned to its chosen data point.
 
-\begin{definition}\label{def:matching_game}
-    Consider two sets \(S, R\) each of size \(N\), and let us call them 
-    `suitors' and `reviewers'. Each element of \(S\) and \(R\) has associated 
-    with it a preference list of the other set's elements. These preference 
-    lists are ranked in descending order. We consider the preference lists as 
-    functions which produce tuples, \(f\) and \(g\) respectively:
-	\[
-	    f : S \to R^n, \ g : R \to S^n
-	\]
-	This construction of sets and preference lists is called a 
-    \emph{matching game} of size \(N\) and we denote the game itself by 
-    \((S,R)\).
-	
-    A matching, \(M\), is defined to be any bijection between \(S\) and \(R\). 
-    If \(s \in S\) and \(r \in R\) are matched by \(M\), then we write
-    \(M(s)~=~r\). A matching \(M\) is considered to be either stable or unstable
-    based on the preference lists of its suitors and reviewers, and the presence
-    of blocking pairs.
+A number of issues arise from this particular model other than it reducing to
+Huang's method. For instance:
+\begin{itemize}
+    \item Ties are common when using the distance metric defined
+        in~(\ref{eq:dissim}).
+    \item There is no intuitively concrete way of constructing sets of players
+        or their preference lists.
+\end{itemize}
+
+Allowing for ties is a simple extension to SM but the notion of stability
+becomes tiered~\cite{Manlove1999}. In each case of stability, if such a matching
+exists, then a polynomial-time algorithm will find one that is optimal for one
+set of players. However, there is no guarantee that a matching exists and even
+in that case, the notion of optimality (via Pareto efficiency) is
+lost~\cite{Erdil2017}. Therefore this extension is not considered here where a
+solution to the game is required, and is preferably party-optimal.
+
+Further to allowing ties, how preference lists are constructed is a point of
+interest in many cases where matching games are applied~\cite{Iwama2008}. Often
+that is a contextual problem and may be addressed in a number of ways. As in
+this case, where similarity and preference are considered equivalent, a bespoke
+distance metric may be used. Though not relevant to this work, if the game forms
+part of a larger, long-standing or otherwise complex model, introducing
+flexibility in preferences~\cite{Agarwal2017,Menzel2015} or estimating them
+\emph{ad hoc}~\cite{Rastegari2016} may be helpful to maintain meaningful
+matchings.
+
+Another method used to construct preference lists is to discount the preference
+lists presented by players. For instance, where acceptability of another player
+is the only criterion, binary preferences (i.e.\ incomplete preference lists
+with ties) can create games that are invulnerable to manipulative players'
+strategies~\cite{Bogomolnaia2004}. This approach can be adapted to cater for
+larger games, such as student-school allocation. In this case, each student
+submits a set of acceptable schools and the schools form strict rankings of the
+students. The result of this is a simpler game (in the practical sense) and a
+reduction in the set of possible stable matchings~\cite{Haeringer2014}.
+
+As this particular case has no interactive element, and to guarantee a stable
+matching with optimality, none of these extensions are used in the proposed
+method despite their merits. Instead, so as to keep the method as simple as
+possible within these constraints, the game used will model an instance of the
+Hospital-Resident Assignment Problem (HR) which was presented with SM as a
+practical solution to the problem that gives it its namesake~\cite{Gale1962}.
+
+Like SM, there exists an algorithm that can provide a unique, party-optimal,
+stable matching to any instance of HR. The game used to model HR, its matchings,
+and its notion of stability are defined in
+Definitions~\ref{def:game}~\--~\ref{def:blocking}.
+
+\begin{definition}\label{def:game}
+    Consider two distinct sets \(R, H\) and refer to them residents and
+    hospitals. Each \(h \in H\) has a capacity \(c_h \in \mathbb{N}\) associated
+    with them. Each player \(r \in R\) and \(h \in H\) has associated 
+    with it a strict preference list of the other set's elements such that:
+    \begin{itemize}
+        \item Each \(r \in R\) ranks a non-empty subset of \(H\), denoted by
+            \(f(r)\).
+        \item Each \(h \in H\) ranks all and only those residents that have
+            ranked it, i.e.\ the preference list of \(h\), denoted \(g(h)\), is
+            a permutation of the set
+            \(\left\{r \in R \ | \ h \in f(r)\right\}\). If no such residents
+            exist, \(h\) is removed from \(H\).
+    \end{itemize}
+
+    This construction of residents, hospitals, capacities and preference lists
+    is called a \emph{game} and is denoted by \((R, H)\).
 \end{definition}
 
-\begin{definition}\label{def:blocking_pair}
-    Let \((S, R)\) be a matching game of size \(N\) with some matching \(M\). A 
-    pair \((s, r) \in S \times R\) is said to \emph{block} \(M\) if \(M(s) \neq
-    r\) but \(s\) prefers \(r\) to \(M(s) = r'\) and \(r\) prefers \(s\) to
-    \(M^{-1}(r) = s'\). That is, \(r\) appears before \(r'\) in \(f(s)\) and
-    \(s\) appears before \(s'\) in \(g(r)\).
+\begin{definition}\label{def:matching}
+    Consider a game \((R, H)\). A \emph{matching} \(M\) is any mapping between
+    \(R\) and \(H\). If a pair \((r, h) \in R \times H\) are matched in \(M\)
+    then this relationship is denoted \(M(r) = h\) and \(r \in M^{-1}(h)\).
+
+    A matching is only considered \emph{valid} if all of the following hold for
+    all \(r \in R, h \in H\):
+    \begin{itemize}
+        \item If \(r\) is matched then \(M(r) \in f(r)\).
+        \item If \(h\) has at least one match then \(M^{-1}(h) \subseteq g(h)\).
+        \item \(h\) is not over-subscribed, i.e.\ \(\abs*{M^{-1}(h)} \leq c_h\).
+    \end{itemize}
+
+    A valid matching is considered \emph{stable} if it does not contain any
+    blocking pairs.
 \end{definition}
 
-\begin{definition}\label{def:stable_matching}
-    Let \((S, R)\) be a matching game of size \(N\) with some matching \(M\). 
-    Then we say \(M\) is a \emph{stable matching} if there are no blocking 
-    pairs, and \emph{unstable} otherwise.
+\begin{definition}\label{def:blocking}
+    Consider a game \((R, H)\). Then a pair \((r, h) \in R \times H\) is said to
+    \emph{block} a matching \(M\) if all of the following hold:
+    \begin{itemize}
+        \item There is mutual preference, i.e.\ \(r \in g(h)\) and \(h \in
+            f(r)\).
+        \item Either \(r\) is unmatched or they prefer \(h\) to \(M(r)\).
+        \item Either \(h\) is under-subscribed or \(h\) prefers \(r\) to at
+            least one resident in \(M^{-1}(h)\).
+    \end{itemize}
 \end{definition}
 
 %\input{tex/examples/matching.tex}
 
-\subsection{The Gale-Shapley algorithm}\label{subsec:galeshapley}
-
-The Gale-Shapley algorithm is known to find a unique stable matching for any 
-matching game of size \(N\). This matching is also considered to be 
-suitor-optimal. That is, each suitor is matched with the best possible reviewer
-that ensures a stable matching, but is in fact the worst possible matching for 
-the reviewers. \textcolor{red}{[cite or have these theorems stated/proven]} 
-
-As was discussed at the start of Section~\ref{sec:matching}, the outline of
-the method proposed in this paper is to extend Huang's method by considering the
-virtual modes with some subset of the data as a matching game to be solved. It
-should be noted, however, that in this method we may not have equally sized 
-sets of suitors and reviewers. As a result of this, the Gale-Shapley algorithm 
-becomes inapplicable as the matching produced \(M\) would not be a bijection of 
-our suitors and reviewers.
-
-\subsection{The capacitated Gale-Shapley algorithm for the hospital-resident 
-	problem}\label{subsec:capacitated_galeshapley}
-
-The situation where a large set of suitors are to be matched with a number
-reviewers is not limited to abstraction. A practical example of this problem is
-how to best assign a cohort of medical students to a group of hospitals. Here, 
-we have all of the requisite components of a matching game:
-
-\begin{itemize}
-	\item A set of reviewers (the hospitals) and a set of suitors (the potential
-        residents) 
-	\item A ranking of the students/residents by the hospitals, and vice versa
-\end{itemize}
-
-The only obstacle which stops us from using the Gale-Shapley algorithm is the 
-disparity in the sizes of our sets. In reality, hospitals need not always take 
-at most one resident on from a cohort of medical students. So each hospital has
-a capacity associated with it and we can consider our matching game to be
-`capacitated'. By this we mean that each reviewer (hospital) may be matched with
-any number of suitors (students) up to their capacity, making our matching
-\(M:~S~\to~R\) surjective.
-
-Research surrounding the hospital-resident assignment problem is well-documented 
-\textcolor{red}{[cite]} and an extension of the Gale-Shapley algorithm was
-developed to solve it, awarding the authors the 2012 Nobel Prize in Economic
-Sciences. This algorithm is currently used by the National Resident Matching
-Program (\url{http://www.nrmp.org}) to assign medical students to hospitals in
-the United States of America.
-
-As before, we consider a set of suitors and reviewers denoted by \(S\) and 
-\(R\). These sets are no longer (necessarily) the same size. We also have our 
-preference lists \(f, g\), and a set \(C = \{c_1, \ldots, c_{|R|}\}\) of 
-reviewer capacities. Finally, let \(S_u \subset S\) denote the set of suitors 
-that are currently unmatched. The capacitated Gale-Shapley algorithm is given 
-below.
-
 \input{tex/algorithms/hospital_resident.tex}
+\input{tex/algorithms/proposed_method.tex}

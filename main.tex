@@ -37,11 +37,7 @@
     \newcommand{\imgwidth}{.9\textwidth}
 \usepackage{tikz}
 \usepackage{xcolor}
-\usepackage[colorlinks=true,
-            linkcolor=black,
-            urlcolor=blue,
-            citecolor=black,
-            anchorcolor=black]{hyperref}
+\usepackage{hyperref}
 \usepackage{caption}
 \usepackage{booktabs}
 \usepackage{float}
@@ -75,15 +71,12 @@
 
 \maketitle%
 \input{sections/abstract.tex}
-\clearpage%
-
 \input{sections/kmodes.tex}
 \input{sections/init_processes.tex}
 \input{sections/matching_games.tex}
-\input{sections/proposed_method.tex}
-\input{sections/preference_lists.tex}
 \input{sections/results.tex}
 
 \clearpage%
 \bibliography{references}
+
 \end{document}
