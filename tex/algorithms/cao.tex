@@ -8,20 +8,18 @@
         Calculate \(\text{Dens}\left(X^{(i)}\right)\)
     }
 
-    Select \(1 \leq i_1 \leq N\) which satisfies:
-    \[
-        \argmax_{1 \leq i \leq N} \left\{\text{Dens}\left(X^{(i)}\right)\right\}
-    \]
+    Select \(1 \leq i_1 \leq N\) which maximises
+    \(\text{Dens}\left(X^{(i)}\right)\)\;
 
     \(\overline Z \gets \overline Z \cup \left\{X^{(i_1)}\right\}\)\;
 
     \While{\(\abs*{\overline Z} < k\)}{%
-        Select \(X^{(i^*)} \notin \overline Z\) which satisfies:
-	    \[
-            \max_{1 \leq i \leq N} \left\{\min_{z^{(l)} \in \overline Z}
-            \left\{\text{Dens}\left(X^{(i)}\right) \times
-            d\left(X^{i}, z^{(l)}\right)\right\}\right\}
-		\]
+        Select \(X^{(i^*)} \notin \overline Z\) which maximises \(%
+            \min_{z^{(l)} \in \overline Z} \left\{%
+                \text{Dens}\left(X^{(i)}\right) \times
+                d\left(X^{i}, z^{(l)}\right)
+            \right\}
+        \)\;
 
         \(\overline Z \gets \overline Z \cup \left\{X^{(i^*)}\right\}\)
     }
