@@ -73,17 +73,19 @@ submits a set of acceptable schools and the schools form strict rankings of the
 students. The result of this is a simpler game (in the practical sense) and a
 reduction in the set of possible stable matchings~\cite{Haeringer2014}.
 
-As this particular case has no interactive element, and to guarantee a stable
-matching with optimality, none of these extensions are used in the proposed
-method despite their merits. Instead, so as to keep the method as simple as
-possible within these constraints, the game used will model an instance of the
-Hospital-Resident Assignment Problem (HR) which was presented with SM as a
-practical solution to the problem that gives it its namesake~\cite{Gale1962}.
+As this particular case has no interactive element, and must guarantee a stable
+matching (ideally with optimality), none of these extensions are used in the
+proposed method. Instead, so as to keep the method as simple as possible within
+these constraints, the game used will model an instance of the Hospital-Resident
+Assignment Problem (HR) which was presented with SM as a practical solution to
+the problem that gives it its namesake~\cite{Gale1962}.
 
 Like SM, there exists an algorithm that can provide a unique, party-optimal,
-stable matching to any instance of HR. The game used to model HR, its matchings,
-and its notion of stability are defined in
-Definitions~\ref{def:game}~\--~\ref{def:blocking}.
+stable matching to any instance of HR.\ The game used to model HR, its
+matchings, and its notion of stability are defined in
+Definitions~\ref{def:game}~\--~\ref{def:blocking}. A summary of these
+definitions in the context of the proposed \(k\)-modes initialisation is given
+in Table~\ref{tab:components}.
 
 \begin{definition}\label{def:game}
     Consider two distinct sets \(R, H\) and refer to them residents and
@@ -132,6 +134,30 @@ Definitions~\ref{def:game}~\--~\ref{def:blocking}.
             least one resident in \(M^{-1}(h)\).
     \end{itemize}
 \end{definition}
+
+\begin{table}[htbp]
+    \begin{tabular}{lcr}
+        \toprule%
+        Object in \(k\)-modes initialisation & {} & Object in a matching game
+        \\\midrule%
+        Similarity between two points \(U, V \in \mathcal{A}\),
+        \(m - d\left(U, V\right)\) & {} & An element of preference lists
+        \(f, g\)
+        \\
+        Potential modes, \(\widehat Z\) & {} & Residents, \(R\)
+        \\
+        Data points closest to \(\widehat Z\), \(\mathcal{X}' \subset
+        \mathcal{X}\) & {} & Hospitals, \(H\)
+        \\
+        A mode \(\hat{z} \in \widehat Z\) being replaced by a point \(X \in
+        \mathcal{X}'\) & {} & A pair in some matching \(M\)\\
+        \bottomrule
+    \end{tabular}
+    \caption{A summary of the relationships between the components of the
+             initialisation for \(k\)-modes and those in a matching game
+             \((R, H)\).
+    }\label{tab:components}
+\end{table}
 
 %\input{tex/examples/matching.tex}
 
