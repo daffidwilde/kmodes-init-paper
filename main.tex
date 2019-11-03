@@ -1,84 +1,82 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
+
 
 % Setting up the page
 \usepackage{setspace}
-    \doublespacing%
+    \newcommand{\standardspacing}{\singlespacing}
+    \standardspacing%
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage[margin=1in, includefoot, footskip=30pt]{geometry}
+\usepackage{fullpage}
+
+% Bibliography
+\usepackage[numbers]{natbib}
+\bibliographystyle{plain}
 
 % Writing mathematics, algorithms and code
 \usepackage{mathtools}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{algpseudocode}
-\usepackage{algorithmicx}
-\usepackage{algorithm}
-\renewcommand{\algorithmiccomment}[1]{%
-    \textcolor{red}{$\triangleright$ #1}
+\usepackage[boxruled]{algorithm2e}
+
+\newcommand{\balg}[1][htbp]{%
+    \begin{algorithm}[#1]\DontPrintSemicolon\singlespacing%
 }
-\newcommand{\true}{\text{True}}
-\newcommand{\false}{\text{False}}
+\newcommand{\ealg}{%
+    \end{algorithm}\standardspacing%
+}
+
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
 
-% Swap the definition of \abs* and \norm*, so that \abs
-% and \norm resizes the size of the brackets, and the 
-% starred version does not.
-\makeatletter
-\let\oldabs\abs
-\def\abs{\@ifstar{\oldabs}{\oldabs*}}
-
-% Importing images, tables and referencing
+% Images, tables and referencing
 \usepackage{graphicx}
+    \newcommand{\imgwidth}{.9\textwidth}
 \usepackage{tikz}
 \usepackage{xcolor}
-\usepackage[colorlinks=true,
-            linkcolor=black,
-            urlcolor=blue,
-            citecolor=black,
-            anchorcolor=black]{hyperref}
+\usepackage{hyperref}
 \usepackage{caption}
 \usepackage{booktabs}
 \usepackage{float}
 
 % For indexing sections, etc.
 \usepackage{amsthm}
-\theoremstyle{definition} \newtheorem{definition}{Definition}
+\theoremstyle{definition} \newtheorem{definition}{Definition}[section]
 \newtheorem*{remark}{Remark}
 \newtheorem{theorem}{Theorem}
 
-\newtheoremstyle{example}
-{\topsep} % Space above
-{\topsep} % Space below
-{} % Body font (normal)
-{} % Indent
-{\bfseries} % Head font
-{.} % Punctuation after head
-{.5em} % Space after head
-{} % Head spec (normal)
+%\newtheoremstyle{example}
+%{\topsep} % Space above
+%{\topsep} % Space below
+%{} % Body font (normal)
+%{} % Indent
+%{\bfseries} % Head font
+%{.} % Punctuation after head
+%{.5em} % Space after head
+%{} % Head spec (normal)
 
-\theoremstyle{example} \newtheorem{example}{Example}
+%\theoremstyle{example} \newtheorem{example}{Example}
 
-\title{A new game-theoretic initialisation process for the \(k\)-modes algorithm
-using the hospital-resident assignment problem}
-\author{Henry Wilde}
+
+\title{%
+    A novel game-theoretic initialisation process for the \(k\)-modes
+    algorithm using the hospital-resident assignment problem
+}
+\author{Henry Wilde, Vincent Knight and Jonathan Gillard}
 
 \begin{document}
+
 \maketitle%
 \input{sections/abstract.tex}
-\clearpage
 \input{sections/kmodes.tex}
 \input{sections/init_processes.tex}
 \input{sections/matching_games.tex}
-\input{sections/proposed_method.tex}
-\input{sections/preference_lists.tex}
 \input{sections/results.tex}
 
-\clearpage
-\bibliographystyle{plain}
+\clearpage%
 \bibliography{references}
+
 \end{document}

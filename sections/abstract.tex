@@ -1,11 +1,20 @@
 \begin{abstract}
-    The \(k\)-modes algorithm is a part of the family of clustering algorithms
-    known as `prototype-based clustering', and is an extension of the
-    \(k\)-means algorithm for categorical data as set out in~\cite{Huang1998}.
-    This work will outline the key differences and similarities between two
-    established initialisation methods for the \(k\)-modes algorithm, and in
-    doing so we will be able to examine how the initial cluster selection
-    process has an impact on the efficiency and quality of the \(k\)-modes
-    algorithm. From there, we will define a new initialisation method that makes
-    use of elements of game theory.
+    The \(k\)-modes algorithm is a centroid-based clustering algorithm, and is
+    an extension of the \(k\)-means algorithm for categorical data. This work
+    outlines a comparison of the established initialisation methods
+    for the \(k\)-modes algorithm by use of examples and algebraic analysis of
+    their cost functions. In doing so, the effect of the initial centroid
+    selection on the overall efficiency and quality of the final clustering
+    found by each method is exposed.
+
+    Following this, a novel initialisation process is described that utilises
+    game-theoretic results to create a fair and robust initial selection for the
+    algorithm. This process is modelled on the hospital-resident assignment
+    problem and is solved using an adapted Gale-Shapley algorithm.
+
+    The paper concludes with a comparison between the established initialisation
+    methods and the proposed method on a number of benchmark datasets, as well
+    as an analysis using preferable artificial datasets. The analysis uses
+    several label-invariant metrics to assess the quality of the clustering both
+    at the beginning of the algorithm and at the end.
 \end{abstract}
