@@ -1,41 +1,14 @@
-name: k-modes
+name: kmodes-init
 channels:
   - defaults
 dependencies:
-  - blas=1.0
-  - ca-certificates=2018.03.07
-  - certifi=2018.4.16
-  - cython=0.28.3
-  - intel-openmp=2018.0.3
-  - libcxx=4.0.1
-  - libcxxabi=4.0.1
-  - libgfortran=3.0.1
-  - mkl=2018.0.3
-  - mkl_fft=1.0.1
-  - mkl_random=1.0.1
-  - numpy=1.14.5
-  - numpy-base=1.14.5
-  - openssl=1.0.2o
-  - pandas=0.23.1
-  - pathlib=1.0.1
-  - pip=10.0.1
-  - python=3.6.0
-  - python-dateutil=2.7.3
-  - pytz=2018.4
-  - readline=6.2
-  - scipy=1.1.0
-  - setuptools=39.2.0
-  - six=1.11.0
-  - sqlite=3.13.0
-  - tk=8.5.18
-  - wheel=0.31.1
-  - xz=5.2.4
-  - zlib=1.2.11
+  - numpy=1.16.2
+  - pandas=0.24.2
+  - pip=19.0.3
+  - python=3.7.0
+  - scikit-learn=0.20.3
   - pip:
-    - matching==0.1
-    - pbr==3.1.1
-    - scikit-learn==0.19.1
-    - sklearn==0.0
-    - virtualenv-clone==0.2.6
-prefix: /Users/henrywilde/anaconda3/envs/k-modes
-
+    - git+https://github.com/daffidwilde/edo_exp
+    - git+https://github.com/daffidwilde/kmodes@dev
+    - edo==0.2.1
+    - matching==1.1
