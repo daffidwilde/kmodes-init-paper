@@ -13,7 +13,7 @@ def get_virtual_modes(data, n_clusters, seed=0):
 
     np.random.seed(seed)
     n_attrs = data.shape[1]
-    modes = np.empty((n_clusters, n_attrs), dtype='object')
+    modes = np.empty((n_clusters, n_attrs), dtype="object")
 
     for i_attr in range(n_attrs):
         freq = defaultdict(int)
@@ -28,6 +28,7 @@ def get_virtual_modes(data, n_clusters, seed=0):
         modes[:, i_attr] = np.random.choice(choices, n_clusters)
 
     return modes
+
 
 def get_initial_modes(data, n_clusters, seed=0):
     """ Find initial modes by Huang's method, seeded. """

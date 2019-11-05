@@ -1,6 +1,8 @@
 """ Fitness function to produce datasets where the matching initialisation
 outperforms Huang's method in terms of initial cost. """
 
+from kmodes.kmodes import KModes
+
 
 def fitness(dataframe, n_clusters=3, seed=0):
     """ Cluster the data into `n_clusters` parts with each initialisation

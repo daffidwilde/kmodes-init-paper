@@ -15,13 +15,21 @@ def get_density_table(data):
     values = data.values
     densities = [density(values, point) for point in values]
 
-    density_table['Density'] = densities
-    density_table.sort_values('Density', ascending=True, inplace=True)
+    density_table["Density"] = densities
+    density_table.sort_values("Density", ascending=True, inplace=True)
 
-    cols = ['Price', 'Maintenance', 'Doors', 'Passengers', 'Wheels',
-            'Eco-Friendly', 'Density']
+    cols = [
+        "Price",
+        "Maintenance",
+        "Doors",
+        "Passengers",
+        "Wheels",
+        "Eco-Friendly",
+        "Density",
+    ]
 
     return density_table[cols]
+
 
 def get_density_dissim_table(data, mode):
     """ Take a dataset, add columns for density, dissimilarity to a mode, and
@@ -33,15 +41,24 @@ def get_density_dissim_table(data, mode):
 
     density_dissim_table = deepcopy(data)
 
-    density_dissim_table['Density'] = densities
-    density_dissim_table[r'Dissimilarity to $\bar{\mu}_1$'] = dissims
-    density_dissim_table['Density-dissimilarity'] = densities * dissims
+    density_dissim_table["Density"] = densities
+    density_dissim_table[r"Dissimilarity to $\bar{\mu}_1$"] = dissims
+    density_dissim_table["Density-dissimilarity"] = densities * dissims
 
-    density_dissim_table.sort_values('Density-dissimilarity',
-                                     ascending=True, inplace=True)
+    density_dissim_table.sort_values(
+        "Density-dissimilarity", ascending=True, inplace=True
+    )
 
-    cols = ['Price', 'Maintenance', 'Doors', 'Passengers', 'Wheels',
-            'Eco-Friendly', 'Density', r'Dissimilarity to $\bar{\mu}_1$',
-            'Density-dissimilarity']
+    cols = [
+        "Price",
+        "Maintenance",
+        "Doors",
+        "Passengers",
+        "Wheels",
+        "Eco-Friendly",
+        "Density",
+        r"Dissimilarity to $\bar{\mu}_1$",
+        "Density-dissimilarity",
+    ]
 
     return density_dissim_table[cols]
