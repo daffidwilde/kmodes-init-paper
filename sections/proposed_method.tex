@@ -1,20 +1,170 @@
-\section{The proposed method}\label{sec:proposed-method}
+\section{Matching games and the proposed method}\label{sec:method}
 
-Now that we have defined what we mean by a matching game, with the algorithm 
-described above, we can construct an alternative initialisation process for the 
-\(k\)-modes algorithm.
+Both of the initialisation methods described in Section~\ref{sec:inits} have a
+greedy component. Cao's method essentially chooses the densest point that has
+not already been chosen whilst forcing separation between the set of initial
+modes. In the case of Huang's, however, the greediness only comes at the end
+of the method, after the set of potential modes has been found by random
+sampling.  In any practical implementation of this method, the order in which a
+set of potential modes is iterated over has no guarantee of consistency. The
+same is true for any arbitrary tie breaks. The result of this is that the
+initial set of modes that the method returns is altered since the next initial
+mode is chosen by the next locally optimal choice.
 
-Let \textbf{X} be a dataset with attribute set \textbf{A}, and let
-\(\tilde{\mu}\) be the set of virtual modes found by Huang's method (i.e.\ the
-set of virtual centroids to be assigned to points in \textbf{X}). We then take
-this set of virtual modes \(\tilde{\mu}\) and construct a capacitated matching
-game to be solved by the capacitated Gale-Shapley algorithm in the following
-way.
+The initialisation method proposed in this work aims to extend Huang's method to
+be order-invariant in the final allocation \-- thereby eliminating its greedy
+component \-- and to provide a more intuitive starting point for the \(k\)-modes
+algorithm. This is done by constructing and solving a matching game between the
+set of potential modes and some subset of the data.
 
+In general, matching games are defined by two sets (parties) of players (often
+termed suitors and reviewers) in which each player creates a preference list of
+at least some of the players in the other party. The objective then is to find a
+mapping between the two sets of players such that no pair of players is
+(rationally) unhappy with their matching. Such a mapping is considered stable.
+Algorithms to find stable matchings to instances of matching games are often
+structured to be party-oriented and aim to maximise some form of social or
+party-based optimality~\cite{Fuku2006,Gale1962,Kwanashie2015}.
+
+One of the simplest matching games models the Stable Marriage Problem (SM). In
+this game the sets of players must be of equal size and rank each other strictly
+(i.e.\ no ties allowed) and entirely. An algorithm was presented in the seminal
+work by D.\ Gale and L.\ Shapley~\cite{Gale1962} that `solves' any instance of
+SM by finding for it a unique, suitor-optimal, stable matching. This kind of
+game is not considered in this work as it effectively reduces down to Huang's
+method. This can be seen as follows. Note that the concept of preference between
+points in an attribute space is synonymous with similarity. Thus, when
+constructing the game, each potential mode gets to pick the data point it is
+closest to but that has not already been picked. Then, up to an arbitrary
+breaking of any ties in the preference lists, each potential mode is assigned to
+its chosen data point.
+
+A number of issues arise from this particular model other than it reducing to
+Huang's method. For instance:
+\begin{itemize}
+    \item Ties are common when using the distance metric defined
+        in~(\ref{eq:dissim}).
+    \item There is no intuitively concrete way of constructing sets of players
+        or their preference lists.
+\end{itemize}
+
+Allowing for ties is a simple extension to SM but the notion of stability
+becomes tiered~\cite{Manlove1999}. In each case of stability, if such a matching
+exists, then a polynomial-time algorithm will find one that is optimal for one
+set of players. However, there is no guarantee that such a level-of-stable
+matching exists and even in that case, the notion of party-optimality is
+lost~\cite{Erdil2017}. Therefore this extension is not considered here where a
+stable solution to the game is required, and is preferably party-optimal.
+
+Further to allowing ties, how preference lists are constructed is a point of
+interest in many applications of matching games~\cite{Iwama2008}. Often this is
+a contextual problem and may be addressed in a number of ways. As in this case,
+where similarity and preference are considered equivalent, a bespoke distance
+metric may be used. Though not relevant to this work, if the game forms part of
+a larger, long-standing or otherwise complex model, introducing flexibility in
+preferences~\cite{Agarwal2017,Menzel2015} or estimating them
+\emph{ad hoc}~\cite{Rastegari2016} may be helpful to obtain meaningful
+matchings.
+
+Another method used to construct preference lists is to discount the preference
+lists presented by players. For instance, where acceptability of another player
+is the only criterion, binary preferences (i.e.\ incomplete preference lists
+with ties) can create games that are invulnerable to manipulative players'
+strategies~\cite{Bogomolnaia2004}. This approach can be adapted to cater for
+larger games, such as student-school allocation. In this case, each student
+submits a set of acceptable schools and the schools form strict rankings of the
+students. The result of this is a simpler game (in the practical sense) and a
+reduction in the set of possible stable matchings~\cite{Haeringer2014}.
+
+As this particular case has no interactive element, and must guarantee a stable
+matching (ideally with optimality), none of these extensions are used in the
+proposed method. Instead, so as to keep the method as simple as possible within
+these constraints, the game used will model an instance of the Hospital-Resident
+Assignment Problem (HR) which was presented with SM as a practical solution to
+the problem that gives it its namesake~\cite{Gale1962}.
+
+Like SM, there exists an algorithm that can provide a unique, party-optimal,
+stable matching to any instance of HR.\ The resident-optimal algorithm is
+presented in Algorithm~\ref{alg:hospital_resident} and is adapted from the
+original to take advantage of the structure of the game~\cite{Roth1984}. The
+game used to model HR, its matchings, and its notion of stability are defined in
+Definitions~\ref{def:game}~\--~\ref{def:blocking}. A summary of these
+definitions in the context of the proposed \(k\)-modes initialisation is given
+in Table~\ref{tab:components}.
+
+\begin{definition}\label{def:game}
+    Consider two distinct sets \(R, H\) and refer to them residents and
+    hospitals. Each \(h \in H\) has a capacity \(c_h \in \mathbb{N}\) associated
+    with them. Each player \(r \in R\) and \(h \in H\) has associated 
+    with it a strict preference list of the other set's elements such that:
+    \begin{itemize}
+        \item Each \(r \in R\) ranks a non-empty subset of \(H\), denoted by
+            \(f(r)\).
+        \item Each \(h \in H\) ranks all and only those residents that have
+            ranked it, i.e.\ the preference list of \(h\), denoted \(g(h)\), is
+            a permutation of the set
+            \(\left\{r \in R \ | \ h \in f(r)\right\}\). If no such residents
+            exist, \(h\) is removed from \(H\).
+    \end{itemize}
+
+    This construction of residents, hospitals, capacities and preference lists
+    is called a \emph{game} and is denoted by \((R, H)\).
+\end{definition}
+
+\begin{definition}\label{def:matching}
+    Consider a game \((R, H)\). A \emph{matching} \(M\) is any mapping between
+    \(R\) and \(H\). If a pair \((r, h) \in R \times H\) are matched in \(M\)
+    then this relationship is denoted \(M(r) = h\) and \(r \in M^{-1}(h)\).
+
+    A matching is only considered \emph{valid} if all of the following hold for
+    all \(r \in R, h \in H\):
+    \begin{itemize}
+        \item If \(r\) is matched then \(M(r) \in f(r)\).
+        \item If \(h\) has at least one match then \(M^{-1}(h) \subseteq g(h)\).
+        \item \(h\) is not over-subscribed, i.e.\ \(\abs*{M^{-1}(h)} \leq c_h\).
+    \end{itemize}
+
+    A valid matching is considered \emph{stable} if it does not contain any
+    blocking pairs.
+\end{definition}
+
+\begin{definition}\label{def:blocking}
+    Consider a game \((R, H)\). Then a pair \((r, h) \in R \times H\) is said to
+    \emph{block} a matching \(M\) if all of the following hold:
+    \begin{itemize}
+        \item There is mutual preference, i.e.\ \(r \in g(h)\) and \(h \in
+            f(r)\).
+        \item Either \(r\) is unmatched or they prefer \(h\) to \(M(r)\).
+        \item Either \(h\) is under-subscribed or \(h\) prefers \(r\) to at
+            least one resident in \(M^{-1}(h)\).
+    \end{itemize}
+\end{definition}
+
+\begin{table}[htbp]
+    \begin{tabular}{lcr}
+        \toprule%
+        Object in \(k\)-modes initialisation & {} & Object in a matching game
+        \\\midrule%
+        Similarity between two points \(U, V \in \mathcal{A}\),
+        \(m - d\left(U, V\right)\) & {} & Respective position in preference
+        lists \(f, g\)
+        \\
+        Potential modes, \(\widehat Z\) & {} & Residents, \(R\)
+        \\
+        Data points closest to \(\widehat Z\), \(\mathcal{X}' \subset
+        \mathcal{X}\) & {} & Hospitals, \(H\)
+        \\
+        A mode \(\hat{z} \in \widehat Z\) being replaced by a point \(X \in
+        \mathcal{X}'\) & {} & A pair in some matching \(M\)\\
+        \bottomrule
+    \end{tabular}
+    \caption{A summary of the relationships between the components of the
+             initialisation for \(k\)-modes and those in a matching game
+             \((R, H)\).
+    }\label{tab:components}
+\end{table}
+
+%\input{tex/examples/matching.tex}
+
+\input{tex/algorithms/hospital_resident.tex}
 \input{tex/algorithms/proposed_method.tex}
-
-\begin{remark}
-    The method for constructing the preference lists of our suitors can affect
-    the outcome and performance of this method. Please refer to
-    Sections~\ref{sec:preferences}~\&~\ref{sec:results}.
-\end{remark}

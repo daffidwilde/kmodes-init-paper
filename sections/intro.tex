@@ -1,0 +1,297 @@
+\section{Introduction}\label{sec:intro}
+
+\begin{itemize}
+    \item What is clustering?
+    \item What is the \(k\)-means paradigm?
+    \item What is categorical data and how is it clustered?
+\end{itemize}
+
+\subsection{The \(k\)-modes algorithm}\label{subsec:kmodes}
+
+The following notation will be used throughout this work to describe the objects
+associated with clustering a dataset:
+
+\begin{itemize}
+    \item Let \(\mathcal{A} := A_1 \times \cdots \times A_m\) denote the
+        \emph{attribute~space}. In this work, only categorical attributes are
+        considered and so it is intuitive to describe each attribute as a set of
+        its values, i.e.\ for each \(j = 1, \ldots, m\) it follows that \(A_j :=
+        \left\{a_1^{(j)}, \ldots, a_{d_j}^{(j)}\right\}\) where \(d_j = |A_j|\)
+        is considered the size of the \(j^{th}\) attribute.
+
+    \item Let \(\mathcal{X} := \left\{X^{(1)}, \ldots, X^{(N)}\right\} \subset
+        \mathcal{A}\) denote a \emph{dataset} where each \(X^{(i)} \in
+        \mathcal{X}\) is defined as an \(m\)-tuple \(X^{(i)} := \left(x_1^{(i)},
+        \ldots, x_m^{(i)}\right)\) where \(x_j^{(i)} \in A_j\) for each \(j = 1,
+        \ldots, m\). The elements of \(\mathcal{X}\) are referred to as
+        \emph{data points} or \emph{instances}.
+%        A dataset \(\mathcal{X}\) can be
+%        represented as a table like so:
+%        \begin{table}[H]
+%        \centering
+%        \begin{tabular}{cccccc}
+%            {} & \(A_1\) & \(A_2\) & \quad \ldots \quad & \(A_{m-1}\) & \(A_m\)
+%            \\
+%            \midrule
+%            \(X^{(1)}\) & \(x_1^{(1)}\) & \(x_2^{(1)}\) & \quad \ldots \quad & 
+%            \(x_{m-1}^{(1)}\) & \(x_m^{(1)}\)
+%            \\
+%            \(X^{(2)}\) & \(x_1^{(2)}\) & \(x_2^{(2)}\) & \quad \ldots \quad &
+%            \(x_{m-1}^{(2)}\) & \(x_m^{(2)}\)
+%            \\
+%            \vdots & \vdots & \vdots & {} & \vdots & \vdots
+%            \\
+%            \(X^{(N)}\) & \(x_1^{(N)}\) & \(x_2^{(N)}\) & \quad \ldots \quad &
+%            \(x_{m-1}^{(N)}\) & \(x_m^{(N)}\)
+%        \end{tabular}
+%        \end{table}
+
+    \item Let \(\mathcal{Z} := \left(Z_1, \ldots, Z_k\right)\) be a partition
+        of a dataset \(\mathcal{X}\) into \(k \in \mathbb{Z}^{+}\) distinct,
+        non-empty parts. Such a partition \(\mathcal{Z}\) is called a
+        \emph{clustering} of \(\mathcal{X}\).
+
+    \item Each cluster \(Z_l\) has associated with it a
+        \emph{representative~point} (see Definition~\ref{def:mode}) which is
+        denoted by \(z^{(l)} = \left(z_1^{(l)},~\ldots,~z_m^{(l)}\right) \in
+        \mathcal{A}\).  These points may also be referred to as cluster modes.
+        The set of all current representative points is denoted \(\overline Z =
+        \left\{z^{(1)}, \ldots, z^{(k)}\right\}\).
+\end{itemize}
+
+As is discussed above, the notion of distance is lost in categorical space, and
+especially when that space is even partly nominal. Definition~\ref{def:dissim}
+describes a simple dissimilarity measure between categorical data points.
+
+\begin{definition}\label{def:dissim}
+    Let \(\mathcal{X}\) be a dataset and consider any \(X^{(a)}, X^{(b)} \in
+    \mathcal{X}\). The dissimilarity between \(X^{(a)}\) and \(X^{(b)}\),
+    denoted by \(d\left(X^{(a)}, X^{(b)}\right)\), is given by:
+    \begin{equation}\label{eq:dissim}
+        d\left(X^{(a)}, X^{(b)}\right) := \sum_{j=1}^{m} \delta\left(x_j^{(a)},
+        x_j^{(b)}\right) \quad \text{where} \quad \delta\left(x, y\right) =
+        \begin{cases}
+            0, & \text{if} \ x = y \\
+            1, & \text{otherwise.}
+        \end{cases}
+    \end{equation}
+    In other words, the dissimilarity between two points is the number of
+    attributes where their values are not the same. A proof
+    that~\eqref{eq:dissim} is a valid distance metric is given as an appendix.
+\end{definition}
+
+%\input{tex/examples/dissim.tex}
+
+With this metric defined, the notion of a representative point within a cluster
+can be addressed. When clustering numeric data, a centroid of a cluster is taken
+to be the average of the points within the cluster so as to summarise the
+information contained within that cluster. With categorical data, however, a
+frequency approach is used. This follows from the concept of dissimilarity
+where the point that best represents (i.e.\ is closest to) those in a cluster
+is one with the most frequent attribute values of the points in the cluster. As
+such, a representative point of a cluster is often called a mode. The following
+definitions and theorem formally define such a representative point and a means
+of finding them.
+
+\begin{definition}\label{def:mode}
+    Let \(\mathcal{X} \subset \mathcal{A}\) be a dataset and consider some point
+    \(z = \left(z_1, \ldots, z_m\right) \in \mathcal{A}\). Then \(z\) is called
+    a \emph{mode} of \(\mathcal{X}\) if it minimises the following:
+    \begin{equation}\label{eq:summed-dissim}
+        D\left(\mathcal{X}, z\right) = \sum_{i=1}^{N} d\left(X^{(i)}, z\right)
+    \end{equation}
+\end{definition}
+
+\begin{definition}\label{def:rel-freq}
+    Let \(\mathcal{X} \subset \mathcal{A}\) be a dataset. Then
+    \(n\left(a_s^{(j)}\right)\) denotes the \emph{frequency} of the \(s^{th}\)
+    category \(a_s^{(j)}\) of \(A_j\) in \(\mathcal{X}\), i.e.\ for each \(A_j
+    \in \mathcal{A}\) and each \(s = 1, \ldots, d_j\):
+    \begin{equation}
+        n\left(a_s^{(j)}\right) := \abs*{%
+            {\left\{X^{(i)} \in \mathcal{X}: x_j^{(i)} = a_s^{(j)}\right\}}
+        }
+    \end{equation}
+	
+    Furthermore, \(\frac{n\left(a_s^{(j)}\right)}{N}\) is called the
+    \emph{relative~frequency} of category \(a_s^{(j)}\) in \(\mathcal{X}\).
+\end{definition}
+
+\begin{theorem}\label{thm:mode}
+    Consider a dataset \(\mathcal{X} \subset \mathcal{A}\) and some \(U = (u_1,
+    \ldots, u_m) \in \mathcal{A}\). Then \(D(\mathcal{X}, U)\) is minimised if
+    and only if \(n\left(u_j\right) \geq n\left(a_s^{(j)}\right)\) for all
+    \(s=1, \ldots, d_j\) for each \(j = 1, \ldots, m\).
+
+    A proof of this theorem can be found in the Appendix of~\cite{Huang1998}.
+\end{theorem}
+
+%\input{tex/examples/mode.tex}
+
+Theorem~\ref{thm:mode} defines the process by which representatives are updated
+in \(k\)-modes (see Algorithm~\ref{alg:update}), and so the final component from
+the \(k\)-means paradigm to be configured is the objective (cost) function. This
+function is defined in Definition~\ref{def:cost}, and following that a practical
+statement of the \(k\)-modes algorithm is given in Algorithm~\ref{alg:kmodes} as
+set out in~\cite{Huang1998}.
+
+\begin{definition}\label{def:cost}
+    Let \(\mathcal{Z} = \left\{Z_1, \ldots, Z_k\right\}\) be a clustering of a
+    dataset \(\mathcal{X}\), and let \(\overline Z = \left\{z^{(1)},
+    \ldots, z^{(k)}\right\}\) be the corresponding cluster modes. Then \(W =
+    \left(w_{i, l}\right)\) is an \(N \times k\) \emph{partition~matrix} of
+    \(\mathcal{X}\) such that:
+    \[
+        w_{i, l} = \begin{cases}
+                     1, & \text{if} \ X^{(i)} \in Z_l\\
+                     0, & \text{otherwise.}
+                   \end{cases}
+    \]
+
+    With this, the \emph{cost~function} is defined to be the summed
+    within-cluster dissimilarity:
+    \begin{equation}
+        C\left(W, \overline Z\right) := \sum_{l=1}^{k} \sum_{i=1}^{N}
+        \sum_{j=1}^{m} w_{i,l} \ \delta\left(x_j^{(i)}, z_j^{(l)}\right)
+    \end{equation}
+\end{definition}
+
+\input{tex/algorithms/kmodes.tex}
+
+
+\subsection{Initialisation processes}\label{subsec:inits}
+
+All of the methods within the \(k\)-means paradigm are heuristics and as
+such their performance is dependent on the quality of their initial
+solution. The quality of the initial centroids for a particular dataset is
+affected by two components: the metric attached to the attribute space and the
+process by which they are chosen.
+
+Following the seminal \(k\)-modes papers~\cite{Huang1997a,Huang1997b,Huang1998},
+a number of alternative dissimilarity measures have been implemented to improve
+on the simple matching dissimilarity defined in~\eqref{eq:dissim}. The main
+drawback of this measure is that it often produces clusters with low
+intra-cluster similarity~\cite{Ng2007} and does not take into account any
+relationships between attributes or their categories. Other measures have been
+designed to be used in a specific context where such relationships may be
+considered~\cite{Cao2012,Yu2018,Zhou2016}.
+
+\subsubsection{Huang's method}\label{subsec:huang}
+
+In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
+chosen at random from \(\mathcal{X}\). Below is an alternative method of
+selecting these modes that forces some diversity between them, as described 
+in~\cite{Huang1998}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
+\(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
+is the set of modes to go on to be used by the \(k\)-modes algorithm.
+
+\input{tex/algorithms/huang.tex}
+
+In the original statement of Huang's method, the algorithm states that the most
+frequent categories should be assigned `equally' to the \(k\) initial modes. How
+the categories should be distributed `equally' is not well-defined or easily
+seen from the example given. This ambiguity in the definition of Huang's method
+means that a probabilistic element must be introduced, and unless seeded
+pseudo-random numbers are used, computer-generated results are not necessarily
+reproducible.
+
+In this work, as is done in the implementation used to apply the \(k\)-modes
+algorithm in Section~\ref{sec:results}, the term `equally' is considered to mean
+taking a sample from a probability distribution. This distribution is formed by
+the relative frequencies of the attributes' values (defined in
+Definition~\ref{def:rel-freq}), as is described in Algorithm~\ref{alg:huang}.
+
+In practice, taking a random sample according to some probability distribution
+will lead to variation between runs of this method. As such, when Huang's method
+is used to initialise the \(k\)-modes algorithm it is typically run multiple
+times and the result with lowest final cost is used.
+
+%\input{tex/examples/huang.tex}
+
+\subsubsection{Cao's method}\label{subsec:cao}
+
+Cao's method selects representative points by the average density of a point in
+the dataset. As will be seen in the following definition, this average density 
+is in fact the average relative frequency of all the attribute values of that 
+point. This method is considered deterministic as there is no probabilistic
+element \- unlike Huang's method or a random initialisation. So, we can consider
+the results to be largely reproducible, except in the case where a tie must be
+broken (see Example~\ref{ex:cao}).
+
+\begin{definition}\label{def:density}	
+    Consider a data set \(\mathcal{X}\) with attribute set \(\mathcal{A} = 
+    \{A_1, \ldots, A_m\}\). Then the \emph{average~density} of any point 
+    \(X_i \in \mathcal{X}\) with respect to \(\mathcal{A}\) is 
+    defined~\cite{Cao2009} as:
+    \begin{equation}\label{eq:density}
+        \text{Dens}\left(X^{(i)}\right) = \frac{%
+            \sum_{j=1}^m \text{Dens}_{j}\left(X^{(i)}\right)
+        }{m}
+        \ \ \text{where} \ \
+        \text{Dens}_{j}\left(X^{(i)}\right) = \frac{%
+            \abs*{%
+                \left\{X^{(t)} \in \mathcal{X} : x_j^{(i)} = x_j^{(t)}\right\}
+            }
+        }{N}
+    \end{equation}
+
+    Observe that:
+    \[
+        \abs*{\left\{X^{(t)} \in \mathcal{X} : x_j^{(i)} = x_j^{(t)}\right\}}%
+        = n\left(x_j^{(i)}\right)%
+        = \sum_{t=1}^N \left(1 - \delta\left(x_j^{(i)}, x_j^{(t)}\right)\right)
+    \]
+
+    And so, an alternative definition for~(\ref{eq:density}) can be derived:
+    \begin{equation}\label{eq:density-alt}
+    \begin{aligned}
+        \text{Dens}\left(X^{(i)}\right)
+        & = \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N \left(%
+            1 - \delta\left(x_j^{(i)}, x_j^{(t)}\right)
+        \right)\\
+        & = \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N 1%
+            - \frac{1}{mN} \sum_{j=1}^m \sum_{t=1}^N
+            \delta\left(x_j^{(i)}, x_j^{(t)}\right)\\
+        & = \frac{mN}{mN} - \frac{1}{mN} \sum_{t=1}^N
+            d\left(X^{(i)}, X^{(t)}\right)\\
+        & = 1 - \frac{1}{mN} D\left(\mathcal{X}, X^{(i)}\right)
+    \end{aligned}
+    \end{equation}
+\end{definition}
+
+\begin{remark}
+    It is worth noting that for all \(X^{(i)} \in \mathcal{X}\) it follows that
+    \(\frac{1}{N} \leq \text{Dens}\left(X^{(i)}\right)
+    \leq 1\), since:		
+	\begin{itemize}	
+        \item If \(n\left(x_j^{(i)}\right) = 1\) for all \(j = 1, \ldots, m\)
+            then \(%
+                \text{Dens}\left(X^{(i)}\right)
+                = \frac{\sum_{j=1}^m \frac{1}{N}}{m}
+                = \frac{m}{mN}
+                = \frac{1}{N}
+            \).
+        \item If \(n\left(x_j^{(i)}\right) = N\) for all \(j = 1, \ldots, m\)
+            then \(%
+                \text{Dens}\left(X^{(i)}\right)
+                = \frac{\sum_{j=1}^m 1}{m}
+                = \frac{m}{m}
+                = 1
+            \).
+	\end{itemize}
+\end{remark}
+
+\input{tex/algorithms/cao.tex}
+
+\begin{remark}
+    With this alternative definition, we see \-- since \(m\) and \(N\) are fixed
+    positive integers \-- that \(\text{Dens}(X^{(i)})\) is maximised when
+    \(D(\mathcal{X}, X^{(i)})\) is minimised. Then by Theorem~\ref{thm:1} we have
+    that such an \(X^{(i)}\) with maximal average density in \(\mathcal{X}\)
+    with respect to \(\mathcal{A}\) is, in fact, a mode of \(\mathcal{X}\). This
+    observation allows us to consider some sense of similarity between Huang and
+    Cao's methods, as they seem to be trying to achieve the same objective \--
+    if only from opposite ends.
+\end{remark}
+
+%\input{tex/examples/cao.tex}
