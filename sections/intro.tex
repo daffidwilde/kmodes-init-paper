@@ -161,11 +161,10 @@ set out in~\cite{Huang1998}.
 
 \subsection{Initialisation processes}\label{subsec:inits}
 
-All of the methods within the \(k\)-means paradigm are heuristics and as
-such their performance is dependent on the quality of their initial
-solution. The quality of the initial centroids for a particular dataset is
-affected by two components: the metric attached to the attribute space and the
-process by which they are chosen.
+The \(k\)-modes algorithm is a heuristic so its performance is dependent on the
+its initial solution. The quality of the initial centroids for a particular
+dataset is affected by two components: the metric attached to the attribute
+space and the process by which they are chosen.
 
 Following the seminal \(k\)-modes papers~\cite{Huang1997a,Huang1997b,Huang1998},
 a number of alternative dissimilarity measures have been implemented to improve
@@ -176,36 +175,33 @@ relationships between attributes or their categories. Other measures have been
 designed to be used in a specific context where such relationships may be
 considered~\cite{Cao2012,Yu2018,Zhou2016}.
 
+This work considers, instead, the process by which the initial modes are
+selected. The standard selection method is to randomly sample \(k\) distinct
+points in the dataset. In all cases, the initial modes must be points in the
+dataset to ensure that there are no empty clusters in the first iteration of the
+algorithm. The remainder of this section describes two well-established
+initialisation methods that aim to preemptively lever the structure of the data
+at hand.
+
 \subsubsection{Huang's method}\label{subsec:huang}
 
-In the standard form of the \(k\)-modes algorithm, the \(k\) initial modes are 
-chosen at random from \(\mathcal{X}\). Below is an alternative method of
-selecting these modes that forces some diversity between them, as described 
-in~\cite{Huang1998}. Here, we consider two sets of modes, \(\tilde{\mu}\) and
-\(\bar{\mu}\). The former acts as a placeholder set of modes, whereas the latter
-is the set of modes to go on to be used by the \(k\)-modes algorithm.
+Amongst the original works by Huang, an alternative initialisation method was
+presented that selects modes by forcing diversity amongst them~\cite{Huang1998}.
+The process, denoted as Huang's method, is described in full in
+Algorithm~\ref{alg:huang}. Huang's method considers a set of potential modes,
+\(\widehat Z \subset \mathcal A\), that is then replaced by the actual set of
+initial modes, \(\overline Z \subset \mathcal X\).
+
+In the original statement of Huang's method, it is stated that the most
+frequent categories should be assigned `equally' to the set of potential modes.
+How the categories should be distributed `equally' is not well-defined or easily
+seen from the example given in the paper. In software implementations, including
+the one used in Section~\ref{sec:results}, the term is taken to mean using a
+probability distribution to sample values from the attribute space. This
+probability distribution is formed by the relative frequencies of each
+attribute's categories.
 
 \input{tex/algorithms/huang.tex}
-
-In the original statement of Huang's method, the algorithm states that the most
-frequent categories should be assigned `equally' to the \(k\) initial modes. How
-the categories should be distributed `equally' is not well-defined or easily
-seen from the example given. This ambiguity in the definition of Huang's method
-means that a probabilistic element must be introduced, and unless seeded
-pseudo-random numbers are used, computer-generated results are not necessarily
-reproducible.
-
-In this work, as is done in the implementation used to apply the \(k\)-modes
-algorithm in Section~\ref{sec:results}, the term `equally' is considered to mean
-taking a sample from a probability distribution. This distribution is formed by
-the relative frequencies of the attributes' values (defined in
-Definition~\ref{def:rel-freq}), as is described in Algorithm~\ref{alg:huang}.
-
-In practice, taking a random sample according to some probability distribution
-will lead to variation between runs of this method. As such, when Huang's method
-is used to initialise the \(k\)-modes algorithm it is typically run multiple
-times and the result with lowest final cost is used.
-
 %\input{tex/examples/huang.tex}
 
 \subsubsection{Cao's method}\label{subsec:cao}
