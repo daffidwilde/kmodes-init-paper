@@ -206,13 +206,16 @@ attribute's categories.
 
 \subsubsection{Cao's method}\label{subsec:cao}
 
-Cao's method selects representative points by the average density of a point in
-the dataset. As will be seen in the following definition, this average density 
-is in fact the average relative frequency of all the attribute values of that 
-point. This method is considered deterministic as there is no probabilistic
-element \- unlike Huang's method or a random initialisation. So, we can consider
-the results to be largely reproducible, except in the case where a tie must be
-broken (see Example~\ref{ex:cao}).
+The second initialisation process that is widely used with \(k\)-modes is known
+as Cao's method~\cite{Cao2009}. This method selects representative points
+according to their density in the dataset whilst forcing dissimilarity between
+them. Definition~\ref{def:density} formalises the concept of density and its
+relationship to relative frequency. The method, which is described in
+Algorithm~\ref{alg:cao}, is often considered to be deterministic as there is no
+formally stochastic element. However, this is only true up to an arbitrary
+breaking of ties in the density-dissimilarity calculations and so many practical
+implementations cannot guarantee a unique solution across multiple runs using
+this method.
 
 \begin{definition}\label{def:density}	
     Consider a data set \(\mathcal{X}\) with attribute set \(\mathcal{A} = 
@@ -238,7 +241,7 @@ broken (see Example~\ref{ex:cao}).
         = \sum_{t=1}^N \left(1 - \delta\left(x_j^{(i)}, x_j^{(t)}\right)\right)
     \]
 
-    And so, an alternative definition for~(\ref{eq:density}) can be derived:
+    And so, an alternative definition for~\eqref{eq:density} can be derived:
     \begin{equation}\label{eq:density-alt}
     \begin{aligned}
         \text{Dens}\left(X^{(i)}\right)
@@ -253,41 +256,15 @@ broken (see Example~\ref{ex:cao}).
         & = 1 - \frac{1}{mN} D\left(\mathcal{X}, X^{(i)}\right)
     \end{aligned}
     \end{equation}
+
+    With this alternative definition, it is clear --- since \(m\) and \(N\) are
+    fixed positive integers --- that \(\text{Dens}(X^{(i)})\) is maximised when
+    \(D(\mathcal{X}, X^{(i)})\) is minimised. Then by Theorem~\ref{thm:mode},
+    any data point with maximal average density is, in fact, a mode of
+    \(\mathcal{X}\). This observation indicates that there is a similarity
+    between this method and Huang's in that they are attempting to achieve the
+    same objective if only from opposite ends.
 \end{definition}
 
-\begin{remark}
-    It is worth noting that for all \(X^{(i)} \in \mathcal{X}\) it follows that
-    \(\frac{1}{N} \leq \text{Dens}\left(X^{(i)}\right)
-    \leq 1\), since:		
-	\begin{itemize}	
-        \item If \(n\left(x_j^{(i)}\right) = 1\) for all \(j = 1, \ldots, m\)
-            then \(%
-                \text{Dens}\left(X^{(i)}\right)
-                = \frac{\sum_{j=1}^m \frac{1}{N}}{m}
-                = \frac{m}{mN}
-                = \frac{1}{N}
-            \).
-        \item If \(n\left(x_j^{(i)}\right) = N\) for all \(j = 1, \ldots, m\)
-            then \(%
-                \text{Dens}\left(X^{(i)}\right)
-                = \frac{\sum_{j=1}^m 1}{m}
-                = \frac{m}{m}
-                = 1
-            \).
-	\end{itemize}
-\end{remark}
-
 \input{tex/algorithms/cao.tex}
-
-\begin{remark}
-    With this alternative definition, we see \-- since \(m\) and \(N\) are fixed
-    positive integers \-- that \(\text{Dens}(X^{(i)})\) is maximised when
-    \(D(\mathcal{X}, X^{(i)})\) is minimised. Then by Theorem~\ref{thm:1} we have
-    that such an \(X^{(i)}\) with maximal average density in \(\mathcal{X}\)
-    with respect to \(\mathcal{A}\) is, in fact, a mode of \(\mathcal{X}\). This
-    observation allows us to consider some sense of similarity between Huang and
-    Cao's methods, as they seem to be trying to achieve the same objective \--
-    if only from opposite ends.
-\end{remark}
-
 %\input{tex/examples/cao.tex}
