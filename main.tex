@@ -1,6 +1,5 @@
 \documentclass[11pt]{article}
 
-
 % Setting up the page
 \usepackage{setspace}
     \newcommand{\standardspacing}{\singlespacing}
@@ -15,19 +14,14 @@
 
 % Writing mathematics, algorithms and code
 \usepackage{mathtools}
+\usepackage{multicol}
+\usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[boxruled]{algorithm2e}
 
-\newcommand{\balg}[1][htbp]{%
-    \begin{algorithm}[#1]\DontPrintSemicolon\singlespacing%
-}
-\newcommand{\ealg}{%
-    \end{algorithm}\standardspacing%
-}
-
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\balg}{\begin{algorithm}[htbp]\DontPrintSemicolon\singlespacing}
+\newcommand{\ealg}{\end{algorithm}\standardspacing}
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
@@ -48,19 +42,6 @@
 \newtheorem*{remark}{Remark}
 \newtheorem{theorem}{Theorem}
 
-%\newtheoremstyle{example}
-%{\topsep} % Space above
-%{\topsep} % Space below
-%{} % Body font (normal)
-%{} % Indent
-%{\bfseries} % Head font
-%{.} % Punctuation after head
-%{.5em} % Space after head
-%{} % Head spec (normal)
-
-%\theoremstyle{example} \newtheorem{example}{Example}
-
-
 \title{%
     A novel game-theoretic initialisation process for the \(k\)-modes
     algorithm using the hospital-resident assignment problem
@@ -71,12 +52,12 @@
 
 \maketitle%
 \input{sections/abstract.tex}
-\input{sections/kmodes.tex}
-\input{sections/init_processes.tex}
-\input{sections/matching_games.tex}
+\input{sections/intro.tex}
+\input{sections/proposed_method.tex}
 \input{sections/results.tex}
 
 \clearpage%
 \bibliography{references}
+\input{sections/appendix.tex}
 
 \end{document}
