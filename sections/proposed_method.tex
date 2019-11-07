@@ -12,8 +12,8 @@ initial set of modes that the method returns is altered since the next initial
 mode is chosen by the next locally optimal choice.
 
 The initialisation method proposed in this work aims to extend Huang's method to
-be order-invariant in the final allocation \-- thereby eliminating its greedy
-component \-- and to provide a more intuitive starting point for the \(k\)-modes
+be order-invariant in the final allocation --- thereby eliminating its greedy
+component --- and to provide a more intuitive starting point for the \(k\)-modes
 algorithm. This is done by constructing and solving a matching game between the
 set of potential modes and some subset of the data.
 
@@ -63,7 +63,7 @@ where similarity and preference are considered equivalent, a bespoke distance
 metric may be used. Though not relevant to this work, if the game forms part of
 a larger, long-standing or otherwise complex model, introducing flexibility in
 preferences~\cite{Agarwal2017,Menzel2015} or estimating them
-\emph{ad hoc}~\cite{Rastegari2016} may be helpful to obtain meaningful
+\emph{ad~hoc}~\cite{Rastegari2016} may be helpful to obtain meaningful
 matchings.
 
 Another method used to construct preference lists is to discount the preference
@@ -74,7 +74,8 @@ strategies~\cite{Bogomolnaia2004}. This approach can be adapted to cater for
 larger games, such as student-school allocation. In this case, each student
 submits a set of acceptable schools and the schools form strict rankings of the
 students. The result of this is a simpler game (in the practical sense) and a
-reduction in the set of possible stable matchings~\cite{Haeringer2014}.
+reduction in the set of possible stable
+matchings~\cite{Haeringer2014,Haeringer2019}.
 
 As this particular case has no interactive element, and must guarantee a stable
 matching (ideally with optimality), none of these extensions are used in the
@@ -146,18 +147,15 @@ in Table~\ref{tab:components}.
         \toprule%
         Object in \(k\)-modes initialisation & {} & Object in a matching game
         \\\midrule%
-        Similarity between two points \(U, V \in \mathcal{A}\),
-        \(m - d\left(U, V\right)\) & {} & Respective position in preference
-        lists \(f, g\)
+        Potential modes & {} & The set of residents
         \\
-        Potential modes, \(\widehat Z\) & {} & Residents, \(R\)
+        Data points closest to potential modes & {} & The set of hospitals
         \\
-        Data points closest to \(\widehat Z\), \(\mathcal{X}' \subset
-        \mathcal{X}\) & {} & Hospitals, \(H\)
+        Similarity between a potential mode and a point & {} & Respective
+        position in each other's preference lists
         \\
-        A mode \(\hat{z} \in \widehat Z\) being replaced by a point \(X \in
-        \mathcal{X}'\) & {} & A pair in some matching \(M\)\\
-        \bottomrule
+        The data point to replace a potential mode & {} & A pair in a matching
+        \\\bottomrule
     \end{tabular}}
     \caption{A summary of the relationships between the components of the
              initialisation for \(k\)-modes and those in a matching game
