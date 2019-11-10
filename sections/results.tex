@@ -28,30 +28,28 @@ is that the classes recorded in the data are indeed separable objects like
 clusters.
 
 This analysis does not consider evaluative metrics related to classification
-such as accuracy, recall or precision. Instead, only internal metrics are
+such as accuracy, recall or precision. Instead, only internal measures are
 considered such as the cost function defined in~\eqref{eq:cost}. This metric is
 label-invariant and its values are comparable across the different
-initialisation methods. Furthermore, the effect of each initialisation method on
-the initial and final clusterings can be captured with the cost function. An
+initialisation methods.  Furthermore, the effect of each initialisation method
+on the initial and final clusterings can be captured with the cost function. An
 additional, and often useful, metric is the silhouette coefficient. This
 measures the ratio between the intra-cluster cohesion and inter-cluster
 separation of a particular clustering. Therefore, it could be used in a similar
-way to reveal the effect of each initialisation method. Unfortunately, this
-metric loses its intuition under the distance measure employed here.\
+way to reveal the effect of each initialisation method at the beginning and end
+of a run of \(k\)-modes.  Unfortunately, this metric loses its intuition under
+the distance measure employed here. The remaining performance measures used are
+the number of iterations for the \(k\)-modes algorithm to terminate and the time
+taken in seconds.
 
-we will not follow this approach since our motivation is to compare the
-quality of the clustering produced when using these initialisation methods. So,
-for the purposes of measuring the performance of our various initialisation
-methods as parts of a clustering algorithm, we will make use of internal metrics
-that are independent of any external information such as a class labelling.
-This family of metrics are built up from two characteristics of the clusters
-found: cohesion and separation. Cluster cohesion is effectively the summed,
-within-cluster variation or dissimilarity of its points, whereas a cluster's
-separation is a sum of the distances between all points in the cluster and every
-other point not in the cluster. In this analysis, we will make use of two
-internal measures for cluster validity: our cost function from
-Definition~\ref{def:cost} and the average silhouette coefficient, or silhouette
-score, of our clustering, defined below. 
+Tables~\ref{tab:breast_cancer_summary}---\ref{tab:zoo_summary} summarise the
+results of each initialisation method on the benchmark datasets. Each column
+shows the mean value of each metric and its standard deviation in parentheses
+over 50 repetitions of the \(k\)-modes algorithm. The data for these results
+was generated using the Python library
+\href{https://github.com/nicodv/kmodes}{\texttt{kmodes}} in which the proposed
+method has been implemented. All of the data included in this paper, and the
+code to generate it are archived online~\textcolor{red}{code and data DOI}.
 
 %\begin{definition}\label{def:silhouette}
 %    Let \textbf{X} be a dataset and consider a clustering of \textbf{X} into
@@ -69,7 +67,7 @@ score, of our clustering, defined below.
 %            dissimilarity between \(X^{(i)}\) and all other points in each
 %            cluster other than \(C_l\). That is:
 %            \[
-%                b\left(X^{(i)}\right) := \min_{l' \neq l} \left\{
+%               }b\left(X^{(i)}\right) := \min_{l' \neq l} \left\{
 %                \frac{1}{|C_{l'}|} D\left(C_{l'}, X^{(i)}\right) \right\}
 %            \]
 %    \end{itemize}
@@ -89,33 +87,6 @@ score, of our clustering, defined below.
 %Values around 0 indicate overlapping clusters, whereas silhouette scores close
 %to 1 suggest well-separated and effective clusters.
 %\end{definition}
-
-
-\subsection{Results}\label{subsec:results}
-
-In this section, two sets of results will be considered. The first are the more
-classically seen tables of metrics defined above, and the latter are a
-collection of plots showing the descent in the cost function of the \(k\)-modes
-algorithm over time. In either case, results are generated using the Python
-library \href{https://github.com/nicodv/kmodes}{\texttt{kmodes}} to which the
-proposed method has been added as another initialisation method. The number of
-clusters to be determined, \(k\), is chosen as the number of classes associated
-with each dataset. Note that this value may not be optimal (as suggested by the
-relatively low silhouette scores in most cases), and that the class variable is
-not considered in the running of the algorithm.
-
-\subsubsection{Metric results}
-
-Each of the tables of results given below were obtained by running the
-\(k\)-modes algorithm 25 times with each initialisation method on the dataset in
-question. For each of these 25 runs, the simulation is seeded to make the
-results reproducible.
-
-At each run of the experiment the number of epochs to termination, the initial
-and final costs, and the average silhouette score were recorded for the
-clustering found. These metrics are summarised below in
-Tables~\ref{tab:soybean_results}~\--~\ref{tab:zoo_animal_results} by their mean
-and median values, and their standard deviation over the 25 runs.
 
 \begin{table}
     \centering
@@ -144,28 +115,20 @@ and median values, and their standard deviation over the 25 runs.
     \(k=7\).}\label{tab:zoo_summary}
 \end{table}
 
-\subsubsection{Epoch costs}
-
-The epoch-cost plots in this section were created by setting an initial seed for
-each initialisation method and then running the \(k\)-modes algorithm 25 times.
-Of these runs, the best set of costs is then chosen by their final cost and
-plotted.
-
-Note that in each figure, dotted lines indicate the established initialisation
-methods whilst solid lines are used for the proposed method.
-
 \begin{figure}
     \centering
     \includegraphics[width=\imgwidth]{%
         img/soybean_initial_cost_violinplot.pdf%
-    }
+    }\caption{Distribution of initial cost by initialisation for the soybean
+              dataset.}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\imgwidth]{%
         img/mushroom_initial_cost_violinplot.pdf%
-    }
+    }\caption{Distribution of initial cost by initialisation for the mushroom
+              dataset.}
 \end{figure}
 
 \begin{figure}
