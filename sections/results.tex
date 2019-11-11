@@ -91,10 +91,10 @@ code to generate it are archived online~\textcolor{red}{code and data DOI}.
 \begin{table}
     \centering
     \resizebox{\textwidth}{!}{%
-        \input{./tex/soybean_summary.tex}
+        \input{./tex/breast_cancer_summary.tex}
     }
-    \captionof{table}{Summative metric results for the soybean dataset with
-    \(k=15\).}\label{tab:soybean_summary}\vspace{20pt}
+    \captionof{table}{Summative metric results for the breast cancer dataset
+    with \(k=2\).}\label{tab:breast_cancer_summary}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/mushroom_summary.tex}
@@ -103,10 +103,10 @@ code to generate it are archived online~\textcolor{red}{code and data DOI}.
     \(k=2\).}\label{tab:mushroom_summary}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
-        \input{./tex/breast_cancer_summary.tex}
+        \input{./tex/soybean_summary.tex}
     }
-    \captionof{table}{Summative metric results for the breast cancer dataset
-    with \(k=2\).}\label{tab:breast_cancer_summary}\vspace{20pt}
+    \captionof{table}{Summative metric results for the soybean dataset with
+    \(k=15\).}\label{tab:soybean_summary}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/zoo_summary.tex}
@@ -135,12 +135,80 @@ code to generate it are archived online~\textcolor{red}{code and data DOI}.
     \centering
     \includegraphics[width=\imgwidth]{%
         img/breast_cancer_initial_cost_violinplot.pdf%
-    }
+    }\caption{Distribution of initial cost by initialisation for the breast
+              cancer dataset.}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=\imgwidth]{%
         img/zoo_initial_cost_violinplot.pdf%
-    }
+    }\caption{Distribution of initial cost by initialisation for the zoo animal
+              dataset.}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/soybean_final_cost_violinplot.pdf%
+    }\caption{Distribution of final cost by initialisation for the soybean
+              dataset.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/mushroom_final_cost_violinplot.pdf%
+    }\caption{Distribution of final cost by initialisation for the mushroom
+              dataset.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/breast_cancer_final_cost_violinplot.pdf%
+    }\caption{Distribution of final cost by initialisation for the breast
+              cancer dataset.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/zoo_final_cost_violinplot.pdf%
+    }\caption{Distribution of final cost by initialisation for the zoo animal
+              dataset.}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/soybean_time_violinplot.pdf%
+    }\caption{Distribution of time taken by initialisation for the soybean
+              dataset.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/mushroom_time_violinplot.pdf%
+    }\caption{Distribution of time taken by initialisation for the mushroom
+              dataset.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/breast_cancer_time_violinplot.pdf%
+    }\caption{Distribution of time taken by initialisation for the breast
+              cancer dataset.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{%
+        img/zoo_time_violinplot.pdf%
+    }\caption{Distribution of time taken by initialisation for the zoo animal
+              dataset.}
 \end{figure}
