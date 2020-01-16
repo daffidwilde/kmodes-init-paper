@@ -1,15 +1,17 @@
 \section{Experimental results}\label{sec:results}
 
-To give comparative results on the quality of the initialisation processes 
+To give comparative results on the quality of the initialisation processes
 considered in this work, four well-known, categorical, labelled datasets ---
-soybean (large), mushroom, breast cancer, and zoo animal --- will be clustered
-by the \(k\)-modes algorithm with each of the initialisation processes using
-their respective number of classes as the number of clusters. These datasets
-have been chosen to fall in line with the established literature, and for their
-relative sizes and complexities. Each dataset is openly available under the
-\href{http://mlr.cs.umass.edu/ml/}{UCI Machine Learning
-Repository}~\cite{Dua2019}, and their characteristics are summarised in
-Table~\ref{tab:dataset_summary}.
+soybean (large), mushroom, breast cancer, and nursery --- will be clustered by
+the \(k\)-modes algorithm with each of the initialisation processes. These
+datasets have been chosen to fall in line with the established literature, and
+for their relative sizes and complexities. Each dataset is openly available
+under the UCI Machine Learning Repository~\cite{Dua2019}, and their
+characteristics are summarised in Table~\ref{tab:dataset_summary}. In this
+analysis, two choices for \(k\) are used: (i) the number of classes in a
+dataset as the number of clusters, and (ii) the value obtained via the knee
+point detection algorithm up to a maximum of
+\(\lfloor\sqrt{N}\rfloor\) clusters~\cite{Satopaa2011}.
 
 \begin{table}[htbp]
     \resizebox{\textwidth}{!}{%
@@ -37,15 +39,15 @@ additional, and often useful, metric is the silhouette coefficient. This
 measures the ratio between the intra-cluster cohesion and inter-cluster
 separation of a particular clustering. Therefore, it could be used in a similar
 way to reveal the effect of each initialisation method at the beginning and end
-of a run of \(k\)-modes.  Unfortunately, this metric loses its intuition under
-the distance measure employed here. The remaining performance measures used are
-the number of iterations for the \(k\)-modes algorithm to terminate and the time
-taken in seconds.
+of a run of \(k\)-modes. Unfortunately, this metric loses its intuition under
+the distance measure employed here and is omitted. The remaining performance
+measures used are the number of iterations for the \(k\)-modes algorithm to
+terminate and the time taken to terminate in seconds.
 
 Tables~\ref{tab:breast_cancer_summary}---\ref{tab:soybean_summary} summarise the
 results of each initialisation method on the benchmark datasets. Each column
 shows the mean value of each metric and its standard deviation in parentheses
-over \input{./tex/repetitions.tex} repetitions of the \(k\)-modes algorithm. The
+over \input{./tex/repetitions.tex}repetitions of the \(k\)-modes algorithm. The
 data for these results was generated using the Python library
 \href{https://github.com/nicodv/kmodes}{\texttt{kmodes}} in which the proposed
 method has been implemented. All of the data included in this paper, and the
@@ -70,4 +72,5 @@ code to generate it are archived online~\textcolor{red}{code and data DOI}.
     }
     \captionof{table}{Summative metric results for the soybean dataset with
     \(k=6\).}\label{tab:soybean_summary}\vspace{20pt}
+
 \end{table}
