@@ -82,26 +82,18 @@ mushroom = pd.read_csv(
     ],
 )
 
-zoo = pd.read_csv(
-    "http://archive.ics.uci.edu/ml/" "machine-learning-databases/zoo/zoo.data",
+nursery = pd.read_csv(
+    "https://archive.ics.uci.edu/ml/"
+    "machine-learning-databases/nursery/nursery.data",
     names=[
-        "animal_name",
-        "hair",
-        "feathers",
-        "eggs",
-        "milk",
-        "airborne",
-        "aquatic",
-        "predator",
-        "toothed",
-        "backbone",
-        "breathes",
-        "venomous",
-        "fins",
-        "legs",
-        "tail",
-        "domestic",
-        "catsize",
+        "parents",
+        "has_nurs",
+        "form",
+        "children",
+        "housing",
+        "finance",
+        "social",
+        "health",
         "class",
     ],
 )
@@ -141,7 +133,7 @@ vehicle = pd.DataFrame(
 
 # Write them all to file
 for name, dataset in zip(
-    ["soybean", "mushroom", "zoo", "breast_cancer", "vehicle"],
-    [soybean, mushroom, zoo, breast_cancer, vehicle],
+    ["soybean", "mushroom", "nursery", "breast_cancer", "vehicle"],
+    [soybean, mushroom, nursery, breast_cancer, vehicle],
 ):
     dataset.to_csv(f"../data/{name}.csv", index=False)
