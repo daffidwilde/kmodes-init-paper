@@ -2,16 +2,12 @@
 
 To give comparative results on the quality of the initialisation processes
 considered in this work, four well-known, categorical, labelled datasets ---
-soybean (large), mushroom, breast cancer, and nursery --- will be clustered by
+breast cancer, mushroom, nursery, and soybean (large) --- will be clustered by
 the \(k\)-modes algorithm with each of the initialisation processes. These
 datasets have been chosen to fall in line with the established literature, and
 for their relative sizes and complexities. Each dataset is openly available
 under the UCI Machine Learning Repository~\cite{Dua2019}, and their
-characteristics are summarised in Table~\ref{tab:dataset_summary}. In this
-analysis, two choices for \(k\) are used: (i) the number of classes in a
-dataset as the number of clusters, and (ii) the value obtained via the knee
-point detection algorithm up to a maximum of
-\(\lfloor\sqrt{N}\rfloor\) clusters~\cite{Satopaa2011}.
+characteristics are summarised in Table~\ref{tab:dataset_summary}.
 
 \begin{table}[htbp]
     \resizebox{\textwidth}{!}{%
@@ -44,6 +40,38 @@ the distance measure employed here and is omitted. The remaining performance
 measures used are the number of iterations for the \(k\)-modes algorithm to
 terminate and the time taken to terminate in seconds.
 
+The final piece of information required in this analysis is a choice for \(k\)
+for each dataset. An immediate choice is the number of classes that are present
+in a dataset but, as stated above, this is not necessarily a fair or wise choice
+since the classes may not be representative of true clusters. A popular strategy
+for choosing an optimal number of clusters is known as the `elbow' method. The
+aim of this method is to identify a kink (elbow) in a plot of number of clusters
+against cost for a dataset. This kink suggests that an increase in \(k\) from
+there would not sufficiently improve the performance of the model. On its own,
+this method is vague and somewhat unreliable which raises a number of questions:
+\begin{itemize}
+    \item What constitutes a kink?
+    \item How does one discern between multiple kinks?
+    \item Is the decision subjective with respect to the observer?
+\end{itemize}
+
+Alas, an alternative `elbow' may be identified objectively by using
+the knee point detection algorithm~\cite{Satopaa2011} where the maximal
+value of \(k\) is taken to be \(\lfloor\sqrt{N}\rfloor\). This algorithm
+identifies the value of \(k\) with the maximum curvature in the plot described
+above by computation rather than inspection --- eliminating the concerns raised.
+An example plot for the nursery dataset is given in
+Figure~\ref{fig:nursery_costs} where the clustering is performed using Cao's
+method.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\linewidth]{./img/elbow/nursery_costs.pdf}
+    \caption{An elbow plot for the nursery dataset.}\label{fig:nursery_costs}
+\end{figure}
+
+\subsection{Elbow method}
+
 Tables~\ref{tab:breast_cancer_summary}---\ref{tab:soybean_summary} summarise the
 results of each initialisation method on the benchmark datasets. Each column
 shows the mean value of each metric and its standard deviation in parentheses
@@ -59,18 +87,79 @@ code to generate it are archived online~\textcolor{red}{code and data DOI}.
         \input{./tex/elbow/breast_cancer_summary.tex}
     }
     \captionof{table}{Summative metric results for the breast cancer dataset
-    with \(k=10\).}\label{tab:breast_cancer_summary}\vspace{20pt}
+    with \(k=8\).}\label{tab:breast_cancer_summary}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/elbow/mushroom_summary.tex}
     }
     \captionof{table}{Summative metric results for the mushroom dataset with
-    \(k=4\).}\label{tab:mushroom_summary}\vspace{20pt}
+    \(k=17\).}\label{tab:mushroom_summary}\vspace{20pt}
+
+    \resizebox{\textwidth}{!}{%
+        \input{./tex/elbow/nursery_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the nursery dataset with
+    \(k=23\).}\label{tab:nursery_summary}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/elbow/soybean_summary.tex}
     }
     \captionof{table}{Summative metric results for the soybean dataset with
-    \(k=6\).}\label{tab:soybean_summary}\vspace{20pt}
-
+    \(k=8\).}\label{tab:soybean_summary}
 \end{table}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/breast_cancer_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/breast_cancer_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/breast_cancer_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/mushroom_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/mushroom_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/mushroom_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/soybean_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/soybean_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/soybean_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/nursery_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/nursery_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {./img/elbow/nursery_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
