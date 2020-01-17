@@ -66,188 +66,302 @@ method.
 
 \begin{figure}
     \centering
-    \includegraphics[width=.6\linewidth]{./img/elbow/nursery_costs.pdf}
+    \includegraphics[width=.8\linewidth]{./img/elbow/nursery_costs.pdf}
     \caption{An elbow plot for the nursery dataset using Cao's initialisation
              method.}\label{fig:nursery_costs}
 \end{figure}
 
-\subsection{Elbow method}
+\subsection{Elbow method}\label{subsec:elbow}
 \graphicspath{{./img/elbow/}}
 
-Tables~\ref{tab:breast_cancer_summary_elbow}---\ref{tab:soybean_summary_elbow}
+Tables~\ref{tab:breast_cancer_elbow}---\ref{tab:soybean_elbow}
 summarise the results of each initialisation method on the benchmark datasets
 where the number of clusters has been determined by the knee point detection
 algorithm. Each column shows the mean value of each metric and its standard
 deviation in parentheses over \input{./tex/repetitions.tex}independent
 repetitions of the \(k\)-modes algorithm.
 
-\begin{table}
+By examining these tables it would seem that the proposed method and Huang's
+method are comparable across the board --- although the proposed method is
+faster despite taking more iterations in general. More importantly though, it
+appears that Cao's method performs the best out of the three initialisation
+methods: in terms of initial and final costs Cao's method improves, on average,
+by roughly 10 percent against the next best method for the three datasets that
+it succeeds with; the number of iterations is comparable; and the computation
+time is substantially less than the other two considering it is a deterministic
+method and need only be run once to achieve this performance.
+
+However, in the \(k\)-means paradigm, a particular clustering is selected based
+on it having the minimum final cost over a number of runs of the algorithm ---
+not the mean --- and while Cao's method is very reliable, in that there is no
+variation at all, it does not always produce the best clustering possible. There
+is a trade-off to be made between computational time and performance here. In
+order to gain more insight into the performance of each method, less granular
+analysis is required.
+Figures~\ref{fig:breast_cancer_elbow}---\ref{fig:soybean_elbow} display the
+cost function results for each dataset in the form of a scatter plot and two
+empirical cumulative density function (CDF) plots, highlighting the breadth and
+depth of the behaviours exhibited by each initialisation method.
+
+Looking at Figure~\ref{fig:breast_cancer_elbow} it is clear that in terms of
+final cost Cao's method is middling when compared to the other methods. This
+was apparent from Table~\ref{tab:breast_cancer_elbow} and, indeed, Huang's and
+the proposed method are both very comparable when looking at the main body of
+the results. However, since the criterion for the best clustering (in practical
+terms) is having the minimum final cost, it is evident that the proposed method
+is superior; that the method produces clusterings with a larger cost
+range (indicated by the trailing right-hand side of each CDF plot) is irrelevant
+for the same reason.
+
+This pattern of largely similar behaviour between Huang's and the proposed
+method is apparent in each of the figures here, and in each case the proposed
+method outperforms Huang's. In fact, in all cases except for the nursery
+dataset, the proposed method achieves the lowest final cost of all the methods.
+
+In the case of the nursery dataset, Cao's method is unquestionably the best
+performing initialisation method. It should be noted that none of the
+methods were able to find an initial clustering that could be improved on, and
+that this dataset exactly describes the entire attribute space in which it
+exists. This property could be why the other methods fall behind Cao's so
+decisively in that Cao's method is able to definitively choose the \(k\) most
+dense-whilst-separated points in the attribute space as the initial cluster
+centres.
+
+\begin{remark}
+The soybean dataset acts as an example where the labels attached to the data may
+be too fine with respect to the space in which the data exists. That is, in this
+case, only 8 clusters were identified from a possible 15 classes. This indicates
+that some of the classes are not easily distinguished from one another. Likewise
+with the remaining datasets, an increase in the number of clusters on the number
+of classes could suggest that the classes are too vague or at the very least
+that more structure exists in the data than is imposed. In any case, the choice
+of \(k\) when clustering is of great importance and should strike a balance
+between explaining structure in the data and interpretability of a model.
+\end{remark}
+
+\begin{table}[htbp]
     \centering
-    \resizebox{\textwidth}{!}{%
+    \resizebox{\tablewidth}{!}{%
         \input{./tex/elbow/breast_cancer_summary.tex}
     }
     \captionof{table}{Summative metric results for the breast cancer dataset
-    with \(k=8\).}\label{tab:breast_cancer_summary_elbow}\vspace{20pt}
+    with \(k=8\).}\label{tab:breast_cancer_elbow}\vspace{20pt}
 
-    \resizebox{\textwidth}{!}{%
+    \resizebox{\tablewidth}{!}{%
         \input{./tex/elbow/mushroom_summary.tex}
     }
     \captionof{table}{Summative metric results for the mushroom dataset with
-    \(k=17\).}\label{tab:mushroom_summary_elbow}\vspace{20pt}
+    \(k=17\).}\label{tab:mushroom_elbow}\vspace{20pt}
 
-    \resizebox{\textwidth}{!}{%
+    \resizebox{\tablewidth}{!}{%
         \input{./tex/elbow/nursery_summary.tex}
     }
     \captionof{table}{Summative metric results for the nursery dataset with
-    \(k=23\).}\label{tab:nursery_summary_elbow}\vspace{20pt}
+    \(k=23\).}\label{tab:nursery_elbow}\vspace{20pt}
 
-    \resizebox{\textwidth}{!}{%
+    \resizebox{\tablewidth}{!}{%
         \input{./tex/elbow/soybean_summary.tex}
     }
     \captionof{table}{Summative metric results for the soybean dataset with
-    \(k=8\).}\label{tab:soybean_summary_elbow}
+    \(k=8\).}\label{tab:soybean_elbow}
 \end{table}
 
 \begin{figure}
-    \begin{minipage}{.5\textwidth}
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {breast_cancer_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {breast_cancer_initial_cost_cdfplot.pdf}
 
-        \includegraphics[width=\linewidth]%
+            \includegraphics[width=\linewidth]%
             {breast_cancer_final_cost_cdfplot.pdf}
-    \end{minipage}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the breast cancer dataset with \(k=8\).}%
+    \label{fig:breast_cancer_elbow}
 \end{figure}
 
 \begin{figure}
-    \begin{minipage}{.5\textwidth}
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {mushroom_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}
-
+            {mushroom_initial_cost_cdfplot.pdf}\\
         \includegraphics[width=\linewidth]%
             {mushroom_final_cost_cdfplot.pdf}
-    \end{minipage}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the mushroom dataset with \(k=17\).}%
+    \label{fig:mushroom_elbow}
 \end{figure}
 
 \begin{figure}
-    \begin{minipage}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}
-
-        \includegraphics[width=\linewidth]%
-            {soybean_final_cost_cdfplot.pdf}
-    \end{minipage}
-\end{figure}
-
-\begin{figure}
-    \begin{minipage}{.5\textwidth}
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {nursery_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}
-
+            {nursery_initial_cost_cdfplot.pdf}\\
         \includegraphics[width=\linewidth]%
             {nursery_final_cost_cdfplot.pdf}
-    \end{minipage}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the nursery dataset with \(k=23\).}%
+    \label{fig:nursery_elbow}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {soybean_cost_scatterplot.pdf}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {soybean_initial_cost_cdfplot.pdf}\\
+        \includegraphics[width=\linewidth]%
+            {soybean_final_cost_cdfplot.pdf}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the soybean dataset with \(k=8\).}%
+    \label{fig:soybean_elbow}
 \end{figure}
 
 
 \subsection{Number of classes}
 \graphicspath{{./img/nclasses/}}
 
-\begin{table}
+As is discussed above, the often automatic choice for \(k\) is the number of
+classes present in the data; this subsection repeats the analysis as with the
+elbow method but with this traditional choice for \(k\).
+Tables~\ref{tab:breast_cancer_nclasses}---\ref{tab:soybean_nclasses}
+contain the analogous summaries of each initialisation method's performance on
+the benchmark datasets over the same number of repetitions.
+
+\begin{table}[htbp]
     \centering
-    \resizebox{\textwidth}{!}{%
+    \resizebox{\tablewidth}{!}{%
         \input{./tex/nclasses/breast_cancer_summary.tex}
     }
     \captionof{table}{Summative metric results for the breast cancer dataset
-    with \(k=8\).}\label{tab:breast_cancer_summary_nclasses}\vspace{20pt}
+    with \(k=2\).}\label{tab:breast_cancer_nclasses}\vspace{20pt}
 
-    \resizebox{\textwidth}{!}{%
+    \resizebox{\tablewidth}{!}{%
         \input{./tex/nclasses/mushroom_summary.tex}
     }
     \captionof{table}{Summative metric results for the mushroom dataset with
-    \(k=17\).}\label{tab:mushroom_summary_nclasses}\vspace{20pt}
+    \(k=2\).}\label{tab:mushroom_nclasses}\vspace{20pt}
 
-    \resizebox{\textwidth}{!}{%
-        \input{./tex/elbow/nursery_summary.tex}
+    \resizebox{\tablewidth}{!}{%
+        \input{./tex/nclasses/nursery_summary.tex}
     }
     \captionof{table}{Summative metric results for the nursery dataset with
-    \(k=23\).}\label{tab:nursery_summary_nclasses}\vspace{20pt}
+    \(k=5\).}\label{tab:nursery_nclasses}\vspace{20pt}
 
-    \resizebox{\textwidth}{!}{%
-        \input{./tex/elbow/soybean_summary.tex}
+    \resizebox{\tablewidth}{!}{%
+        \input{./tex/nclasses/soybean_summary.tex}
     }
     \captionof{table}{Summative metric results for the soybean dataset with
-    \(k=8\).}\label{tab:soybean_summary_nclasses}
+    \(k=15\).}\label{tab:soybean_nclasses}
 \end{table}
 
+An immediate comparison to the previous tables is that for all datasets bar the
+soybean dataset, the mean costs are significantly higher and the computation
+times are lower. These effects come directly from the choice of \(k\) in that
+higher values of \(k\) will require more checks (and thus computational time)
+but will typically lead to more homogeneous clusters, reducing their
+within-cluster dissimilarity and therefore cost.
+
 \begin{figure}
-    \begin{minipage}{.5\textwidth}
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {breast_cancer_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {breast_cancer_initial_cost_cdfplot.pdf}
 
         \includegraphics[width=\linewidth]%
             {breast_cancer_final_cost_cdfplot.pdf}
-    \end{minipage}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the breast cancer dataset with \(k=2\).}%
+    \label{fig:breast_cancer_elbow}
 \end{figure}
 
 \begin{figure}
-    \begin{minipage}{.5\textwidth}
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {mushroom_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}
-
+            {mushroom_initial_cost_cdfplot.pdf}\\
         \includegraphics[width=\linewidth]%
             {mushroom_final_cost_cdfplot.pdf}
-    \end{minipage}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the mushroom dataset with \(k=2\).}%
+    \label{fig:mushroom_elbow}
 \end{figure}
 
 \begin{figure}
-    \begin{minipage}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}
-
-        \includegraphics[width=\linewidth]%
-            {soybean_final_cost_cdfplot.pdf}
-    \end{minipage}
-\end{figure}
-
-\begin{figure}
-    \begin{minipage}{.5\textwidth}
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
             {nursery_cost_scatterplot.pdf}
-    \end{minipage}
-    \begin{minipage}{.5\textwidth}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}
-
+            {nursery_initial_cost_cdfplot.pdf}\\
         \includegraphics[width=\linewidth]%
             {nursery_final_cost_cdfplot.pdf}
-    \end{minipage}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the nursery dataset with \(k=5\).}%
+    \label{fig:nursery_elbow}
+\end{figure}
+
+\begin{figure}
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {soybean_cost_scatterplot.pdf}
+        \caption{Scatter plot of initial and final costs.}
+    \end{subfigure}
+    \hfill%
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {soybean_initial_cost_cdfplot.pdf}\\
+        \includegraphics[width=\linewidth]%
+            {soybean_final_cost_cdfplot.pdf}
+        \caption{Empirical CDF plots for initial (top) and final (bottom)
+                 costs.}
+    \end{subfigure}
+    \caption{Summative plots for the soybean dataset with \(k=15\).}%
+    \label{fig:soybean_elbow}
 \end{figure}
 
