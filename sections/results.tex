@@ -72,15 +72,14 @@ method.
 \end{figure}
 
 \subsection{Elbow method}
+\graphicspath{{./img/elbow/}}
 
-Tables~\ref{tab:breast_cancer_summary}---\ref{tab:soybean_summary} summarise the
-results of each initialisation method on the benchmark datasets. Each column
-shows the mean value of each metric and its standard deviation in parentheses
-over \input{./tex/repetitions.tex}repetitions of the \(k\)-modes algorithm. The
-data for these results was generated using the Python library
-\href{https://github.com/nicodv/kmodes}{\texttt{kmodes}} in which the proposed
-method has been implemented. All of the data included in this paper, and the
-code to generate it are archived online~\textcolor{red}{code and data DOI}.
+Tables~\ref{tab:breast_cancer_summary_elbow}---\ref{tab:soybean_summary_elbow}
+summarise the results of each initialisation method on the benchmark datasets
+where the number of clusters has been determined by the knee point detection
+algorithm. Each column shows the mean value of each metric and its standard
+deviation in parentheses over \input{./tex/repetitions.tex}independent
+repetitions of the \(k\)-modes algorithm.
 
 \begin{table}
     \centering
@@ -88,79 +87,167 @@ code to generate it are archived online~\textcolor{red}{code and data DOI}.
         \input{./tex/elbow/breast_cancer_summary.tex}
     }
     \captionof{table}{Summative metric results for the breast cancer dataset
-    with \(k=8\).}\label{tab:breast_cancer_summary}\vspace{20pt}
+    with \(k=8\).}\label{tab:breast_cancer_summary_elbow}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/elbow/mushroom_summary.tex}
     }
     \captionof{table}{Summative metric results for the mushroom dataset with
-    \(k=17\).}\label{tab:mushroom_summary}\vspace{20pt}
+    \(k=17\).}\label{tab:mushroom_summary_elbow}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/elbow/nursery_summary.tex}
     }
     \captionof{table}{Summative metric results for the nursery dataset with
-    \(k=23\).}\label{tab:nursery_summary}\vspace{20pt}
+    \(k=23\).}\label{tab:nursery_summary_elbow}\vspace{20pt}
 
     \resizebox{\textwidth}{!}{%
         \input{./tex/elbow/soybean_summary.tex}
     }
     \captionof{table}{Summative metric results for the soybean dataset with
-    \(k=8\).}\label{tab:soybean_summary}
+    \(k=8\).}\label{tab:soybean_summary_elbow}
 \end{table}
 
 \begin{figure}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/breast_cancer_cost_scatterplot.pdf}
+            {breast_cancer_cost_scatterplot.pdf}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/breast_cancer_initial_cost_cdfplot.pdf}
+            {breast_cancer_initial_cost_cdfplot.pdf}
 
         \includegraphics[width=\linewidth]%
-            {./img/elbow/breast_cancer_final_cost_cdfplot.pdf}
+            {breast_cancer_final_cost_cdfplot.pdf}
     \end{minipage}
 \end{figure}
 
 \begin{figure}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/mushroom_cost_scatterplot.pdf}
+            {mushroom_cost_scatterplot.pdf}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/mushroom_initial_cost_cdfplot.pdf}
+            {mushroom_initial_cost_cdfplot.pdf}
 
         \includegraphics[width=\linewidth]%
-            {./img/elbow/mushroom_final_cost_cdfplot.pdf}
+            {mushroom_final_cost_cdfplot.pdf}
     \end{minipage}
 \end{figure}
 
 \begin{figure}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/soybean_cost_scatterplot.pdf}
+            {soybean_cost_scatterplot.pdf}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/soybean_initial_cost_cdfplot.pdf}
+            {soybean_initial_cost_cdfplot.pdf}
 
         \includegraphics[width=\linewidth]%
-            {./img/elbow/soybean_final_cost_cdfplot.pdf}
+            {soybean_final_cost_cdfplot.pdf}
     \end{minipage}
 \end{figure}
 
 \begin{figure}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/nursery_cost_scatterplot.pdf}
+            {nursery_cost_scatterplot.pdf}
     \end{minipage}
     \begin{minipage}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {./img/elbow/nursery_initial_cost_cdfplot.pdf}
+            {nursery_initial_cost_cdfplot.pdf}
 
         \includegraphics[width=\linewidth]%
-            {./img/elbow/nursery_final_cost_cdfplot.pdf}
+            {nursery_final_cost_cdfplot.pdf}
     \end{minipage}
 \end{figure}
+
+
+\subsection{Number of classes}
+\graphicspath{{./img/nclasses/}}
+
+\begin{table}
+    \centering
+    \resizebox{\textwidth}{!}{%
+        \input{./tex/nclasses/breast_cancer_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the breast cancer dataset
+    with \(k=8\).}\label{tab:breast_cancer_summary_nclasses}\vspace{20pt}
+
+    \resizebox{\textwidth}{!}{%
+        \input{./tex/nclasses/mushroom_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the mushroom dataset with
+    \(k=17\).}\label{tab:mushroom_summary_nclasses}\vspace{20pt}
+
+    \resizebox{\textwidth}{!}{%
+        \input{./tex/elbow/nursery_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the nursery dataset with
+    \(k=23\).}\label{tab:nursery_summary_nclasses}\vspace{20pt}
+
+    \resizebox{\textwidth}{!}{%
+        \input{./tex/elbow/soybean_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the soybean dataset with
+    \(k=8\).}\label{tab:soybean_summary_nclasses}
+\end{table}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {breast_cancer_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {breast_cancer_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {breast_cancer_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {mushroom_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {mushroom_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {mushroom_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {soybean_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {soybean_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {soybean_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {nursery_cost_scatterplot.pdf}
+    \end{minipage}
+    \begin{minipage}{.5\textwidth}
+        \includegraphics[width=\linewidth]%
+            {nursery_initial_cost_cdfplot.pdf}
+
+        \includegraphics[width=\linewidth]%
+            {nursery_final_cost_cdfplot.pdf}
+    \end{minipage}
+\end{figure}
+
