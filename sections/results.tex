@@ -19,11 +19,20 @@ Clustering algorithms are often evaluated based on their performance as a
 classifier~\cite{%
     Arthur2007,Cao2009,Cao2012,Huang1998,Ng2007,Olaode2014,Schaeffer2007%
 }. This is a fundamentally flawed approach --- especially given that
-classification belongs to an entirely different branch of learning. Moreover,
+classification belongs to an entirely different branch of learning.  Moreover,
 doing so requires a number of assumptions about the topology of the data within
-the metric space that is being considered~\cite{Memoli2011}. One such assumption
-is that the classes recorded in the data are indeed separable objects like
-clusters.
+the metric space that is being considered~\cite{Memoli2011}.  One such
+assumption is that the classes recorded in the data are indeed separable objects
+like clusters. The soybean dataset acts as an example where the labels attached
+to the dataset may be too fine with respect to the space in which the data
+exists. That is, in this case, only 8 clusters were identified from a possible
+15 classes. This indicates that some of the classes are not easily distinguished
+from one another. Likewise with the remaining datasets, an increase in the
+number of clusters on the number of classes could suggest that the classes are
+too vague or at the very least that more structure exists in the data than is
+imposed. In any case, the choice of \(k\) when clustering is of great importance
+and should strike a balance between explaining structure in the data and
+interpretability of a model.
 
 This analysis does not consider evaluative metrics related to classification
 such as accuracy, recall or precision. Instead, only internal measures are
@@ -46,23 +55,16 @@ in a dataset but, as stated above, this is not necessarily a fair or wise choice
 since the classes may not be representative of true clusters. A popular strategy
 for choosing an optimal number of clusters is known as the `elbow' method. The
 aim of this method is to identify a kink (elbow) in a plot of number of clusters
-against cost for a dataset. This kink suggests that an increase in \(k\) from
-there would not sufficiently improve the performance of the model. On its own,
-this method is vague and somewhat unreliable which raises a number of questions:
+against cost for a dataset. Figure~\ref{fig:nursery_costs} is an example of such
+a plot for the nursery dataset. This kink suggests that an increase in \(k\)
+from there would not sufficiently improve the performance of the model. On its
+own, this method is vague and somewhat unreliable which raises a number of
+questions:
 \begin{itemize}
     \item What constitutes a kink?
     \item How does one discern between multiple kinks?
-    \item Is the decision subjective with respect to the observer?
+    \item Is choosing a particular kink subjective to the observer?
 \end{itemize}
-
-Alas, an alternative `elbow' may be identified objectively by using
-the knee point detection algorithm~\cite{Satopaa2011} where the maximal
-value of \(k\) is taken to be \(\lfloor\sqrt{N}\rfloor\). This algorithm
-identifies the value of \(k\) with the maximum curvature in the plot described
-above by computation rather than inspection --- eliminating the concerns raised.
-An example plot for the nursery dataset is given in
-Figure~\ref{fig:nursery_costs} where the clustering is performed using Cao's
-method.
 
 \begin{figure}
     \centering
@@ -70,6 +72,12 @@ method.
     \caption{An elbow plot for the nursery dataset using Cao's initialisation
              method.}\label{fig:nursery_costs}
 \end{figure}
+
+An alternative `elbow' may be identified objectively by using the knee point
+detection algorithm~\cite{Satopaa2011} where the maximal value of \(k\) is taken
+to be \(\lfloor\sqrt{N}\rfloor\). This algorithm identifies the value of \(k\)
+with the maximum curvature in the plot described above by computation rather
+than inspection --- eliminating the concerns raised.
 
 \subsection{Elbow method}\label{subsec:elbow}
 \graphicspath{{./img/elbow/}}
@@ -80,6 +88,33 @@ where the number of clusters has been determined by the knee point detection
 algorithm. Each column shows the mean value of each metric and its standard
 deviation in parentheses over \input{./tex/repetitions.tex}independent
 repetitions of the \(k\)-modes algorithm.
+
+\begin{table}[htbp]
+    \centering
+    \resizebox{\tablewidth}{!}{%
+        \input{./tex/elbow/breast_cancer_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the breast cancer dataset
+    with \(k=8\).}\label{tab:breast_cancer_elbow}\vspace{20pt}
+
+    \resizebox{\tablewidth}{!}{%
+        \input{./tex/elbow/mushroom_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the mushroom dataset with
+    \(k=17\).}\label{tab:mushroom_elbow}\vspace{20pt}
+
+    \resizebox{\tablewidth}{!}{%
+        \input{./tex/elbow/nursery_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the nursery dataset with
+    \(k=23\).}\label{tab:nursery_elbow}\vspace{20pt}
+
+    \resizebox{\tablewidth}{!}{%
+        \input{./tex/elbow/soybean_summary.tex}
+    }
+    \captionof{table}{Summative metric results for the soybean dataset with
+    \(k=8\).}\label{tab:soybean_elbow}
+\end{table}
 
 By examining these tables it would seem that the proposed method and Huang's
 method are comparable across the board --- although the proposed method is
@@ -116,7 +151,8 @@ for the same reason.
 This pattern of largely similar behaviour between Huang's and the proposed
 method is apparent in each of the figures here, and in each case the proposed
 method outperforms Huang's. In fact, in all cases except for the nursery
-dataset, the proposed method achieves the lowest final cost of all the methods.
+dataset, the proposed method achieves the lowest final cost of all the methods
+and, as such, performs the best in practical terms on these particular datasets.
 
 In the case of the nursery dataset, Cao's method is unquestionably the best
 performing initialisation method. It should be noted that none of the
@@ -124,47 +160,10 @@ methods were able to find an initial clustering that could be improved on, and
 that this dataset exactly describes the entire attribute space in which it
 exists. This property could be why the other methods fall behind Cao's so
 decisively in that Cao's method is able to definitively choose the \(k\) most
-dense-whilst-separated points in the attribute space as the initial cluster
-centres.
-
-\begin{remark}
-The soybean dataset acts as an example where the labels attached to the data may
-be too fine with respect to the space in which the data exists. That is, in this
-case, only 8 clusters were identified from a possible 15 classes. This indicates
-that some of the classes are not easily distinguished from one another. Likewise
-with the remaining datasets, an increase in the number of clusters on the number
-of classes could suggest that the classes are too vague or at the very least
-that more structure exists in the data than is imposed. In any case, the choice
-of \(k\) when clustering is of great importance and should strike a balance
-between explaining structure in the data and interpretability of a model.
-\end{remark}
-
-\begin{table}[htbp]
-    \centering
-    \resizebox{\tablewidth}{!}{%
-        \input{./tex/elbow/breast_cancer_summary.tex}
-    }
-    \captionof{table}{Summative metric results for the breast cancer dataset
-    with \(k=8\).}\label{tab:breast_cancer_elbow}\vspace{20pt}
-
-    \resizebox{\tablewidth}{!}{%
-        \input{./tex/elbow/mushroom_summary.tex}
-    }
-    \captionof{table}{Summative metric results for the mushroom dataset with
-    \(k=17\).}\label{tab:mushroom_elbow}\vspace{20pt}
-
-    \resizebox{\tablewidth}{!}{%
-        \input{./tex/elbow/nursery_summary.tex}
-    }
-    \captionof{table}{Summative metric results for the nursery dataset with
-    \(k=23\).}\label{tab:nursery_elbow}\vspace{20pt}
-
-    \resizebox{\tablewidth}{!}{%
-        \input{./tex/elbow/soybean_summary.tex}
-    }
-    \captionof{table}{Summative metric results for the soybean dataset with
-    \(k=8\).}\label{tab:soybean_elbow}
-\end{table}
+dense-whilst-separated points from the attribute space as the initial cluster
+centres whereas the other two methods are in essence randomly sampling from this
+space. That each initial solution is locally optimal remains a mystery
+\textcolor{red}{potential for further work?}.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
@@ -195,7 +194,8 @@ between explaining structure in the data and interpretability of a model.
     \hfill%
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}\\
+            {mushroom_initial_cost_cdfplot.pdf}
+        
         \includegraphics[width=\linewidth]%
             {mushroom_final_cost_cdfplot.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
@@ -214,7 +214,8 @@ between explaining structure in the data and interpretability of a model.
     \hfill%
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}\\
+            {nursery_initial_cost_cdfplot.pdf}
+
         \includegraphics[width=\linewidth]%
             {nursery_final_cost_cdfplot.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
@@ -233,7 +234,8 @@ between explaining structure in the data and interpretability of a model.
     \hfill%
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}\\
+            {soybean_initial_cost_cdfplot.pdf}
+
         \includegraphics[width=\linewidth]%
             {soybean_final_cost_cdfplot.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
@@ -288,6 +290,16 @@ higher values of \(k\) will require more checks (and thus computational time)
 but will typically lead to more homogeneous clusters, reducing their
 within-cluster dissimilarity and therefore cost.
 
+Looking at these tables on their own, Cao's method is the superior
+initialisation method on average: the means are substantially lower in terms of
+initial and final cost; there is no deviation in these results; again, the total
+computational time is a fraction of the other two methods. It is also apparent
+that Huang's method and the proposed extension are very comparable on average.
+As before, finer investigation will require finer visualisations.
+Figures~\ref{fig:breast_cancer_nclasses}---\ref{fig:soybean_nclasses} show the
+same plots as in the previous subsection except the number of clusters has been
+taken to be the number of classes present in each dataset.
+
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
@@ -305,7 +317,7 @@ within-cluster dissimilarity and therefore cost.
                  costs.}
     \end{subfigure}
     \caption{Summative plots for the breast cancer dataset with \(k=2\).}%
-    \label{fig:breast_cancer_elbow}
+    \label{fig:breast_cancer_nclasses}
 \end{figure}
 
 \begin{figure}
@@ -317,14 +329,15 @@ within-cluster dissimilarity and therefore cost.
     \hfill%
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}\\
+            {mushroom_initial_cost_cdfplot.pdf}
+
         \includegraphics[width=\linewidth]%
             {mushroom_final_cost_cdfplot.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
     \caption{Summative plots for the mushroom dataset with \(k=2\).}%
-    \label{fig:mushroom_elbow}
+    \label{fig:mushroom_nclasses}
 \end{figure}
 
 \begin{figure}
@@ -336,14 +349,15 @@ within-cluster dissimilarity and therefore cost.
     \hfill%
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}\\
+            {nursery_initial_cost_cdfplot.pdf}
+
         \includegraphics[width=\linewidth]%
             {nursery_final_cost_cdfplot.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
     \caption{Summative plots for the nursery dataset with \(k=5\).}%
-    \label{fig:nursery_elbow}
+    \label{fig:nursery_nclasses}
 \end{figure}
 
 \begin{figure}
@@ -355,13 +369,14 @@ within-cluster dissimilarity and therefore cost.
     \hfill%
     \begin{subfigure}{.5\textwidth}
         \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}\\
+            {soybean_initial_cost_cdfplot.pdf}
+
         \includegraphics[width=\linewidth]%
             {soybean_final_cost_cdfplot.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
     \caption{Summative plots for the soybean dataset with \(k=15\).}%
-    \label{fig:soybean_elbow}
+    \label{fig:soybean_nclasses}
 \end{figure}
 
