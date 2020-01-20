@@ -7,7 +7,10 @@ the \(k\)-modes algorithm with each of the initialisation processes. These
 datasets have been chosen to fall in line with the established literature, and
 for their relative sizes and complexities. Each dataset is openly available
 under the UCI Machine Learning Repository~\cite{Dua2019}, and their
-characteristics are summarised in Table~\ref{tab:dataset_summary}.
+characteristics are summarised in Table~\ref{tab:dataset_summary}. For the
+purposes of this analysis, incomplete instances (i.e.\ where data is missing)
+are excluded and the remaining dataset characteristics are reported as
+`adjusted'.
 
 \begin{table}[htbp]
     \resizebox{\textwidth}{!}{%
@@ -17,7 +20,8 @@ characteristics are summarised in Table~\ref{tab:dataset_summary}.
 
 Clustering algorithms are often evaluated based on their performance as a
 classifier~\cite{%
-    Arthur2007,Cao2009,Cao2012,Huang1998,Ng2007,Olaode2014,Schaeffer2007%
+    Arthur2007,Cao2009,Cao2012,Huang1998,%
+    Ng2007,Olaode2014,Schaeffer2007,Sharma2015%
 }. This is a fundamentally flawed approach --- especially given that
 classification belongs to an entirely different branch of learning.  Moreover,
 doing so requires a number of assumptions about the topology of the data within
@@ -299,6 +303,8 @@ As before, finer investigation will require finer visualisations.
 Figures~\ref{fig:breast_cancer_nclasses}---\ref{fig:soybean_nclasses} show the
 same plots as in the previous subsection except the number of clusters has been
 taken to be the number of classes present in each dataset.
+
+
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
