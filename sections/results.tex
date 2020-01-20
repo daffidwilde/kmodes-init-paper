@@ -304,7 +304,32 @@ Figures~\ref{fig:breast_cancer_nclasses}---\ref{fig:soybean_nclasses} show the
 same plots as in the previous subsection except the number of clusters has been
 taken to be the number of classes present in each dataset.
 
+Figures~\ref{fig:breast_cancer_nclasses}~\&~\ref{fig:mushroom_nclasses} indicate
+that a particular behaviour emerged during the \(k\)-modes runs. Namely, that
+each solution falls into one of (predominantly) two types: effectively no
+improvement on the initial clustering, or terminating at some clustering with a
+practically unique cost across all such solutions. Invariably, Cao's method
+achieves this lower bound and unless Cao's method is used, these particular
+choices for \(k\) mean that the performance of the \(k\)-modes algorithm is
+exceptionally sensitive to its initial clustering. Moreover, the other two
+methods are effectively indistinguishable in these cases.
 
+Another point to be raised from these two figures is that the \(k\)-modes
+algorithm is susceptible to a worsening move between iterations. This may seem
+theoretically counter-intuitive \textcolor{red}{but may be seen as follows\ldots
+Can a small example be thought up? \(k = 2\) is a nice place to start.}
+Fundamentally, this is possible since the cluster centres are updated after
+every point is moved rather than at the end of the iteration. That is, a move
+that may be beneficial when moving a point between clusters may not be
+beneficial to the cluster overall in terms of within-cluster dissimilarity
+by the end of an iteration.
+
+Figure~\ref{fig:nursery_nclasses} corresponds to the nursery dataset with
+\(k~=~5\). In this set of runs, the same pattern emerges where sampling the
+initial centres from amongst the most dense points (via Huang's method and the
+proposed) is an inferior strategy to one considering the entire attribute space
+such as with Cao's method. Again, no method is able to improve on the initial
+solution except for one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
@@ -386,3 +411,13 @@ taken to be the number of classes present in each dataset.
     \label{fig:soybean_nclasses}
 \end{figure}
 
+The primary conclusion from this analysis is that while Huang's method is
+largely comparable to the proposed extension, there is no substantial evidence
+from these use cases to use Huang's method over the one proposed in this work.
+This is due to the proposed method performing better (or as well as) Huang's
+in terms of minimal final costs and computational time over a number of runs in
+both the cases where an external framework is imposed on the data (by choosing
+\(k\) to be the number of classes) and not. Furthermore, though not discussed in
+this work, the matching initialisation method has the scope to allow for expert
+or prior knowledge to be included in an initial clustering by using a particular
+preference list mechanism.
