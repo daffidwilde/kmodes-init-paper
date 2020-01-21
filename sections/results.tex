@@ -166,8 +166,8 @@ exists. This property could be why the other methods fall behind Cao's so
 decisively in that Cao's method is able to definitively choose the \(k\) most
 dense-whilst-separated points from the attribute space as the initial cluster
 centres whereas the other two methods are in essence randomly sampling from this
-space. That each initial solution is locally optimal remains a mystery
-\textcolor{red}{potential for further work?}.
+space. That each initial solution in these repetitions is locally optimal
+remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
@@ -305,24 +305,24 @@ same plots as in the previous subsection except the number of clusters has been
 taken to be the number of classes present in each dataset.
 
 Figures~\ref{fig:breast_cancer_nclasses}~\&~\ref{fig:mushroom_nclasses} indicate
-that a particular behaviour emerged during the \(k\)-modes runs. Namely, that
-each solution falls into one of (predominantly) two types: effectively no
-improvement on the initial clustering, or terminating at some clustering with a
-practically unique cost across all such solutions. Invariably, Cao's method
-achieves this lower bound and unless Cao's method is used, these particular
-choices for \(k\) mean that the performance of the \(k\)-modes algorithm is
-exceptionally sensitive to its initial clustering. Moreover, the other two
-methods are effectively indistinguishable in these cases.
+that a particular behaviour emerged during the runs of the \(k\)-modes
+algorithm. Specifically, each solution falls into one of (predominantly) two
+types: effectively no improvement on the initial clustering, or terminating at
+some clustering with a cost that is bounded below across all such solutions.
+Invariably, Cao's method achieves this lower bound and unless Cao's method is
+used, these particular choices for \(k\) mean that the performance of the
+\(k\)-modes algorithm is exceptionally sensitive to its initial clustering.
+Moreover, the other two methods are effectively indistinguishable in these
+cases and so if a robust solution is required, Cao's method is the only viable
+option.
 
 Another point to be raised from these two figures is that the \(k\)-modes
 algorithm is susceptible to a worsening move between iterations. This may seem
-theoretically counter-intuitive \textcolor{red}{but may be seen as follows\ldots
-Can a small example be thought up? \(k = 2\) is a nice place to start.}
-Fundamentally, this is possible since the cluster centres are updated after
+counter-intuitive but is possible since the cluster centres are updated after
 every point is moved rather than at the end of the iteration. That is, a move
 that may be beneficial when moving a point between clusters may not be
-beneficial to the cluster overall in terms of within-cluster dissimilarity
-by the end of an iteration.
+beneficial to the cluster overall in terms of within-cluster dissimilarity by
+the end of an iteration.
 
 Figure~\ref{fig:nursery_nclasses} corresponds to the nursery dataset with
 \(k~=~5\). In this set of runs, the same pattern emerges where sampling the
