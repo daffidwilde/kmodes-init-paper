@@ -309,12 +309,12 @@ that a particular behaviour emerged during the runs of the \(k\)-modes
 algorithm. Specifically, each solution falls into one of (predominantly) two
 types: effectively no improvement on the initial clustering, or terminating at
 some clustering with a cost that is bounded below across all such solutions.
-Invariably, Cao's method achieves this lower bound and unless Cao's method is
-used, these particular choices for \(k\) mean that the performance of the
-\(k\)-modes algorithm is exceptionally sensitive to its initial clustering.
-Moreover, the other two methods are effectively indistinguishable in these
-cases and so if a robust solution is required, Cao's method is the only viable
-option.
+Invariably, Cao's method achieves or approaches this lower bound and unless
+Cao's method is used, these particular choices for \(k\) mean that the
+performance of the \(k\)-modes algorithm is exceptionally sensitive to its
+initial clustering. Moreover, the other two methods are effectively
+indistinguishable in these cases and so if a robust solution is required, Cao's
+method is the only viable option.
 
 Another point to be raised from these two figures is that the \(k\)-modes
 algorithm is susceptible to a worsening move between iterations. This may seem
@@ -414,10 +414,10 @@ solution except for one repetition with the matching initialisation method.
 The primary conclusion from this analysis is that while Huang's method is
 largely comparable to the proposed extension, there is no substantial evidence
 from these use cases to use Huang's method over the one proposed in this work.
-This is due to the proposed method performing better (or as well as) Huang's
-in terms of minimal final costs and computational time over a number of runs in
-both the cases where an external framework is imposed on the data (by choosing
-\(k\) to be the number of classes) and not. Furthermore, though not discussed in
-this work, the matching initialisation method has the scope to allow for expert
-or prior knowledge to be included in an initial clustering by using a particular
-preference list mechanism.
+This is due to the proposed method consistently performing better (or as well
+as) Huang's method in terms of minimal final costs and computational time over a
+number of runs in both the cases where an external framework is imposed on the
+data (by choosing \(k\) to be the number of classes) and not. Furthermore,
+though not discussed in this work, the matching initialisation method has the
+scope to allow for expert or prior knowledge to be included in an initial
+clustering by using some \textit{ad hoc} preference list mechanism.
