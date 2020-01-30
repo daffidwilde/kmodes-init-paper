@@ -81,7 +81,9 @@ An alternative `elbow' may be identified objectively by using the knee point
 detection algorithm~\cite{Satopaa2011} where the maximal value of \(k\) is taken
 to be \(\lfloor\sqrt{N}\rfloor\). This algorithm identifies the value of \(k\)
 with the maximum curvature in the plot described above by computation rather
-than inspection --- eliminating the concerns raised.
+than inspection --- eliminating the concerns raised. The value of \(k\)
+determined by this algorithm is reported in the final column of
+Table~\ref{tab:dataset_summary}.
 
 \subsection{Elbow method}\label{subsec:elbow}
 \graphicspath{{./img/elbow/}}
@@ -122,13 +124,14 @@ repetitions of the \(k\)-modes algorithm.
 
 By examining these tables it would seem that the proposed method and Huang's
 method are comparable across the board --- although the proposed method is
-faster despite taking more iterations in general. More importantly though, it
-appears that Cao's method performs the best out of the three initialisation
-methods: in terms of initial and final costs Cao's method improves, on average,
-by roughly 10 percent against the next best method for the three datasets that
-it succeeds with; the number of iterations is comparable; and the computation
-time is substantially less than the other two considering it is a deterministic
-method and need only be run once to achieve this performance.
+faster despite taking more iterations in general which may relate to a more
+intuitive initialisation. More importantly though, it appears that Cao's method
+performs the best out of the three initialisation methods: in terms of initial
+and final costs Cao's method improves, on average, by roughly 10 percent against
+the next best method for the three datasets that it succeeds with; the number of
+iterations is comparable; and the computation time is substantially less than
+the other two considering it is a deterministic method and need only be run once
+to achieve this performance.
 
 However, in the \(k\)-means paradigm, a particular clustering is selected based
 on it having the minimum final cost over a number of runs of the algorithm ---
@@ -324,12 +327,13 @@ that may be beneficial when moving a point between clusters may not be
 beneficial to the cluster overall in terms of within-cluster dissimilarity by
 the end of an iteration.
 
-Figure~\ref{fig:nursery_nclasses} corresponds to the nursery dataset with
-\(k~=~5\). In this set of runs, the same pattern emerges where sampling the
-initial centres from amongst the most dense points (via Huang's method and the
-proposed) is an inferior strategy to one considering the entire attribute space
-such as with Cao's method. Again, no method is able to improve on the initial
-solution except for one repetition with the matching initialisation method.
+Figure~\ref{fig:nursery_nclasses} corresponds to the nursery dataset results
+with \(k=5\). In this set of runs, the same pattern emerges as in
+Figure~\ref{fig:nursery_elbow} where sampling the initial centres from amongst
+the most dense points (via Huang's method and the proposed) is an inferior
+strategy to one considering the entire attribute space such as with Cao's
+method. Again, no method is able to improve on the initial solution except for
+one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
@@ -421,3 +425,130 @@ data (by choosing \(k\) to be the number of classes) and not. Furthermore,
 though not discussed in this work, the matching initialisation method has the
 scope to allow for expert or prior knowledge to be included in an initial
 clustering by using some \textit{ad hoc} preference list mechanism.
+
+
+\subsection{Artificial datasets}
+\graphicspath{{img/edo/}}
+
+Following on from the conclusions of the analysis thus far, the competition
+between Cao's method and the proposed matching method may be studied more
+deeply. All of the results leading up to this point were conducted using
+benchmark datasets and while there are certainly benefits to comparing methods
+in this way, it does not afford a rich understanding of how any of them perform
+more generally. This stage of the analysis relies on a method for generating
+artificial datasets introduced in~\cite{Wilde2019}. In essence, this method is
+an evolutionary algorithm which acts on entire datasets to explore the space in
+which potentially all possible datasets exist. The key component of this method
+is an objective function that takes a dataset and returns a value that is to be
+minimised; this function is referred to as the fitness function under this
+framework.
+
+In order to reveal the nuances in the performance of Cao's method and the
+proposed initialisation on a particular dataset, two cases are considered:
+where Cao's method outperforms the proposed, and vice versa. Both cases use the
+same fitness function --- with the latter using its negative --- which is
+defined as follows:
+\begin{equation}\label{eq:fitness}
+    f\left(\mathcal X\right) = C_{cao} - C_{match}
+\end{equation}
+where \(C_{cao}\) and \(C_{match}\) are the final costs when \(\mathcal X\) is
+clustered using Cao's method and the proposed matching method respectively with
+\(k = 2\). For the sake of computational time, the proposed initialisation was
+given 25 repetitions as opposed to the 250 repetitions in the remainder of this
+section. Apart from the sign of \(f\), the dataset generation processes used
+identical parameters in each case and the datasets considered here are all of
+comparable shape.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\imgwidth]{fitness.pdf}
+    \caption{Histograms of fitness for the top performing percentile in each
+             case.}\label{fig:fitness}
+\end{figure}
+
+This process yielded approximately 35,000 unique datasets for each case, and the
+ensuing analysis only considers the top-performing percentile of datasets from
+each. The source code used to generate these datasets, and the datasets
+themselves are archived at: DOI.\ %TODO data gen code and data DOIs
+Figure~\ref{fig:fitness} shows the fitness distribution of the top
+percentile in each case. It should be clear from~\eqref{eq:fitness} that large
+negative values are preferable here. With that, and bearing in mind that the
+generation of these datasets was parameterised in a consistent manner, it
+appears that the attempt to outperform Cao's method proved somewhat easier. This
+is indicated by the substantial difference in the locations of the fitness
+distributions.
+
+Given the quantity of data available, to understand the patterns that have
+emerged, they must be summarised; in this case, univariate statistics are used.
+Despite the datasets all being of similar shapes, there are some discrepancies.
+With the number of rows this is less of an issue but any comparison of
+statistics across datasets of different widths is difficult without prior
+knowledge of the datasets. Moreover, there is no guarantee of contingency
+amongst the attributes, and the comparison of more than a handful of variables
+becomes complicated even when the attributes are identifiable. To combat this
+and bring uniformity to the datasets, each dataset is represented as their first
+principal component obtained via centred PCA.\ While some subtleties may be
+lost, this representation captures the most important characteristics of each
+dataset in a single variable meaning they can be compared directly.
+
+Since the transformation by PCA is centred, all measures for central tendency
+are moot. In fact, the mean and median are not interpretable here anyway given
+that the original data is categorical. As such, the univariate statistics used
+here describe the spread and shape of the principal components, and are split
+into two groups:
+\begin{itemize}
+    \item Central moments: variance, skewdness and kurtosis.
+    \item Empirical quantiles: interquartile range, lower decile and upper
+        decile.
+\end{itemize}
+
+Figures~\ref{fig:edo_moments}~\&~\ref{fig:edo_quantiles} show the distributions
+of the six univariate statistics across all of the principal components in each
+case.  In addition to this, they show the p.d.f.\ of a fitted distribution
+chosen via a least sum of squared errors approach.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\imgwidth}
+        \includegraphics[width=\linewidth]{variance.pdf}%
+        \caption{}\label{fig:edo_variance}
+    \end{subfigure}
+
+    \begin{subfigure}{\imgwidth}
+        \includegraphics[width=\linewidth]{skewdness.pdf}%
+    \caption{}\label{fig:edo_skewdness}
+    \end{subfigure}
+    
+    \begin{subfigure}{\imgwidth}
+        \includegraphics[width=\linewidth]{kurtosis.pdf}%
+        \caption{}\label{fig:edo_kurtosis}
+    \end{subfigure}
+    \caption{Distribution plots for the (\subref{fig:edo_variance}) variance,
+        (\subref{fig:edo_skewdness}) skewdness and (\subref{fig:edo_kurtosis})
+        kurtosis of the first principal components in each
+        case.}\label{fig:edo_moments}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{\imgwidth}
+        \includegraphics[width=\linewidth]{interquartile_range.pdf}
+        \caption{}\label{fig:edo_iqr}
+    \end{subfigure}\vfill%
+
+    \begin{subfigure}{\imgwidth}
+        \includegraphics[width=\linewidth]{lower_decile.pdf}
+        \caption{}\label{fig:edo_lower}
+    \end{subfigure}\vfill%
+    
+    \begin{subfigure}{\imgwidth}
+        \includegraphics[width=\linewidth]{upper_decile.pdf}
+        \caption{}\label{fig:edo_upper}
+    \end{subfigure}
+    \caption{Distribution plots for the (\subref{fig:edo_iqr}) interquartile
+        range, (\subref{fig:edo_lower}) lower decile and
+        (\subref{fig:edo_upper}) upper decile of the first principal components
+        in each case.}\label{fig:edo_quantiles}
+\end{figure}
+
+
