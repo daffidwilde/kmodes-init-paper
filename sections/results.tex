@@ -451,13 +451,13 @@ defined as follows:
 \begin{equation}\label{eq:fitness}
     f\left(\mathcal X\right) = C_{cao} - C_{match}
 \end{equation}
-where \(C_{cao}\) and \(C_{match}\) are the final costs when \(\mathcal X\) is
-clustered using Cao's method and the proposed matching method respectively with
-\(k = 2\). For the sake of computational time, the proposed initialisation was
-given 25 repetitions as opposed to the 250 repetitions in the remainder of this
-section. Apart from the sign of \(f\), the dataset generation processes used
-identical parameters in each case and the datasets considered here are all of
-comparable shape.
+where \(C_{cao}\) and \(C_{match}\) are the final costs when a dataset
+\(\mathcal X\) is clustered using Cao's method and the proposed matching method
+respectively with \(k = 2\). For the sake of computational time, the proposed
+initialisation was given 25 repetitions as opposed to the 250 repetitions in the
+remainder of this section. Apart from the sign of \(f\), the dataset generation
+processes used identical parameters in each case and the datasets considered
+here are all of comparable shape.
 
 \begin{figure}
     \centering
@@ -497,7 +497,7 @@ that the original data is categorical. As such, the univariate statistics used
 here describe the spread and shape of the principal components, and are split
 into two groups:
 \begin{itemize}
-    \item Central moments: variance, skewdness and kurtosis.
+    \item Central moments: variance, skewness and kurtosis.
     \item Empirical quantiles: interquartile range, lower decile and upper
         decile.
 \end{itemize}
@@ -505,7 +505,32 @@ into two groups:
 Figures~\ref{fig:edo_moments}~\&~\ref{fig:edo_quantiles} show the distributions
 of the six univariate statistics across all of the principal components in each
 case.  In addition to this, they show the p.d.f.\ of a fitted distribution
-chosen via a least sum of squared errors approach.
+chosen via a least sum of squared errors approach. What becomes immediately
+clear from each of these plots is that datasets where Cao's method succeeds, the
+general spread of their first principal component is much tighter than in the
+case where the proposed initialisation method succeeds. This is particularly
+evident in Figure~\ref{fig:edo_variance} where relatively low variance in the
+first case indicates a higher level of density in the original categorical data.
+
+The patterns in the quantiles further this. Although Figure~\ref{fig:edo_iqr}
+suggests that the components of Cao-preferable datasets can have higher
+interquartile ranges than in the second case, the lower and upper deciles tend
+to be closer together as is seen in
+Figures~\ref{fig:edo_lower}~\&~\ref{fig:edo_upper}. This suggests that despite
+the body of the component being spread, its extremities are not.
+
+In Figures~\ref{fig:edo_skewness}~\&~\ref{fig:edo_kurtosis}, the most notable
+contrast between the two cases is the range in values for both skewness and
+kurtosis. This supports the evidence thus far that individual datasets have
+higher densities and lower variety (i.e.\ tighter extremities) when Cao's method
+succeeds over the proposed initialisation. In particular, larger values of
+skewness and kurtosis translate to high similarity between the instances in a
+categorical dataset which is equivalent to having high density.
+
+Overall, this analysis has revealed that if a dataset shows clear evidence of
+high-density points, then Cao's method should be used over the proposed method.
+However, if there is no such evidence, the proposed method is able to find a
+substantially better clustering than Cao's method.
 
 \begin{figure}
     \centering
@@ -515,8 +540,8 @@ chosen via a least sum of squared errors approach.
     \end{subfigure}
 
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{skewdness.pdf}%
-    \caption{}\label{fig:edo_skewdness}
+        \includegraphics[width=\linewidth]{skewness.pdf}%
+    \caption{}\label{fig:edo_skewness}
     \end{subfigure}
     
     \begin{subfigure}{\imgwidth}
@@ -524,7 +549,7 @@ chosen via a least sum of squared errors approach.
         \caption{}\label{fig:edo_kurtosis}
     \end{subfigure}
     \caption{Distribution plots for the (\subref{fig:edo_variance}) variance,
-        (\subref{fig:edo_skewdness}) skewdness and (\subref{fig:edo_kurtosis})
+        (\subref{fig:edo_skewness}) skewness and (\subref{fig:edo_kurtosis})
         kurtosis of the first principal components in each
         case.}\label{fig:edo_moments}
 \end{figure}
