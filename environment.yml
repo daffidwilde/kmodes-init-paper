@@ -14,3 +14,4 @@ dependencies:
     - edo==0.2.1
     - matching==1.1
     - tqdm==4.36.1
+    - yellowbrick==1.0.1

@@ -49,22 +49,23 @@ Huang's method. For instance:
 \end{itemize}
 
 Allowing for ties is a simple extension to SM but the notion of stability
-becomes tiered~\cite{Manlove1999}. In each case of stability, if such a matching
-exists, then a polynomial-time algorithm will find one that is optimal for one
-set of players. However, there is no guarantee that such a level-of-stable
-matching exists and even in that case, the notion of party-optimality is
-lost~\cite{Erdil2017}. Therefore this extension is not considered here where a
-stable solution to the game is required, and is preferably party-optimal.
+becomes tiered~\cite{Iwama2016,Iwama1999}. In each case of stability, if such a
+matching exists, then a polynomial-time algorithm will find one that is optimal
+for one set of players. However, there is no guarantee that such a
+level-of-stable matching exists and even in that case, the notion of
+party-optimality is lost~\cite{Erdil2017}. Therefore this extension is not
+considered here where a stable solution to the game is required, and is
+preferably party-optimal.
 
 Further to allowing ties, how preference lists are constructed is a point of
-interest in many applications of matching games~\cite{Iwama2008}. Often this is
-a contextual problem and may be addressed in a number of ways. As in this case,
-where similarity and preference are considered equivalent, a bespoke distance
-metric may be used. Though not relevant to this work, if the game forms part of
-a larger, long-standing or otherwise complex model, introducing flexibility in
-preferences~\cite{Agarwal2017,Menzel2015} or estimating them
-\emph{ad~hoc}~\cite{Rastegari2016} may be helpful to obtain meaningful
-matchings.
+interest in many applications of matching games~\cite{Iwama2008,Manlove2002}.
+Often this is a contextual problem and may be addressed in a number of ways. As
+in this case, where similarity and preference are considered equivalent, a
+bespoke distance metric may be used. Though not relevant to this work, if the
+game forms part of a larger, long-standing or otherwise complex model,
+introducing flexibility in preferences~\cite{Agarwal2017,Menzel2015} or
+estimating them \emph{ad~hoc}~\cite{Rastegari2016} may be helpful to obtain
+meaningful matchings.
 
 Another method used to construct preference lists is to discount the preference
 lists presented by players. For instance, where acceptability of another player
@@ -89,9 +90,9 @@ stable matching to any instance of HR.\ The resident-optimal algorithm is
 presented in Algorithm~\ref{alg:hospital_resident} and is adapted from the
 original to take advantage of the structure of the game~\cite{Roth1984}. The
 game used to model HR, its matchings, and its notion of stability are defined in
-Definitions~\ref{def:game}~\--~\ref{def:blocking}. A summary of these
-definitions in the context of the proposed \(k\)-modes initialisation is given
-in Table~\ref{tab:components}.
+Definitions~\ref{def:game}---\ref{def:blocking}. A summary of these definitions
+in the context of the proposed \(k\)-modes initialisation is given in
+Table~\ref{tab:components}.
 
 \begin{definition}\label{def:game}
     Consider two distinct sets \(R, H\) and refer to them residents and
