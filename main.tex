@@ -1,35 +1,44 @@
-\documentclass{article}
+\documentclass[11pt]{article}
 
 % Setting up the page
+\usepackage{setspace}
+    \newcommand{\standardspacing}{\singlespacing}
+    \standardspacing%
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage[margin=1.5cm, includefoot, footskip=30pt]{geometry}
+\usepackage{fullpage}
+
+% Bibliography
+\usepackage[numbers]{natbib}
+\bibliographystyle{abbrvnat}
 
 % Writing mathematics, algorithms and code
 \usepackage{mathtools}
+\usepackage{multicol}
+\usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{algpseudocode}
-\usepackage{algorithmicx}
-\usepackage{algorithm}
-\renewcommand{\algorithmiccomment}[1]{%
-    \textcolor{red}{$\triangleright$ #1}
-}
-%\usepackage{minted}
-\newcommand{\true}{\text{True}}
-\newcommand{\false}{\text{False}}
-\DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage[boxruled]{algorithm2e}
 
-% Importing images, tables and referencing
+\newcommand{\balg}{\begin{algorithm}[htbp]\DontPrintSemicolon\singlespacing}
+\newcommand{\ealg}{\end{algorithm}\standardspacing}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+% Images, tables and referencing
 \usepackage{graphicx}
+    \newcommand{\imgwidth}{.85\textwidth}
 \usepackage{tikz}
 \usepackage{xcolor}
-%\usepackage{hyperref}
+\usepackage{hyperref}
 \usepackage{caption}
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{subcaption}
+
+\newlength{\tablewidth}
+\setlength{\tablewidth}{.9\textwidth}
 
 % For indexing sections, etc.
 \usepackage{amsthm}
@@ -37,55 +46,23 @@
 \newtheorem*{remark}{Remark}
 \newtheorem{theorem}{Theorem}
 
-\newtheoremstyle{example}
-{\topsep} % Space above
-{\topsep} % Space below
-{} % Body font (normal)
-{} % Indent
-{\bfseries} % Head font
-{.} % Punctuation after head
-{.5em} % Space after head
-{} % Head spec (normal)
 
-\theoremstyle{example} \newtheorem{example}{Example}
-
-% Bibliography
-\usepackage[backend=bibtex]{biblatex}
-\addbibresource{thesis.bib}
-
-
-\title{Comparing initialisation processes for the \(k\)-modes algorithm, and an 
-	alternative process utilising the hospital-resident assignment problem}
-\author{Henry Wilde}
+\title{%
+    A novel game-theoretic initialisation process for the \(k\)-modes
+    algorithm using the hospital-resident assignment problem
+}
+\author{Henry Wilde, Vincent Knight and Jonathan Gillard}
 
 \begin{document}
-\maketitle
 
+\maketitle%
+\input{sections/abstract.tex}
+\input{sections/intro.tex}
+\input{sections/proposed_method.tex}
+\input{sections/results.tex}
+\input{sections/conclusion.tex}
 
-\section{The \(k\)-modes algorithm}\label{sec:kmodes}
-\input{sections/01-kmodes.tex}
-
-
-\section{Initialisation processes}\label{sec:init}
-\input{sections/02-init-processes.tex}
-
-
-\section{Matching games}\label{sec:matching}
-\input{sections/03-matching-games.tex}
-
-
-\section{The proposed method}\label{sec:proposed-method}
-\input{sections/04-proposed-method.tex}
-
-
-\section{Resident preference lists}\label{sec:preferences}
-\input{sections/05-preference-lists.tex}
-
-
-\section{Experimental results}\label{sec:results}
-\input{sections/06-results.tex}
-
-
-\printbibliography
+\bibliography{references}
+\input{sections/appendix.tex}
 
 \end{document}

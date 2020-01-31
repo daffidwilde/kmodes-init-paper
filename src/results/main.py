@@ -11,18 +11,19 @@ from write_results import write_results
 def get_name(path):
     """ Get name of dataset from its path. """
 
-    return Path(path).parts[-1].replace('.csv', '')
+    return Path(path).parts[-1].replace(".csv", "")
+
 
 def get_dataset(path):
     """ Read in dataset from path, dropping missing values. """
 
-    return pd.read_csv(path, na_values='?').dropna(axis=0, inplace=True)
+    return pd.read_csv(path, na_values="?").dropna(axis=0, inplace=True)
 
 
 max_seed = 10
 
 inputs = [
-    (get_name(path), get_dataset(path)) for path in iglob('../../data/*.csv')
+    (get_name(path), get_dataset(path)) for path in iglob("../../data/*.csv")
 ]
 
 for name, dataset in inputs:

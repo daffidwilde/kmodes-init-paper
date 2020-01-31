@@ -1,45 +1,42 @@
-\begin{algorithm}[H]
-\caption{Huang's method}\label{alg:huang}
-    \begin{algorithmic}[0]
-        \State{\textbf{Input:} a dataset \textbf{X}, with attribute sets \(A_1,
-        \ldots, A_m\), and a number of modes to find \(k\)}
-        \State{\textbf{Output:} a set of \(k\) initial modes \(\bar{\mu}\)\\}
-        \\
-        \Comment{Initialisation step}
-        \State{\(\tilde{\mu} \gets \emptyset\)}
-        \State{\(\bar{\mu} \gets \emptyset\)}
-        \For{\(j = 1, \ldots, m\)}
-            \For{\(s = 1, \ldots, d_j\)}
-                \State{Calculate the relative frequency of each attribute value:
-                    \(\frac{n(a_s^{(j)})}{N}\).}
-	        \EndFor
-        \EndFor
-        \\
-        \\
-        \Comment{Distribute most common attribute values}
-        \For{\(l = 1, \ldots, k\)}
-            \For{\(j = 1, \ldots, m\)}
-                \State{Sample \(a_{s^*}^{(j)}\) from \(A_j\) by considering the 
-                relative frequencies of the elements of \(A_j\) as a probability
-                distribution.}
-                \State{\(\mu_j^{(l)} \gets a_{s^*}^{(j)}\)}
-	        \EndFor
-            \State{\(\tilde{\mu} \gets \tilde{\mu} \cup
-            \left\{\mu^{(l)}\right\}\)}
-	    \EndFor
-        \\
-        \\
-        \Comment{Replace \(\tilde{\mu}\) with points in \textbf{X} to avoid
-        empty clusters}
-        \For{\(\mu \in \tilde{\mu}\)}
-            \State{Select \(X^{(i^*)} \in \textbf{X}\) such that: 
-                \[
-                    X^{(i^*)} = \argmin_{1 \leq i \leq N} \left\{ d(X^{(i)}, 
-                    \mu): \ X^{(i^*)} \neq \mu'  \ \forall \mu' \in 
-                    \bar{\mu}\right\}
-                \]
-            }
-            \State{\(\bar{\mu} \gets \bar{\mu} \cup \left\{X^{(i^*)}\right\}\)}
-        \EndFor
-    \end{algorithmic}
-\end{algorithm}
+\balg%
+    \caption{Huang's method}\label{alg:huang}
+    \KwIn{a dataset \(\mathcal{X} \subset \mathcal{A}\), a number of modes to
+    find \(k\)}
+    \KwOut{a set of \(k\) initial modes \(\overline Z\)}
+
+    \(\overline Z \gets \emptyset\)\;
+    \(\widehat Z \gets \textsc{SamplePotentialModes}\left(\mathcal{X}\right)\)\;
+
+    \For{\(\hat{z} \in \widehat Z\)}{%
+        Select \(X^{(i^*)} \in \mathcal{X} \setminus \overline Z\) that
+        minimises \(d\left(X^{(i)}, \hat{z}\right)\)\;
+
+        \(\overline Z \gets \overline Z \cup \left\{X^{(i^*)}\right\}\)
+    }
+\ealg%
+
+\balg%
+    \caption{\textsc{SamplePotentialModes}}\label{alg:potential_modes}
+    \KwIn{%
+        a dataset \(\mathcal{X} \subset \mathcal{A}\), a number of modes to find
+        \(k\)
+    }
+    \KwOut{a set of \(k\) potential modes \(\widehat Z\)}
+
+    \(\widehat Z \gets \emptyset\)\;
+    \For{\(j = 1, \ldots, m\)}{%
+        \For{\(s = 1, \ldots, d_j\)}{%
+            Calculate \(\frac{n\left(a_s^{(j)}\right)}{N}\)
+        }
+    }
+
+    \While{\(\abs*{\widehat Z} < k\)}{%
+        Create an empty \(m\)-tuple \(\hat{z}^{(l)}\)\;
+        \For{\(j = 1, \ldots, m\)}{%
+            Sample \(a_{s^*}^{(j)}\) from \(A_j\) with respect to the
+            relative frequencies of \(A_j\)\;
+            \(\hat{z}_j^{(l)} \gets a_{s^*}^{(j)}\)
+        }
+        \(\widehat Z \gets \widehat Z \cup \left\{\hat{z}^{(l)}\right\}\)
+    }
+\ealg%

@@ -1,0 +1,23 @@
+\section{Conclusion}\label{sec:conclusion}
+
+In this paper a novel initialisation method for the \(k\)-modes was introduced
+that built on the method set out in the seminal paper~\cite{Huang1998}. The new
+method models the final `replacement' process in the original as an instance of
+the Hospital-Resident Assignment Problem that may be solved to be mathematically
+fair and stable.
+
+Following a thorough description of the \(k\)-modes algorithm and the
+established initialisation methods, a comparative analysis was conducted amongst
+the three initialisations using both benchmark and artificial datasets. This
+analysis revealed that the proposed initialisation was able to outperform both
+of the other methods when the choice of \(k\) was optimised according to a
+mathematically rigorous elbow method. However, the proposed method was unable to
+beat Cao's method (established in~\cite{Cao2009}) when an external framework was
+imposed on each dataset by choosing \(k\) to be the number of classes present.
+
+This paper has shown that the original initialisation method is redundant when
+compared to the method presented in this work. Additionally, the proposed method
+should be employed over Cao's when there are no hard restrictions on what \(k\)
+may be, or if there is no immediate evidence that the dataset at hand has some
+notion of high density. Otherwise, Cao's method remains the most reliable
+initialisation in terms of computational time and final cost.

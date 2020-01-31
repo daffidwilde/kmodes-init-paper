@@ -2,7 +2,8 @@
 
 from copy import deepcopy
 
-from huang_modes import dissim
+from util import dissim
+
 
 def get_dissim_table(data, modes):
     """ Take a dataset and some modes; return the dataset ranked by the
@@ -10,9 +11,19 @@ def get_dissim_table(data, modes):
 
     mode = modes[0, :]
     dissim_table = deepcopy(data)
-    dissim_col = r'Dissimilarity to $\tilde{\mu}_1$'
+    dissim_col = r"Dissimilarity to $\tilde{\mu}_1$"
 
     dissim_table[dissim_col] = dissim(data, mode)
     dissim_table.sort_values(dissim_col, ascending=True, inplace=True)
 
-    return dissim_table
+    cols = [
+        "Price",
+        "Maintenance",
+        "Doors",
+        "Passengers",
+        "Wheels",
+        "Eco-Friendly",
+        r"Dissimilarity to $\tilde{\mu}_1$",
+    ]
+
+    return dissim_table[cols]

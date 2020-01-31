@@ -1,0 +1,37 @@
+\begin{example}\label{example:matching}
+    Consider the following example with \(S = \{A, B, C\}\) and \(R = \{D, E,
+    F\}\). We can visualise this matching game as a bipartite graph as in
+    Figure~\ref{fig:matching_bipartite}. In this representation, an edge between
+    two vertices indicates that they are matched by \(M\). Beside each node is 
+    the name of the node and a complete ranking of its complementary set's 
+    elements. We interpret these rankings as the values of our preference list 
+    functions. Here, for instance, \(A\) would most prefer to be matched with 
+    \(D\), then \(E\), and finally \(F\).
+    
+    \begin{figure}[h]
+        \centering
+        \input{tex/matching_bipartite.tex}
+    \end{figure}
+
+    Suppose we have the matching shown in Figure~\ref{fig:unstable_matching} for
+    our game. This matching, \(M\) is valid since it is a bijection between 
+    \(S\) and \(R\) but it is not stable. For instance, we have \((B, D)\) as a
+    blocking pair since \(B\) would rather be matched with \(D\) than its 
+    current match \(E\), and \(D\) would prefer to be matched with \(B\) than
+    its current match \(A\).
+
+    \begin{figure}[h]
+        \centering
+        \input{tex/unstable_matching.tex}
+    \end{figure}
+
+    We can make this matching stable by switching these pairs as in
+    Figure~\ref{fig:stable_matching}. Here we have that each suitor is matched 
+    with their most preferred reviewer so as not to form a blocking pair. We 
+    call such a matching \emph{suitor-optimal}.
+
+    \begin{figure}[h]
+        \centering
+        \input{tex/stable_matching.tex}
+    \end{figure}
+\end{example}
