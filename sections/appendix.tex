@@ -17,25 +17,18 @@ in~\eqref{eq:dissim}. Then \(d\) is a metric such that for all \(x, y, z \in
 \end{multicols}
 
 \begin{proof}
-    Let \(\mathcal A\) be a categorical attribute space and consider any
-    \(x,y,z \in \mathcal A\).
+    Consider any \(x,y,z \in \mathcal A\).
     \begin{enumerate}[label=(\roman*)]
         \item If \(x = y\), then \(x_j = y_j\) for all \(j = 1, \ldots, m\).
             Then it immediately follows that \(d(x,y) = 0\). Otherwise,
             \(\delta\left(x_j, y_j\right) = 1\) for at least one
             \(j = 1, \ldots, m\). Therefore, \(d(x, y) \geq 1\), as required.
-        \item As above, if \(x = y\) then \(d(x, y) = 0\). Now consider any
-            \(x, y \in \mathcal A\) such that \(d(x, y) = 0\). Then
-            \(d(x, y) = 0 \iff \delta\left(x_j, y_j\right) = 0\) for all
+        \item Consider any \(x, y \in \mathcal A\) such that \(d(x, y) = 0\).
+            Then \(d(x, y) = 0 \iff \delta\left(x_j, y_j\right) = 0\) for all
             \(j = 1, \ldots, m \iff x_j = y_j\) for all
             \(j = 1, \ldots, m \iff x = y\), as required.
-        \item This follows from the commutativity of equality in the definition
-            of \(\delta\) in~\eqref{eq:dissim}:
-            \[
-                d(x, y) = \sum_{j=1}^{m}~\delta\left(x_j,~y_j\right)
-                = \sum_{j=1}^{m}~\delta\left(y_j,~x_j\right)
-                = d(y, x)
-            \]
+        \item This follows from the definition
+            of \(\delta\) in~\eqref{eq:dissim}
         \item Without ambiguity, let \(x, y, z\) each be represented as a set of
             its elements. Then an alternative form for \(d\) may be considered
             where \(d(x, y) = m - \abs*{x \cap y}\). With this, it is sufficient

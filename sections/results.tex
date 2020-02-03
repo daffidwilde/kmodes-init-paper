@@ -18,40 +18,43 @@ are excluded and the remaining dataset characteristics are reported as
     }\caption{A summary of the benchmark datasets.}\label{tab:dataset_summary}
 \end{table}
 
-Clustering algorithms are often evaluated based on their performance as a
-classifier~\cite{%
-    Arthur2007,Cao2009,Cao2012,Huang1998,%
-    Ng2007,Olaode2014,Schaeffer2007,Sharma2015%
-}. This is a fundamentally flawed approach --- especially given that
-classification belongs to an entirely different branch of learning.  Moreover,
-doing so requires a number of assumptions about the topology of the data within
-the metric space that is being considered~\cite{Memoli2011}.  One such
-assumption is that the classes recorded in the data are indeed separable objects
-like clusters. The soybean dataset acts as an example where the labels attached
-to the dataset may be too fine with respect to the space in which the data
-exists. That is, in this case, only 8 clusters were identified from a possible
-15 classes. This indicates that some of the classes are not easily distinguished
-from one another. Likewise with the remaining datasets, an increase in the
-number of clusters on the number of classes could suggest that the classes are
-too vague or at the very least that more structure exists in the data than is
-imposed. In any case, the choice of \(k\) when clustering is of great importance
-and should strike a balance between explaining structure in the data and
-interpretability of a model.
+%Clustering algorithms are often evaluated based on their performance as a
+%classifier~\cite{%
+%    Arthur2007,Cao2009,Cao2012,Huang1998,%
+%    Ng2007,Olaode2014,Schaeffer2007,Sharma2015%
+%}. This is a fundamentally flawed approach --- especially given that
+%classification belongs to an entirely different branch of learning.  Moreover,
+%doing so requires a number of assumptions about the topology of the data within
+%the metric space that is being considered~\cite{Memoli2011}.  One such
+%assumption is that the classes recorded in the data are indeed separable objects
+%like clusters. The soybean dataset acts as an example where the labels attached
+%to the dataset may be too fine with respect to the space in which the data
+%exists. That is, in this case, only 8 clusters were identified from a possible
+%15 classes. This indicates that some of the classes are not easily distinguished
+%from one another. Likewise with the remaining datasets, an increase in the
+%number of clusters on the number of classes could suggest that the classes are
+%too vague or at the very least that more structure exists in the data than is
+%imposed. In any case, the choice of \(k\) when clustering is of great importance
+%and should strike a balance between explaining structure in the data and
+%interpretability of a model.
 
 This analysis does not consider evaluative metrics related to classification
-such as accuracy, recall or precision. Instead, only internal measures are
-considered such as the cost function defined in~\eqref{eq:cost}. This metric is
-label-invariant and its values are comparable across the different
-initialisation methods. Furthermore, the effect of each initialisation method
-on the initial and final clusterings can be captured with the cost function. An
-additional, and often useful, metric is the silhouette coefficient. This
-measures the ratio between the intra-cluster cohesion and inter-cluster
-separation of a particular clustering. Therefore, it could be used in a similar
-way to reveal the effect of each initialisation method at the beginning and end
-of a run of \(k\)-modes. Unfortunately, this metric loses its intuition under
-the distance measure employed here and is omitted. The remaining performance
-measures used are the number of iterations for the \(k\)-modes algorithm to
-terminate and the time taken to terminate in seconds.
+such as accuracy, recall or precision as is commonly done~\cite{%
+    Arthur2007,Cao2009,Cao2012,Huang1998,%
+    Ng2007,Olaode2014,Schaeffer2007,Sharma2015%
+}. Instead, only internal measures are considered such as the cost function
+defined in~\eqref{eq:cost}. This metric is label-invariant and its values are
+comparable across the different initialisation methods. Furthermore, the effect
+of each initialisation method on the initial and final clusterings can be
+captured with the cost function. An additional, and often useful, metric is the
+silhouette coefficient. This measures the ratio between the intra-cluster
+cohesion and inter-cluster separation of a particular clustering. Therefore, it
+could be used in a similar way to reveal the effect of each initialisation
+method at the beginning and end of a run of \(k\)-modes. Unfortunately, this
+metric loses its intuition under the distance measure employed here and is
+omitted. The remaining performance measures used are the number of iterations
+for the \(k\)-modes algorithm to terminate and the time taken to terminate in
+seconds.
 
 The final piece of information required in this analysis is a choice for \(k\)
 for each dataset. An immediate choice is the number of classes that are present
@@ -78,16 +81,17 @@ questions:
 \end{figure}
 
 An alternative `elbow' may be identified objectively by using the knee point
-detection algorithm~\cite{Satopaa2011} where the maximal value of \(k\) is taken
-to be \(\lfloor\sqrt{N}\rfloor\). This algorithm identifies the value of \(k\)
-with the maximum curvature in the plot described above by computation rather
-than inspection --- eliminating the concerns raised. The value of \(k\)
-determined by this algorithm is reported in the final column of
+detection algorithm described in~\cite{Satopaa2011} where the maximal value of
+\(k\) is taken to be \(\lfloor\sqrt{N}\rfloor\). This algorithm identifies the
+value of \(k\) with the maximum curvature in the plot described above by
+computation rather than inspection --- eliminating the concerns raised. The
+value of \(k\) determined by this algorithm is reported in the final column of
 Table~\ref{tab:dataset_summary}.
 
 \subsection{Elbow method}\label{subsec:elbow}
 \graphicspath{{./img/elbow/}}
 
+% TODO Is it unclear how $k$ is chosen?
 Tables~\ref{tab:breast_cancer_elbow}---\ref{tab:soybean_elbow}
 summarise the results of each initialisation method on the benchmark datasets
 where the number of clusters has been determined by the knee point detection
