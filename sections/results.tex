@@ -323,13 +323,14 @@ initial clustering. Moreover, the other two methods are effectively
 indistinguishable in these cases and so if a robust solution is required, Cao's
 method is the only viable option.
 
-Another point to be raised from these two figures is that the \(k\)-modes
-algorithm is susceptible to a worsening move between iterations. This may seem
-counter-intuitive but is possible since the cluster centres are updated after
-every point is moved rather than at the end of the iteration. That is, a move
-that may be beneficial when moving a point between clusters may not be
-beneficial to the cluster overall in terms of within-cluster dissimilarity by
-the end of an iteration.
+% TODO Is this paragraph necessary?
+%Another point to be raised from these two figures is that the \(k\)-modes
+%algorithm is susceptible to a worsening move between iterations. This may seem
+%counter-intuitive but is possible since the cluster centres are updated after
+%every point is moved rather than at the end of the iteration. That is, a move
+%that may be beneficial when moving a point between clusters may not be
+%beneficial to the cluster overall in terms of within-cluster dissimilarity by
+%the end of an iteration.
 
 Figure~\ref{fig:nursery_nclasses} corresponds to the nursery dataset results
 with \(k=5\). In this set of runs, the same pattern emerges as in
@@ -444,8 +445,7 @@ artificial datasets introduced in~\cite{Wilde2019}. In essence, this method is
 an evolutionary algorithm which acts on entire datasets to explore the space in
 which potentially all possible datasets exist. The key component of this method
 is an objective function that takes a dataset and returns a value that is to be
-minimised; this function is referred to as the fitness function under this
-framework.
+minimised; this function is referred to as the fitness function.
 
 In order to reveal the nuances in the performance of Cao's method and the
 proposed initialisation on a particular dataset, two cases are considered:
@@ -496,10 +496,10 @@ lost, this representation captures the most important characteristics of each
 dataset in a single variable meaning they can be compared directly.
 
 Since the transformation by PCA is centred, all measures for central tendency
-are moot. In fact, the mean and median are not interpretable here anyway given
-that the original data is categorical. As such, the univariate statistics used
-here describe the spread and shape of the principal components, and are split
-into two groups:
+are moot. In fact, the mean and median are not interpretable here given that the
+original data is categorical. As such, the univariate statistics used here
+describe the spread and shape of the principal components, and are split into
+two groups:
 \begin{itemize}
     \item Central moments: variance, skewness and kurtosis.
     \item Empirical quantiles: interquartile range, lower decile and upper
