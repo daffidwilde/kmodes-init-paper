@@ -162,17 +162,11 @@ the attribute space among \(k\) potential modes~\cite{Huang1998}. The process,
 denoted as Huang's method, is described in full in Algorithm~\ref{alg:huang}.
 Huang's method considers a set of potential modes, \(\widehat Z \subset \mathcal
 A\), that is then replaced by the actual set of initial modes, \(\overline Z
-\subset \mathcal X\).
-
-% TODO Tighten this up into one or two sentences. Point at a paper.
-%In the original statement of Huang's method, it is stated that the most
-%frequent categories should be assigned `equally' to the set of potential modes.
-%How the categories should be distributed `equally' is not well-defined or easily
-%seen from the example given in the paper. In software implementations, including
-%the one used in Section~\ref{sec:results}, the term is taken to mean using a
-%probability distribution to sample values from the attribute space. This
-%probability distribution is formed by the relative frequencies of each
-%attribute's categories.
+\subset \mathcal X\). The statement of how the set of potential modes are formed
+is ambiguous in the original paper --- as is alluded to in~\cite{Jiang2016}.
+Here, as is done in practical implementations of \(k\)-modes, this has been
+interpreted as being done via a weighted random sample (see
+Algorithm~\ref{alg:potential_modes}).
 
 \input{tex/algorithms/huang.tex}
 
