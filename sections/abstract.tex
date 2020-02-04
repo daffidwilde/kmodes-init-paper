@@ -1,20 +1,13 @@
 \begin{abstract}
-    The \(k\)-modes algorithm is a centroid-based clustering algorithm, and is
-    an extension of the \(k\)-means algorithm for categorical data. This work
-    outlines a comparison of the established initialisation methods
-    for the \(k\)-modes algorithm by use of examples and algebraic analysis of
-    their cost functions. In doing so, the effect of the initial centroid
-    selection on the overall efficiency and quality of the final clustering
-    found by each method is exposed.
-
-    Following this, a novel initialisation process is described that utilises
-    game-theoretic results to create a fair and robust initial selection for the
-    algorithm. This process is modelled on the hospital-resident assignment
-    problem and is solved using an adapted Gale-Shapley algorithm.
-
-    The paper concludes with a comparison between the established initialisation
-    methods and the proposed method on a number of benchmark datasets, as well
-    as an analysis using preferable artificial datasets. The analysis uses
-    several label-invariant metrics to assess the quality of the clustering both
-    at the beginning of the algorithm and at the end.
+    This paper presents a new way of selecting an initial solution for the
+    \(k\)-modes algorithm that allows for some notion of mathematical fairness
+    and a leverage of the data that the established initialisations do not. The
+    method, which utilises the Hospital-Resident Assignment Problem to find the
+    set of initial cluster centroids, is thoroughly compared with the current
+    initialisations on both benchmark datasets and a body of newly generated
+    artificial datasets. Based on this analysis, the proposed method is shown
+    to outperform the other initialisations in the majority of cases, especially
+    when the number of clusters is optimised. In addition, some characteristics
+    of preferable datasets are discovered for the proposed method and the
+    leading established method.
 \end{abstract}
