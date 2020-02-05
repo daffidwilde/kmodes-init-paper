@@ -18,6 +18,12 @@ are excluded and the remaining dataset characteristics are reported as
     }\caption{A summary of the benchmark datasets.}\label{tab:dataset_summary}
 \end{table}
 
+All of the source code used to produce the results and data in this analysis ---
+including the datasets investigated in Section~\ref{subsec:artificial} --- are
+archived at DOI. In addition to this, the implementation of the \(k\)-modes
+algorithm and its initialisations is available under
+DOI~\href{https://doi.org/10.5281/zenodo.3638035}{10.5281/zenodo.3638035}.
+
 This analysis does not consider evaluative metrics related to classification
 such as accuracy, recall or precision as is commonly done~\cite{%
     Arthur2007,Cao2009,Cao2012,Huang1998,%
@@ -388,7 +394,7 @@ prior knowledge to be included in an initial clustering by using some \textit{ad
 hoc} preference list mechanism.
 
 
-\subsection{Artificial datasets}
+\subsection{Artificial datasets}\label{subsec:artificial}
 \graphicspath{{img/edo/}}
 
 Following on from the conclusions of the analysis thus far, the competition
@@ -428,9 +434,7 @@ datasets considered here are all of comparable shape.
 
 This process yielded approximately 35,000 unique datasets for each case, and the
 ensuing analysis only considers the top-performing percentile of datasets from
-each. The source code used to generate these datasets, and the datasets
-themselves are archived at: DOI.\ %TODO data gen code and data DOIs
-Figure~\ref{fig:fitness} shows the fitness distribution of the top
+each. Figure~\ref{fig:fitness} shows the fitness distribution of the top
 percentile in each case. It should be clear from~\eqref{eq:fitness} that large
 negative values are preferable here. With that, and bearing in mind that the
 generation of these datasets was parameterised in a consistent manner, it
