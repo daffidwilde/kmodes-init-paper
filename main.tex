@@ -1,51 +1,36 @@
 \documentclass[11pt]{article}
 
 % Setting up the page
-\usepackage{setspace}
-    \newcommand{\standardspacing}{\singlespacing}
-    \standardspacing%
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{fullpage}
 
 % Bibliography
 \usepackage[numbers]{natbib}
-\bibliographystyle{abbrvnat}
+\bibliographystyle{spmpsci}
 
 % Writing mathematics, algorithms and code
-\usepackage{mathtools}
-\usepackage{multicol}
-\usepackage{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
+    \newtheorem{definition}{Definition}
+    \newtheorem{theorem}{Theorem}
+\usepackage{mathtools} % lvert and rvert
+    \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+    \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
 \usepackage[boxruled]{algorithm2e}
-
-\newcommand{\balg}{\begin{algorithm}[htbp]\DontPrintSemicolon\singlespacing}
-\newcommand{\ealg}{\end{algorithm}\standardspacing}
-
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+    \newcommand{\balg}{\begin{algorithm}[htbp]\DontPrintSemicolon}
+    \newcommand{\ealg}{\end{algorithm}}
 
 % Images, tables and referencing
-\usepackage{graphicx}
-    \newcommand{\imgwidth}{.85\textwidth}
-\usepackage{tikz}
-\usepackage{xcolor}
-\usepackage{hyperref}
-\usepackage{caption}
 \usepackage{booktabs}
-\usepackage{float}
-\usepackage{subcaption}
+\usepackage{caption, subcaption}
+    \captionsetup[figure]{name={Figure}, labelsep=colon}
+\usepackage{graphicx}
+\usepackage{hyperref}
 
+\newcommand{\imgwidth}{.85\textwidth}
 \newlength{\tablewidth}
 \setlength{\tablewidth}{.9\textwidth}
-
-% For indexing sections, etc.
-\usepackage{amsthm}
-\theoremstyle{definition} \newtheorem{definition}{Definition}[section]
-\newtheorem*{remark}{Remark}
-\newtheorem{theorem}{Theorem}
-
 
 \title{%
     A novel initialisation based on hospital-resident assignment for the
@@ -63,6 +48,5 @@
 \input{sections/conclusion.tex}
 
 \bibliography{references}
-%\input{sections/appendix.tex}
 
 \end{document}

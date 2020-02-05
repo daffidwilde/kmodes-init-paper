@@ -1,0 +1,52 @@
+\balg%
+    \caption{The hospital-resident algorithm
+        (resident-optimal)}\label{alg:hospital_resident}
+    \KwIn{a set of residents \(R\), a set of hospitals \(H\), a set of hospital
+        capacities \(C\), two preference list functions \(f, g\)}
+    \KwOut{a stable, resident-optimal mapping \(M\) between \(R\) and \(H\)}
+
+    \For{\(h \in H\)}{%
+        \(M^{-1}(h) \gets \emptyset\)
+    }
+    \While{There exists any unmatched \(r \in R\) with a non-empty preference
+        list}{%
+        Take any such resident \(r\) and their most preferred hospital \(h\)\;
+        \(\textsc{MatchPair}(s, h)\)\;
+
+        \If{\(\abs*{M^{-1}(h)} > c_h\)}{%
+            Find their worst match \(r' \in M^{-1}(h)\)\;
+            \(\textsc{UnmatchPair}(r', h)\)\;
+        }
+        \If{\(\abs*{M^{-1}(h)} = c_h\)}{%
+            Find their worst match \(r' \in M^{-1}(h)\)\;
+            \For{each successor \(s \in g(h)\) to \(r'\)}{%
+                \(\textsc{DeletePair}(s, h)\)
+            }
+        }
+    }
+\ealg%
+
+\balg%
+    \caption{\textsc{MatchPair}}\label{alg:match}
+    \KwIn{a resident \(r\), a hospital \(h\), a matching \(M\)}
+    \KwOut{an updated matching \(M\)}
+
+    \(M^{-1}(h) \gets M^{-1}(h) \cup \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{\textsc{UnmatchPair}}\label{alg:unmatch}
+    \KwIn{a resident \(r\), a hospital \(h\), a matching \(M\)}
+    \KwOut{an updated matching \(M\)}
+
+    \(M^{-1}(h) \gets M^{-1}(h) \setminus \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{\textsc{DeletePair}}\label{alg:delete}
+    \KwIn{a resident \(r\), a hospital \(h\)}
+    \KwOut{updated preference lists}
+
+    \(f(r) \gets f(r) \setminus \left\{h\right\}\)\;
+    \(g(h) \gets g(h) \setminus \left\{r\right\}\)\;
+\ealg%

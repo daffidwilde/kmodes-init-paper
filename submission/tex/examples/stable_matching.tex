@@ -1,0 +1,26 @@
+\begin{tikzpicture}[scale=0.5]
+
+    % Suitors
+    \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+    label=left: {\(A: (D, E, F)\)}] (A) at (0, 0) {};
+    \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+    label=left: {\(B: (D, F, E)\)}] (B) at (0, -3) {}; 
+    \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+    label=left: {\(C: (F, D, E)\)}] (C) at (0, -6) {};
+
+    % Reviewers
+    \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+    label=right: {\(D: (B, C, A)\)}] (D) at (6, 0) {};
+    \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm, 
+    label=right: {\(E: (A, C, B)\)}] (E) at (6, -3) {};
+    \node[draw, shape=circle, fill, inner sep=0, minimum size=0.25cm,
+    label=right: {\(F: (C, B, A)\)}] (F) at (6, -6) {};
+
+    % Lines
+    \draw (A) -- (E);
+    \draw (B) -- (D);
+    \draw (C) -- (F);
+
+\end{tikzpicture}
+\caption{An example of a stable matching for our
+    game.}\label{fig:stable_matching}
