@@ -11,8 +11,8 @@ herein will reproduce the data and plots used in the paper exactly. Instructions
 on how to create, use and otherwise manage ``conda`` environments can be found
 [here](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
 
-The remainder of the directory is made up of three subdirectories: ``data``,
-``nbs``, and ``src``.
+The remainder of the directory is made up of three ZIP archives that should be
+decompressed: ``data.zip``, ``nbs.zip``, and ``src.zip``.
 
 
 The data
@@ -53,6 +53,10 @@ The notebooks
 The ``nbs`` subdirectory contains the Jupyter Notebooks used to produce the
 data, tables and plots in the results section of the paper. Each notebook has
 some brief documentation within.
+
+It may be helpful to add the ``conda`` environment as a kernel to Jupyter. To do
+this, run the following command once it is installed:
+``python - ipykernel install --user --name kmodes-init --display-name "k-modes (Wilde)"``.
 
 
 The source code
