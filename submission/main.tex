@@ -26,10 +26,9 @@
 \usepackage{hyperref}
 \usepackage{caption}
 \usepackage{booktabs}
-\usepackage{float}
 \usepackage{subcaption}
 
-\renewcommand{\figurename}{Figure}
+\captionsetup[figure]{name={Figure}, labelsep=colon}
 \newlength{\tablewidth}
 \setlength{\tablewidth}{.9\textwidth}
 
@@ -68,8 +67,6 @@
         Matching games
     }
 \end{abstract}
-
-
 \section{Introduction}\label{sec:intro}
 
 This work focusses on \(k\)-modes clustering --- an extension to
@@ -214,7 +211,59 @@ set out in~\cite{Huang1998}.
     \end{equation}
 \end{definition}
 
-\input{tex/algorithms/kmodes.tex}
+\balg%
+    \caption{The \(k\)-modes algorithm}\label{alg:kmodes}
+    \KwIn{a dataset \(\mathcal{X}\), a number of clusters to form \(k\)}
+    \KwOut{a clustering \(\mathcal{Z}\) of \(\mathcal{X}\)}
+
+    Select \(k\) initial modes \(z^{(1)}, \ldots, z^{(k)} \in \mathcal{X}\)\;
+    \(\overline Z \gets \left\{z^{(1)}, \ldots, z^{(k)}\right\}\)\;
+    \(\mathcal{Z} \gets \left(\left\{z^{(1)}\right\}, \ldots,
+    \left\{z^{(k)}\right\}\right)\)\;
+
+    \For{\(X^{(i)} \in \mathcal{X}\)}{%
+        \(Z_{l^*} \gets \textsc{SelectClosest}\left(X^{(i)}\right)\)\;
+        \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
+        \(\textsc{Update}\left(z^{(l^*)}\right)\)\;
+    }
+
+    \Repeat{No point changes cluster}{%
+        \For{\(X^{(i)} \in \textbf{X}\)}{%
+            Let \(Z_l\) be the cluster \(X^{(i)}\) currently belongs to\;
+            \(Z_{l^*} \gets \textsc{SelectClosest}\left(X^{(i)}\right)\)\;
+            \If{\(l \neq l^*\)}{%                
+                \(Z_{l} \gets Z_{l} \setminus \left\{X^{(i)}\right\}\) and
+                \(Z_{l^*} \gets Z_{l^*} \cup \left\{X^{(i)}\right\}\)\;
+                \(\textsc{Update}\left(z^{(l)}\right)\) and
+                \(\textsc{Update}\left(z^{(l^*)}\right)\)\;
+            }
+        }
+    }
+\ealg%
+
+\balg%
+    \caption{\textsc{SelectClosest}}\label{alg:select_closest}
+    \KwIn{%
+        a data point \(X^{(i)}\), a set of current clusters \(\mathcal{Z}\) and
+        their modes \(\overline Z\)
+    }
+    \KwOut{the cluster whose mode is closest to the data point \(Z_{l^*}\)}
+
+    Select \(z^{l^*} \in \overline Z\) that minimises:
+    \(d\left(X^{(i)}, z_{l^*}\right)\)\;
+    Find their associated cluster \(Z_{l^*}\)
+\ealg%
+
+\balg%
+    \caption{\textsc{Update}}\label{alg:update}
+    \KwIn{an attribute space \(\mathcal{A}\), a mode to update \(z^{(l)}\) and
+    its cluster \(Z_l\)}
+    \KwOut{an updated mode}
+
+    Find \(z \in \mathcal{A}\) that minimises \(D(Z_l, z)\)\;
+    \(z^{(l)} \gets z\)\;
+\ealg%
+
 
 
 \subsection{Initialisation processes}\label{subsec:inits}
@@ -240,7 +289,49 @@ Here, as is done in practical implementations of \(k\)-modes, this has been
 interpreted as being done via a weighted random sample (see
 Algorithm~\ref{alg:potential_modes}).
 
-\input{tex/algorithms/huang.tex}
+\balg%
+    \caption{Huang's method}\label{alg:huang}
+    \KwIn{a dataset \(\mathcal{X} \subset \mathcal{A}\), a number of modes to
+    find \(k\)}
+    \KwOut{a set of \(k\) initial modes \(\overline Z\)}
+
+    \(\overline Z \gets \emptyset\)\;
+    \(\widehat Z \gets \textsc{SamplePotentialModes}\left(\mathcal{X}\right)\)\;
+
+    \For{\(\hat{z} \in \widehat Z\)}{%
+        Select \(X^{(i^*)} \in \mathcal{X} \setminus \overline Z\) that
+        minimises \(d\left(X^{(i)}, \hat{z}\right)\)\;
+
+        \(\overline Z \gets \overline Z \cup \left\{X^{(i^*)}\right\}\)
+    }
+\ealg%
+
+\balg%
+    \caption{\textsc{SamplePotentialModes}}\label{alg:potential_modes}
+    \KwIn{%
+        a dataset \(\mathcal{X} \subset \mathcal{A}\), a number of modes to find
+        \(k\)
+    }
+    \KwOut{a set of \(k\) potential modes \(\widehat Z\)}
+
+    \(\widehat Z \gets \emptyset\)\;
+    \For{\(j = 1, \ldots, m\)}{%
+        \For{\(s = 1, \ldots, d_j\)}{%
+            Calculate \(\frac{n\left(a_s^{(j)}\right)}{N}\)
+        }
+    }
+
+    \While{\(\abs*{\widehat Z} < k\)}{%
+        Create an empty \(m\)-tuple \(\hat{z}^{(l)}\)\;
+        \For{\(j = 1, \ldots, m\)}{%
+            Sample \(a_{s^*}^{(j)}\) from \(A_j\) with respect to the
+            relative frequencies of \(A_j\)\;
+            \(\hat{z}_j^{(l)} \gets a_{s^*}^{(j)}\)
+        }
+        \(\widehat Z \gets \widehat Z \cup \left\{\hat{z}^{(l)}\right\}\)
+    }
+\ealg%
+
 
 
 \subsubsection{Cao's method}\label{subsec:cao}
@@ -287,7 +378,33 @@ on random sampling.
     \end{equation}
 \end{definition}
 
-\input{tex/algorithms/cao.tex}
+\balg%
+    \caption{Cao's method}\label{alg:cao}
+    \KwIn{a dataset \(\mathcal{X}\), a number of modes to find \(k\)}
+    \KwOut{a set of \(k\) initial modes \(\overline Z\)}
+
+    \(\overline Z \gets \emptyset\)\;
+    \For{\(X^{(i)} \in \mathcal{X}\)}{%
+        Calculate \(\text{Dens}\left(X^{(i)}\right)\)
+    }
+
+    Select \(1 \leq i_1 \leq N\) which maximises
+    \(\text{Dens}\left(X^{(i)}\right)\)\;
+
+    \(\overline Z \gets \overline Z \cup \left\{X^{(i_1)}\right\}\)\;
+
+    \While{\(\abs*{\overline Z} < k\)}{%
+        Select \(X^{(i^*)} \notin \overline Z\) which maximises \(%
+            \min_{z^{(l)} \in \overline Z} \left\{%
+                \text{Dens}\left(X^{(i)}\right) \times
+                d\left(X^{i}, z^{(l)}\right)
+            \right\}
+        \)\;
+
+        \(\overline Z \gets \overline Z \cup \left\{X^{(i^*)}\right\}\)
+    }
+\ealg%
+
 
 \section{Matching games and the proposed method}\label{sec:method}
 
@@ -322,7 +439,10 @@ Hospital-Resident Assignment Problem (HR). This problem gets its name from the
 real-world problem of fairly allocating medical students to hospital posts.  A
 resident-optimal algorithm for solving HR was presented in~\cite{Gale1962} and
 was adapted in~\cite{Roth1984} to take advantage of the structure of the game.
-This adapted algorithm is given in Algorithm~\ref{alg:hospital_resident}.
+This adapted algorithm is given in Algorithm~\ref{alg:hospital_resident}. A
+practical implementation of this algorithm has been implemented in Python as
+part of the \texttt{matching} library~\cite{Matching1.1} and is used in the
+implementation of the proposed method for Section~\ref{sec:results}.
 
 The game used to model HR, its matchings, and its notion of stability are
 defined in Definitions~\ref{def:game}---\ref{def:blocking}. A summary of these
@@ -333,7 +453,7 @@ in Algorithm~\ref{alg:proposed_method}.
 \begin{definition}\label{def:game}
     Consider two distinct sets \(R, H\) and refer to them residents and
     hospitals. Each \(h \in H\) has a capacity \(c_h \in \mathbb{N}\) associated
-    with them. Each player \(r \in R\) and \(h \in H\) has associated
+    with them. Each player \(r \in R\) and \(h \in H\) has associated 
     with it a strict preference list of the other set's elements such that:
     \begin{itemize}
         \item Each \(r \in R\) ranks a non-empty subset of \(H\), denoted by
@@ -400,10 +520,94 @@ in Algorithm~\ref{alg:proposed_method}.
     }\label{tab:components}
 \end{table}
 
-\input{tex/algorithms/hospital_resident.tex}
-\input{tex/algorithms/proposed_method.tex}
+\balg%
+    \caption{The hospital-resident algorithm
+        (resident-optimal)}\label{alg:hospital_resident}
+    \KwIn{a set of residents \(R\), a set of hospitals \(H\), a set of hospital
+        capacities \(C\), two preference list functions \(f, g\)}
+    \KwOut{a stable, resident-optimal mapping \(M\) between \(R\) and \(H\)}
+
+    \For{\(h \in H\)}{%
+        \(M^{-1}(h) \gets \emptyset\)
+    }
+    \While{There exists any unmatched \(r \in R\) with a non-empty preference
+        list}{%
+        Take any such resident \(r\) and their most preferred hospital \(h\)\;
+        \(\textsc{MatchPair}(s, h)\)\;
+
+        \If{\(\abs*{M^{-1}(h)} > c_h\)}{%
+            Find their worst match \(r' \in M^{-1}(h)\)\;
+            \(\textsc{UnmatchPair}(r', h)\)\;
+        }
+        \If{\(\abs*{M^{-1}(h)} = c_h\)}{%
+            Find their worst match \(r' \in M^{-1}(h)\)\;
+            \For{each successor \(s \in g(h)\) to \(r'\)}{%
+                \(\textsc{DeletePair}(s, h)\)
+            }
+        }
+    }
+\ealg%
+
+\balg%
+    \caption{\textsc{MatchPair}}\label{alg:match}
+    \KwIn{a resident \(r\), a hospital \(h\), a matching \(M\)}
+    \KwOut{an updated matching \(M\)}
+
+    \(M^{-1}(h) \gets M^{-1}(h) \cup \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{\textsc{UnmatchPair}}\label{alg:unmatch}
+    \KwIn{a resident \(r\), a hospital \(h\), a matching \(M\)}
+    \KwOut{an updated matching \(M\)}
+
+    \(M^{-1}(h) \gets M^{-1}(h) \setminus \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{\textsc{DeletePair}}\label{alg:delete}
+    \KwIn{a resident \(r\), a hospital \(h\)}
+    \KwOut{updated preference lists}
+
+    \(f(r) \gets f(r) \setminus \left\{h\right\}\)\;
+    \(g(h) \gets g(h) \setminus \left\{r\right\}\)\;
+\ealg%
+
+\balg%
+    \caption{The proposed initialisation method}\label{alg:proposed_method}
+    \KwIn{a dataset \(\mathcal{X} \subset \mathcal{A}\), a number of modes to
+        find \(k\)}
+    \KwOut{a set of \(k\) initial modes \(\overline Z\)}
+
+    \(\overline Z \gets \emptyset\)\;
+    \(H \gets \emptyset\)\;
+    \(R \gets \textsc{SamplePotentialModes}\left(\mathcal{X}\right)\)\;
+
+    \For{\(r \in R\)}{%
+        Find the set of \(k\) data points \(H_r \subset \mathcal{X}\) that 
+        are the least dissimilar to \(r\)\;
+        Arrange \(H_r\) into descending order of similarity with respect to
+        \(r\), denoted by \(H_r^*\)\;
+        \(H \gets H \cup H_r\)\;
+        \(f(r) \gets H_r^*\)\;
+    }
+
+    \For{\(h \in H\)}{%
+        \(c_h \gets 1\)\;
+        Sort \(R\) into descending order of similarity with respect to \(h\),
+        denoted by \(R^*\)\;
+        \(g(h) \gets R^*\)
+    }
+
+    Solve the matching game defined by \((R, H)\) to obtain a matching \(M\)\;
+    \For{\(r \in R\)}{%
+        \(\overline Z \gets \overline Z \cup \left\{M(r)\right\}\)
+    }
+\ealg%
+
 
 \section{Experimental results}\label{sec:results}
+\graphicspath{{./img/}}
 
 To give comparative results on the quality of the initialisation processes
 considered in this work, four well-known, categorical, labelled datasets ---
@@ -419,9 +623,25 @@ are excluded and the remaining dataset characteristics are reported as
 
 \begin{table}[htbp]
     \resizebox{\textwidth}{!}{%
-        \input{tex/dataset_summary.tex}
+\begin{tabular}{lrrrrrrr}
+\toprule
+{} &      N &   m &  No. classes &  Missing values &  Adjusted N &  Adjusted no. classes &  No. clusters found \\
+\midrule
+Breast cancer &    699 &  10 &            2 &            True &         683 &                     2 &                   8 \\
+Mushroom      &   8124 &  22 &            2 &            True &        5644 &                     2 &                  17 \\
+Nursery       &  12960 &   8 &            5 &           False &       12960 &                     5 &                  23 \\
+Soybean       &    307 &  35 &           19 &            True &         266 &                    15 &                   8 \\
+\bottomrule
+\end{tabular}
+
     }\caption{A summary of the benchmark datasets.}\label{tab:dataset_summary}
 \end{table}
+
+All of the source code used to produce the results and data in this analysis ---
+including the datasets investigated in Section~\ref{subsec:artificial} --- are
+archived at DOI. In addition to this, the implementation of the \(k\)-modes
+algorithm and its initialisations is available under
+DOI~\href{https://doi.org/10.5281/zenodo.3638035}{10.5281/zenodo.3638035}.
 
 This analysis does not consider evaluative metrics related to classification
 such as accuracy, recall or precision as is commonly done~\cite{%
@@ -458,37 +678,72 @@ Table~\ref{tab:dataset_summary}.
 
 
 \subsection{Using knee point detection algorithm for \(k\)}\label{subsec:knee}
-\graphicspath{{./img/knee/}}
 
 Tables~\ref{tab:breast_cancer_knee}---\ref{tab:soybean_knee}
 summarise the results of each initialisation method on the benchmark datasets
 where the number of clusters has been determined by the knee point detection
 algorithm. Each column shows the mean value of each metric and its standard
-deviation in parentheses over \input{./tex/repetitions.tex}independent
+250
 repetitions of the \(k\)-modes algorithm.
 
 \begin{table}[htbp]
     \centering
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/knee/breast_cancer_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &       Initial cost &        Final cost & No. iterations &          Time \\
+\midrule
+Cao      &    3118.00 (0.000) &   2774.00 (0.000) &   4.00 (0.000) &  0.30 (0.012) \\
+Huang    &  2856.50 (104.245) &  2748.83 (64.514) &   2.68 (0.817) &  0.22 (0.046) \\
+Matching &  2870.11 (101.869) &  2752.59 (52.387) &   2.72 (0.760) &  0.16 (0.021) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the breast cancer dataset
     with \(k=8\).}\label{tab:breast_cancer_knee}\vspace{20pt}
 
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/knee/mushroom_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &         Initial cost &          Final cost & No. iterations &          Time \\
+\midrule
+Cao      &     20381.00 (0.000) &    20376.00 (0.000) &   2.00 (0.000) &  4.68 (0.205) \\
+Huang    &  23027.24 (1209.753) &  21869.06 (747.766) &   2.90 (0.934) &  5.11 (1.138) \\
+Matching &  23279.36 (1498.324) &  21855.50 (751.641) &   3.02 (0.936) &  2.77 (0.325) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the mushroom dataset with
     \(k=17\).}\label{tab:mushroom_knee}\vspace{20pt}
 
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/knee/nursery_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &        Initial cost &          Final cost & No. iterations &          Time \\
+\midrule
+Cao      &    35544.00 (0.000) &    35544.00 (0.000) &   1.00 (0.000) &  4.98 (0.152) \\
+Huang    &  37535.06 (372.596) &  37535.06 (372.596) &   1.00 (0.000) &  3.58 (0.121) \\
+Matching &  37484.29 (327.467) &  37484.29 (327.467) &   1.00 (0.000) &  3.14 (0.141) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the nursery dataset with
     \(k=23\).}\label{tab:nursery_knee}\vspace{20pt}
 
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/knee/soybean_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &      Initial cost &        Final cost & No. iterations &          Time \\
+\midrule
+Cao      &   1654.00 (0.000) &   1585.00 (0.000) &   4.00 (0.000) &  0.28 (0.014) \\
+Huang    &  1829.31 (92.308) &  1708.55 (69.740) &   3.58 (1.019) &  0.28 (0.063) \\
+Matching &  1827.76 (86.852) &  1711.49 (73.319) &   3.42 (0.963) &  0.17 (0.022) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the soybean dataset with
     \(k=8\).}\label{tab:soybean_knee}
@@ -546,17 +801,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig1a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig1b1.pdf}
 
-            \includegraphics[width=\linewidth]%
-            {breast_cancer_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig1b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -566,17 +818,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig2a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}
-        
-        \includegraphics[width=\linewidth]%
-            {mushroom_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig2b1.pdf}
+
+        \includegraphics[width=\linewidth]{Fig2b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -586,17 +835,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig3a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig3b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {nursery_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig3b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -606,17 +852,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig4a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig4b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {soybean_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig4b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -626,7 +869,6 @@ remains a mystery.
 
 
 \subsection{Using number of classes for \(k\)}\label{subsec:nclasses}
-\graphicspath{{./img/nclasses/}}
 
 As is discussed above, the often automatic choice for \(k\) is the number of
 classes present in the data; this subsection repeats the analysis from the
@@ -638,25 +880,61 @@ the benchmark datasets over the same number of repetitions.
 \begin{table}[htbp]
     \centering
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/nclasses/breast_cancer_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &       Initial cost &         Final cost & No. iterations &          Time \\
+\midrule
+Cao      &    3315.00 (0.000) &    3172.00 (0.000) &   2.00 (0.000) &  0.13 (0.005) \\
+Huang    &  3393.80 (120.772) &  3348.51 (144.849) &   1.54 (0.653) &  0.10 (0.024) \\
+Matching &  3406.73 (111.686) &  3355.56 (144.621) &   1.61 (0.638) &  0.09 (0.018) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the breast cancer dataset
     with \(k=2\).}\label{tab:breast_cancer_nclasses}\vspace{20pt}
 
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/nclasses/mushroom_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &         Initial cost &           Final cost & No. iterations &          Time \\
+\midrule
+Cao      &     37662.00 (0.000) &     37662.00 (0.000) &   1.00 (0.000) &  0.94 (0.035) \\
+Huang    &  41974.07 (2393.889) &  39226.25 (2483.933) &   3.11 (1.430) &  1.92 (0.679) \\
+Matching &  42175.54 (2520.163) &  39617.53 (2637.574) &   3.03 (1.439) &  1.38 (0.491) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the mushroom dataset with
     \(k=2\).}\label{tab:mushroom_nclasses}\vspace{20pt}
 
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/nclasses/nursery_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &        Initial cost &          Final cost & No. iterations &          Time \\
+\midrule
+Cao      &    49060.00 (0.000) &    49060.00 (0.000) &   1.00 (0.000) &  1.80 (0.090) \\
+Huang    &  51229.45 (902.503) &  51229.45 (902.503) &   1.00 (0.000) &  1.72 (0.116) \\
+Matching &  51107.52 (910.258) &  51101.95 (903.525) &   1.00 (0.063) &  1.37 (0.128) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the nursery dataset with
     \(k=5\).}\label{tab:nursery_nclasses}\vspace{20pt}
 
     \resizebox{\tablewidth}{!}{%
-        \input{./tex/nclasses/soybean_summary.tex}
+\begin{tabular}{lllll}
+\toprule
+{} &      Initial cost &        Final cost & No. iterations &          Time \\
+\midrule
+Cao      &   1364.00 (0.000) &   1314.00 (0.000) &   2.00 (0.000) &  0.33 (0.009) \\
+Huang    &  1588.89 (83.682) &  1446.22 (59.844) &   4.02 (1.081) &  0.45 (0.085) \\
+Matching &  1582.56 (87.418) &  1447.08 (60.154) &   4.01 (1.128) &  0.24 (0.025) \\
+\bottomrule
+\end{tabular}
+
     }
     \captionof{table}{Summative metric results for the soybean dataset with
     \(k=15\).}\label{tab:soybean_nclasses}
@@ -701,17 +979,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig5a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig5b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig5b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -721,17 +996,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig6a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig6b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {mushroom_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig6b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -741,17 +1013,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig7a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig7b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {nursery_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig7b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -761,17 +1030,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig8a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig8b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {soybean_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig8b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -793,8 +1059,7 @@ prior knowledge to be included in an initial clustering by using some \textit{ad
 hoc} preference list mechanism.
 
 
-\subsection{Artificial datasets}
-\graphicspath{{img/edo/}}
+\subsection{Artificial datasets}\label{subsec:artificial}
 
 Following on from the conclusions of the analysis thus far, the competition
 between Cao's method and the proposed matching method may be studied more
@@ -826,16 +1091,14 @@ datasets considered here are all of comparable shape.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\imgwidth]{fitness.pdf}
+    \includegraphics[width=\imgwidth]{Fig9.pdf}
     \caption{Histograms of fitness for the top performing percentile in each
              case.}\label{fig:fitness}
 \end{figure}
 
 This process yielded approximately 35,000 unique datasets for each case, and the
 ensuing analysis only considers the top-performing percentile of datasets from
-each. The source code used to generate these datasets, and the datasets
-themselves are archived at: DOI.\ %TODO data gen code and data DOIs
-Figure~\ref{fig:fitness} shows the fitness distribution of the top
+each. Figure~\ref{fig:fitness} shows the fitness distribution of the top
 percentile in each case. It should be clear from~\eqref{eq:fitness} that large
 negative values are preferable here. With that, and bearing in mind that the
 generation of these datasets was parameterised in a consistent manner, it
@@ -902,17 +1165,17 @@ substantially better clustering than Cao's method.
 \begin{figure}
     \centering
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{variance.pdf}%
+        \includegraphics[width=\linewidth]{Fig10a.pdf}%
         \caption{}\label{fig:edo_variance}
     \end{subfigure}
 
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{skewness.pdf}%
+        \includegraphics[width=\linewidth]{Fig10b.pdf}%
     \caption{}\label{fig:edo_skewness}
     \end{subfigure}
     
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{kurtosis.pdf}%
+        \includegraphics[width=\linewidth]{Fig10c.pdf}%
         \caption{}\label{fig:edo_kurtosis}
     \end{subfigure}
     \caption{Distribution plots for the (\subref{fig:edo_variance}) variance,
@@ -924,17 +1187,17 @@ substantially better clustering than Cao's method.
 \begin{figure}
     \centering
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{interquartile_range.pdf}
+        \includegraphics[width=\linewidth]{Fig11a.pdf}
         \caption{}\label{fig:edo_iqr}
     \end{subfigure}\vfill%
 
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{lower_decile.pdf}
+        \includegraphics[width=\linewidth]{Fig11b.pdf}
         \caption{}\label{fig:edo_lower}
     \end{subfigure}\vfill%
     
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{upper_decile.pdf}
+        \includegraphics[width=\linewidth]{Fig11c.pdf}
         \caption{}\label{fig:edo_upper}
     \end{subfigure}
     \caption{Distribution plots for the (\subref{fig:edo_iqr}) interquartile
@@ -942,6 +1205,7 @@ substantially better clustering than Cao's method.
         (\subref{fig:edo_upper}) upper decile of the first principal components
         in each case.}\label{fig:edo_quantiles}
 \end{figure}
+
 
 
 \section{Conclusion}\label{sec:conclusion}
@@ -966,16 +1230,163 @@ restrictions on what \(k\) may be, or if there is no immediate evidence that the
 dataset at hand has some notion of high density. Otherwise, Cao's method remains
 the most reliable initialisation in terms of computational time and final cost.
 
-\begin{acknowledgements}
-    The authors wish to thank the Cwm Taf Morgannwg University Health Board for
-    their funding and support of the Ph.D. of which this work has formed a part.
-\end{acknowledgements}
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI~\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI~\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
 
-\section*{Conflict of interest}
+\bibitem{Arthur2007}
+Arthur, D., Vassilvitskii, S.: $k$-means++: {T}he advantages of careful
+  seeding.
+\newblock In: Proceedings of the Eighteenth Annual ACM-SIAM Symposium on
+  Discrete Algorithms, SODA '07, pp. 1027--1035 (2007).
+\newblock \urlprefix\url{http://dl.acm.org/citation.cfm?id=1283383.1283494}
 
-The authors declare that they have no conflict of interest.
+\bibitem{Bashtannyk2001}
+Bashtannyk, D.M., Hyndman, R.J.: Bandwidth selection for kernel conditional
+  density estimation.
+\newblock Computational Statistics and Data Analysis \textbf{36}, 279--298
+  (2001)
 
-\bibliography{references}
-%\input{sections/appendix.tex}
+\bibitem{Cao2009}
+Cao, F., Liang, J., Bai, L.: A new initialization method for categorical data
+  clustering.
+\newblock Expert Systems with Applications \textbf{36}, 10223--10228 (2009).
+\newblock \urlprefix\url{https://pdfs.semanticscholar.org/1955/
+  c6801bca5e95a44e70ce14180f00fd3e55b8.pdf}
+
+\bibitem{Cao2012}
+Cao, F., Liang, J., Li, D., Bai, L., Dang, C.: A dissimilarity measure for the
+  $k$-modes clustering algorithm.
+\newblock Knowledge-Based Systems \textbf{26}, 120--127 (2012).
+\newblock \doi{10.1016/j.knosys.2011.07.011}
+
+\bibitem{Dua2019}
+Dua, D., Graff, C.: {UCI Machine Learning Repository} (2017).
+\newblock \urlprefix\url{http://archive.ics.uci.edu/ml}
+
+\bibitem{Erdil2017}
+Erdil, A., Ergin, H.: Two-sided matching with indifferences.
+\newblock Journal of Economic Theory \textbf{171}, 268--292 (2017).
+\newblock \doi{10.1016/j.jet.2017.07.002}
+
+\bibitem{Fuku2006}
+Fuku, T., Namatame, A., Kaizoji, T.: Collective Efficiency in Two-Sided
+  Matching, pp. 115--126 (2006).
+\newblock \doi{10.1007/3-540-28547-4_10}
+
+\bibitem{Gale1962}
+Gale, D., Shapley, L.: College admissions and the stability of marriage.
+\newblock The American Mathematical Monthly \textbf{69}(1), 9--15 (1962).
+\newblock \doi{10.2307/2312726}
+
+\bibitem{Huang1997a}
+Huang, Z.: Clustering large data sets with mixed numeric and categorical
+  values.
+\newblock In: The First {P}acific-{A}sia Conference on Knowledge Discovery and
+  Data Mining, pp. 21--34 (1997)
+
+\bibitem{Huang1997b}
+Huang, Z.: A fast clustering algorithm to cluster very large categorical data
+  sets in data mining.
+\newblock In: Proceedings of the {SIGMOD} Workshop on Research Issues on Data
+  Mining and Knowledge Discovery, pp. 1--8 (1997)
+
+\bibitem{Huang1998}
+Huang, Z.: Extensions to the $k$-means algorithm for clustering large data sets
+  with categorical values.
+\newblock Data Mining and Knowledge Discovery \textbf{2}(3), 283--304 (1998).
+\newblock \doi{10.1023/A:1009769707641}
+
+\bibitem{Iwama2016}
+Iwama, K., Miyazaki, S.: Stable Marriage with Ties and Incomplete Lists, pp.
+  2071--2075.
+\newblock Springer New York (2016).
+\newblock \doi{10.1007/978-1-4939-2864-4_805}
+
+\bibitem{Jiang2016}
+Jiang, F., Liu, G., Du, J., Sui, Y.: Initialization of $k$-modes clustering
+  using outlier detection techniques.
+\newblock Information Sciences \textbf{332}, 167--183 (2016).
+\newblock \doi{10.1016/j.ins.2015.11.005}
+
+\bibitem{Jolliffe1986}
+Jolliffe, I.T.: Principal Component Analysis and Factor Analysis, pp. 115--128.
+\newblock Springer New York (1986).
+\newblock \doi{10.1007/978-1-4757-1904-8_7}
+
+\bibitem{Kwanashie2015}
+Kwanashie, A., Irving, R.W., Manlove, D.F., Sng, C.T.S.: Profile-based optimal
+  matchings in the student/project allocation problem.
+\newblock In: Combinatorial Algorithms, pp. 213--225 (2015).
+\newblock \doi{10.1007/978-3-319-19315-1_19}
+
+\bibitem{Manlove2002}
+Manlove, D.F., Irving, R.W., Iwama, K., Miyazaki, S., Morita, Y.: Hard variants
+  of stable marriage.
+\newblock Theoretical Computer Science \textbf{276}(1), 261--279 (2002).
+\newblock \doi{10.1016/S0304-3975(01)00206-7}
+
+\bibitem{Memoli2011}
+M{\'e}moli, F.: Metric structures on datasets: Stability and classification of
+  algorithms.
+\newblock In: Computer Analysis of Images and Patterns, pp. 1--33. Springer
+  Berlin Heidelberg (2011).
+\newblock \doi{10.1007/978-3-642-23678-5_1}
+
+\bibitem{Ng2007}
+Ng, M.K., Li, M.J., Huang, J.Z., He, Z.: On the impact of dissimilarity measure
+  in $k$-modes clustering algorithm.
+\newblock IEEE Transactions on Pattern Analysis and Machine Intelligence
+  \textbf{29}(3), 503--507 (2007).
+\newblock \doi{10.1109/TPAMI.2007.53}
+
+\bibitem{Olaode2014}
+Olaode, A., Naghdy, G., Todd, C.: Unsupervised image classification by
+  {P}robabilistic {L}atent {S}emantic {A}nalysis for the annotation of images.
+\newblock In: International Conference on Digital Image Computing: Techniques
+  and Applications (2014).
+\newblock \doi{10.13140/2.1.1909.4086}
+
+\bibitem{Roth1984}
+Roth, A.: The evolution of the labor market for medical interns and residents:
+  A case study in game theory.
+\newblock Journal of Political Economy \textbf{92}(6), 991--1016 (1984).
+\newblock \doi{10.1086/261272}
+
+\bibitem{Satopaa2011}
+Satopaa, V., Albrecht, J., Irwin, D., Raghavan, B.: Finding a `kneedle' in a
+  haystack: Detecting knee points in system behavior.
+\newblock In: Proceedings of the 2011 31st International Conference on
+  Distributed Computing Systems Workshops, pp. 166--171 (2011).
+\newblock \doi{10.1109/ICDCSW.2011.20}
+
+\bibitem{Schaeffer2007}
+Schaeffer, S.E.: Graph clustering.
+\newblock Computer Science Review \textbf{1}(1), 27--64 (2007).
+\newblock \doi{10.1016/j.cosrev.2007.05.001}
+
+\bibitem{Sharma2015}
+Sharma, N., Gaud, N.: $k$-modes clustering algorithm for categorical data.
+\newblock International Journal of Computer Applications \textbf{127}(17), 1--6
+  (2015).
+\newblock \doi{10.5120/ijca2015906708}
+
+\bibitem{Matching1.1}
+{The Matching library developers}: Matching: v1.1 (2019).
+\newblock \doi{10.5281/zenodo.2711847}.
+\newblock \urlprefix\url{http://dx.doi.org/10.5281/zenodo.2711847}
+
+\bibitem{Wilde2019}
+Wilde, H., Knight, V., Gillard, J.: Evolutionary dataset optimisation: learning
+  algorithm quality through evolution.
+\newblock Applied Intelligence  (2019).
+\newblock \doi{10.1007/s10489-019-01592-4}
+
+\end{thebibliography}
+
 
 \end{document}

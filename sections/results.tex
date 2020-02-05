@@ -1,4 +1,5 @@
 \section{Experimental results}\label{sec:results}
+\graphicspath{{./img/}}
 
 To give comparative results on the quality of the initialisation processes
 considered in this work, four well-known, categorical, labelled datasets ---
@@ -17,6 +18,12 @@ are excluded and the remaining dataset characteristics are reported as
         \input{tex/dataset_summary.tex}
     }\caption{A summary of the benchmark datasets.}\label{tab:dataset_summary}
 \end{table}
+
+All of the source code used to produce the results and data in this analysis ---
+including the datasets investigated in Section~\ref{subsec:artificial} --- are
+archived at DOI. In addition to this, the implementation of the \(k\)-modes
+algorithm and its initialisations is available under
+DOI~\href{https://doi.org/10.5281/zenodo.3638035}{10.5281/zenodo.3638035}.
 
 This analysis does not consider evaluative metrics related to classification
 such as accuracy, recall or precision as is commonly done~\cite{%
@@ -53,7 +60,6 @@ Table~\ref{tab:dataset_summary}.
 
 
 \subsection{Using knee point detection algorithm for \(k\)}\label{subsec:knee}
-\graphicspath{{./img/knee/}}
 
 Tables~\ref{tab:breast_cancer_knee}---\ref{tab:soybean_knee}
 summarise the results of each initialisation method on the benchmark datasets
@@ -141,17 +147,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig1a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig1b1.pdf}
 
-            \includegraphics[width=\linewidth]%
-            {breast_cancer_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig1b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -161,17 +164,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig2a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}
-        
-        \includegraphics[width=\linewidth]%
-            {mushroom_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig2b1.pdf}
+
+        \includegraphics[width=\linewidth]{Fig2b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -181,17 +181,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig3a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig3b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {nursery_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig3b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -201,17 +198,14 @@ remains a mystery.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig4a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig4b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {soybean_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig4b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -221,7 +215,6 @@ remains a mystery.
 
 
 \subsection{Using number of classes for \(k\)}\label{subsec:nclasses}
-\graphicspath{{./img/nclasses/}}
 
 As is discussed above, the often automatic choice for \(k\) is the number of
 classes present in the data; this subsection repeats the analysis from the
@@ -296,17 +289,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig5a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig5b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {breast_cancer_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig5b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -316,17 +306,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig6a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {mushroom_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig6b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {mushroom_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig6b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -336,17 +323,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig7a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {nursery_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig7b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {nursery_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig7b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -356,17 +340,14 @@ one repetition with the matching initialisation method.
 
 \begin{figure}
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_cost_scatterplot.pdf}
+        \includegraphics[width=\linewidth]{Fig8a.pdf}
         \caption{Scatter plot of initial and final costs.}
     \end{subfigure}
     \hfill%
     \begin{subfigure}{.5\textwidth}
-        \includegraphics[width=\linewidth]%
-            {soybean_initial_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig8b1.pdf}
 
-        \includegraphics[width=\linewidth]%
-            {soybean_final_cost_cdfplot.pdf}
+        \includegraphics[width=\linewidth]{Fig8b2.pdf}
         \caption{Empirical CDF plots for initial (top) and final (bottom)
                  costs.}
     \end{subfigure}
@@ -388,8 +369,7 @@ prior knowledge to be included in an initial clustering by using some \textit{ad
 hoc} preference list mechanism.
 
 
-\subsection{Artificial datasets}
-\graphicspath{{img/edo/}}
+\subsection{Artificial datasets}\label{subsec:artificial}
 
 Following on from the conclusions of the analysis thus far, the competition
 between Cao's method and the proposed matching method may be studied more
@@ -421,16 +401,14 @@ datasets considered here are all of comparable shape.
 
 \begin{figure}
     \centering
-    \includegraphics[width=\imgwidth]{fitness.pdf}
+    \includegraphics[width=\imgwidth]{Fig9.pdf}
     \caption{Histograms of fitness for the top performing percentile in each
              case.}\label{fig:fitness}
 \end{figure}
 
 This process yielded approximately 35,000 unique datasets for each case, and the
 ensuing analysis only considers the top-performing percentile of datasets from
-each. The source code used to generate these datasets, and the datasets
-themselves are archived at: DOI.\ %TODO data gen code and data DOIs
-Figure~\ref{fig:fitness} shows the fitness distribution of the top
+each. Figure~\ref{fig:fitness} shows the fitness distribution of the top
 percentile in each case. It should be clear from~\eqref{eq:fitness} that large
 negative values are preferable here. With that, and bearing in mind that the
 generation of these datasets was parameterised in a consistent manner, it
@@ -497,17 +475,17 @@ substantially better clustering than Cao's method.
 \begin{figure}
     \centering
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{variance.pdf}%
+        \includegraphics[width=\linewidth]{Fig10a.pdf}%
         \caption{}\label{fig:edo_variance}
     \end{subfigure}
 
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{skewness.pdf}%
+        \includegraphics[width=\linewidth]{Fig10b.pdf}%
     \caption{}\label{fig:edo_skewness}
     \end{subfigure}
     
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{kurtosis.pdf}%
+        \includegraphics[width=\linewidth]{Fig10c.pdf}%
         \caption{}\label{fig:edo_kurtosis}
     \end{subfigure}
     \caption{Distribution plots for the (\subref{fig:edo_variance}) variance,
@@ -519,17 +497,17 @@ substantially better clustering than Cao's method.
 \begin{figure}
     \centering
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{interquartile_range.pdf}
+        \includegraphics[width=\linewidth]{Fig11a.pdf}
         \caption{}\label{fig:edo_iqr}
     \end{subfigure}\vfill%
 
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{lower_decile.pdf}
+        \includegraphics[width=\linewidth]{Fig11b.pdf}
         \caption{}\label{fig:edo_lower}
     \end{subfigure}\vfill%
     
     \begin{subfigure}{\imgwidth}
-        \includegraphics[width=\linewidth]{upper_decile.pdf}
+        \includegraphics[width=\linewidth]{Fig11c.pdf}
         \caption{}\label{fig:edo_upper}
     \end{subfigure}
     \caption{Distribution plots for the (\subref{fig:edo_iqr}) interquartile
