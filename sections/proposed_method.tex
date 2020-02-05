@@ -31,7 +31,10 @@ Hospital-Resident Assignment Problem (HR). This problem gets its name from the
 real-world problem of fairly allocating medical students to hospital posts.  A
 resident-optimal algorithm for solving HR was presented in~\cite{Gale1962} and
 was adapted in~\cite{Roth1984} to take advantage of the structure of the game.
-This adapted algorithm is given in Algorithm~\ref{alg:hospital_resident}.
+This adapted algorithm is given in Algorithm~\ref{alg:hospital_resident}. A
+practical implementation of this algorithm has been implemented in Python as
+part of the \texttt{matching} library~\cite{Matching1.1} and is used in the
+implementation of the proposed method for Section~\ref{sec:results}.
 
 The game used to model HR, its matchings, and its notion of stability are
 defined in Definitions~\ref{def:game}---\ref{def:blocking}. A summary of these
