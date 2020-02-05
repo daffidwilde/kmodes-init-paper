@@ -1,0 +1,57 @@
+\begin{example}\label{ex:dissim}
+    Throughout this work, we will make use of a number of small examples to aid
+    our understanding of various concepts. These examples will utilise a small,
+    artificial dataset describing some qualities about vehicles.
+    
+    The dataset is made up of \(N = 10\) instances, each of which describe a
+    vehicle. These instances are defined by \(m = 6\) attributes, the first two
+    of which are ordinal variables taken from the set \(\{\text{L, M, H, V}\}\)
+    standing for `low', `medium', `high', and `very high' respectively. The
+    next three are integer variables and so can be considered as categorical,
+    and the final attribute is a binary variable indicating whether the vehicle
+    is eco-friendly \((1)\) or not \((0)\). The full dataset is given in
+    Table~\ref{tab:dataset}. Please note that there is an additional, unheaded
+    column on the left hand side showing the index starting at \(1\) and going
+    up to \(5\).
+    
+    \begin{table}[H]
+        \centering
+        \singlespacing{%
+        \resizebox{.8\textwidth}{!}{%
+            \centering
+            \input{tex/example_table.tex}
+        }}
+        \caption{The vehicle dataset.}\label{tab:dataset}
+    \end{table}
+
+    Let us consider our first two datapoints. With the notation laid out in
+    Section~\ref{subsec:notation}, we can express these points as vectors in the
+    following way:
+
+    \begin{equation}
+        \nonumber
+        \begin{aligned}
+            X^{(1)} & = & \left[ x_1^{(1)} = \text{H}, \ x_2^{(1)} = \text{M}, \
+            x_3^{(1)} = 2, \ x_4^{(1)} = 2, \ x_5^{(1)} = 4, \ x_6^{(1)} = 0 
+            \right]
+            \\
+            X^{(2)} & = & \left[ x_1^{(2)} = \text{L}, \ x_2^{(2)} = \text{M}, \
+            x_3^{(2)} = 0, \ x_4^{(2)} = 1, \ x_5^{(2)} = 2, \ x_6^{(2)} = 0
+            \right]
+        \end{aligned}
+    \end{equation}
+
+    Then, by Definition~\ref{def:dissim}, their pairwise dissimilarity is:
+    \begin{equation}
+        \nonumber
+        \begin{aligned}
+            \centering
+            d(X^{(1)}, X^{(2)}) & = & \delta(\text{H}, \text{L}) & + & 
+            \delta(\text{M}, \text{M}) & + & \delta(3, 0) & + & \delta(2, 1) &
+            + & \delta(4, 2) & + & \delta(0, 0) & {} & {}
+            \\
+            {} & = & 1 \ & + & 0 \ & + & 1 \ & + & 1 \ & + & 1 \ & + & 0 \ & = &
+            4
+        \end{aligned}
+    \end{equation}
+\end{example}
