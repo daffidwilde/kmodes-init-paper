@@ -1,17 +1,21 @@
-\documentclass[smallextended]{svjour3}
+\documentclass[review]{elsarticle}
 
 % Setting up the page
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{lineno}
+    \modulolinenumbers[5]
 
 % Bibliography
-\usepackage[numbers]{natbib}
-\bibliographystyle{spmpsci}
+\bibliographystyle{elsarticle-num}
 
 % Writing mathematics, algorithms and code
 \usepackage{mathtools} % lvert and rvert
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{amsthm}
+    \newtheorem{definition}{Definition}
+    \newtheorem{theorem}{Theorem}
 \usepackage[boxruled]{algorithm2e}
 
 \newcommand{\balg}{\begin{algorithm}[htbp]\DontPrintSemicolon}
@@ -33,21 +37,27 @@
 \setlength{\tablewidth}{.9\textwidth}
 
 
-\journalname{Data Mining and Knowledge Discovery}
+\begin{document}
+
+\begin{frontmatter}
+
 \title{%
     A novel initialisation based on hospital-resident assignment for the
     \(k\)-modes algorithm
 }
-\author{Henry Wilde \and Vincent Knight \and Jonathan Gillard}
-\institute{%
-    School of Mathematics, Senghennydd Rd, Cardiff, WALES CF24 4AG \\
-    \textit{\email{\{wildehd, knightva, gillardjw\}@cardiff.ac.uk}}
+
+\author[cardiffmaths]{Henry Wilde\corref{corrauthor}}
+\cortext[corrauthor]{Corresponding author}
+\ead{wildehd@cardiff.ac.uk}
+
+\author[cardiffmaths]{Vincent Knight}
+
+\author[cardiffmaths]{Jonathan Gillard}
+
+\address[cardiffmaths]{%
+    School of Mathematics, Senghennydd Rd, Cardiff, WALES CF24 4AG
 }
-\date{Received: date / Accepted: date}
 
-\begin{document}
-
-\maketitle%
 \begin{abstract}
     This paper presents a new way of selecting an initial solution for the
     \(k\)-modes algorithm that allows for a notion of mathematical fairness and
@@ -63,13 +73,17 @@
     cases, especially when the number of clusters is optimised. In addition, the
     proposed method is found to outperform the popular established method
     specifically for low-density data.
-
-    \keywords{%
-        Clustering \and
-        Categorical data \and
-        Matching games
-    }
 \end{abstract}
+
+\begin{keyword}
+    Clustering \sep
+    Categorical data \sep
+    Matching games
+\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
 
 \section{Introduction}\label{sec:intro}
 
@@ -962,7 +976,7 @@ times are lower. These effects come directly from the choice of \(k\) in that
 higher values of \(k\) will require more checks (and thus computational time)
 but will typically lead to more homogeneous clusters, reducing their
 within-cluster dissimilarity and therefore cost.
-
+ZI
 Looking at these tables on their own, Cao's method is the superior
 initialisation method on average: the means are substantially lower in terms of
 initial and final cost; there is no deviation in these results; again, the total
@@ -1246,6 +1260,8 @@ restrictions on what \(k\) may be, or if there is no immediate evidence that the
 dataset at hand has some notion of high density. Otherwise, Cao's method remains
 the most reliable initialisation in terms of computational time and final cost.
 
-\bibliography{references.bib}
+\section*{References}
+
+\bibliography{references}
 
 \end{document}
