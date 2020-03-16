@@ -7,7 +7,6 @@
 
 % Bibliography
 \usepackage[numbers]{natbib}
-\bibliographystyle{abbrvnat}
 
 % Writing mathematics, algorithms and code
 \usepackage{amsmath}
@@ -44,16 +43,20 @@
 \maketitle%
 \begin{abstract}
     This paper presents a new way of selecting an initial solution for the
-    \(k\)-modes algorithm that allows for a notion of mathematical fairness and
-    a leverage of the data that the common initialisations from literature do
-    not. The method, which utilises the Hospital-Resident Assignment Problem to
-    find the set of initial cluster centroids, is compared with the current
-    initialisations on both benchmark datasets and a body of newly generated
-    artificial datasets. Based on this analysis, the proposed method is shown to
-    outperform the other initialisations in the majority of cases, especially
-    when the number of clusters is optimised. In addition, we find that our
-    method outperforms the leading established method specifically for
-    low-density data.
+    \(k\)-modes algorithm that allows for a notion of game theoretic fairness
+    that classic initialisations, namely those by Huang and Cao, do not. The
+    method, which utilises the Hospital-Resident Assignment Problem to find the
+    set of initial cluster centroids, is compared with two initialisation
+    methods for \(k\)-modes~\cite{Haung1998} as well as the next most popular
+    method present in the literature~\cite{Cao2009}. In order to highlight the
+    merits of the proposed method two stages of analysis are presented. The
+    paper concludes with an analysis of these methods against the proposed and
+    it is demonstrated that the proposed method is able to outperform them both.
+    The aim of this analysis is two-fold: first, to highlight the merits of the
+    method in a familiar setting by clustering well-known benchmark datasets;
+    and second, to provide a deeper insight into how the methods perform against
+    one another by generating artificial datasets using the method set out
+    in~\cite{Wilde2019}.
 \end{abstract}
 
 \section{Introduction}\label{sec:intro}
@@ -66,9 +69,19 @@ this paper is in how the performance of the \(k\)-modes algorithm is affected by
 the quality of its initial solution. The initialisation method proposed in this
 work extends the method presented by Huang~\cite{Huang1998} by using results
 from game theory to ensure mathematical fairness and to lever the full learning
-opportunities presented by the data being clustered. In doing so, it is
-demonstrated that the proposed method is able to outperform both of the
-established initialisations for \(k\)-modes. The paper is structured as follows:
+opportunities presented by the data being clustered. In addition to the method
+presented by Huang, the literature revealed that the next most commonly cited
+initialisation was presented in~\cite{Cao2009}. This initialisation also forms
+the basis of a number of other initialisations where a notion of density is
+central to that method. The paper concludes with an analysis of these methods
+against the proposed and it is demonstrated that the proposed method is able to
+outperform them both. The aim of this analysis is two-fold: first, to highlight
+the merits of the method in a familiar setting by clustering well-known
+benchmark datasets; and second, to provide a deeper insight into how the methods
+perform against one another by generating artificial datasets using the method
+set out in~\cite{Wilde2019}.
+
+The paper is structured as follows:
 \begin{itemize}
     \item Section~\ref{sec:intro} introduces the \(k\)-modes algorithm and its
         established initialisation methods.
