@@ -1,13 +1,15 @@
-main.aux
-main.bbl
-main.bcf
-main.blg
-main.dvi
-main.log
-main.out
-main.toc
-main.run.xml
-main-blx.bib
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.run.xml
+*-blx.bib
 
 *.bib.bak
 *.bib.sav

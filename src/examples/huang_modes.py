@@ -1,10 +1,10 @@
 """ Find initial modes by Huang's method, and write to file. """
 
 from collections import defaultdict
-import numpy as np
 
-from util import dissim
+import numpy as np
 from kmodes.kmodes import init_huang
+from util import dissim
 
 
 def get_virtual_modes(data, n_clusters, seed=0):

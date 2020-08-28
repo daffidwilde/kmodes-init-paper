@@ -1,12 +1,10 @@
 """ Generate all Huang example images. """
 
 import pandas as pd
-
-from util import get_mode_string
-from huang_modes import get_initial_modes, get_virtual_modes
-from huang_relative_freq import get_rel_freq_table, get_probability_dist
 from huang_dissim_table import get_dissim_table
-
+from huang_modes import get_initial_modes, get_virtual_modes
+from huang_relative_freq import get_probability_dist, get_rel_freq_table
+from util import get_mode_string
 
 seed = 0
 n_clusters = 3

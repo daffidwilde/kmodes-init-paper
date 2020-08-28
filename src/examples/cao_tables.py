@@ -1,9 +1,9 @@
 """ Get ranked tables for Cao's method example. """
 
 from copy import deepcopy
-import numpy as np
 
-from util import dissim, density
+import numpy as np
+from util import density, dissim
 
 
 def get_density_table(data):
